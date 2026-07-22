@@ -1,0 +1,57 @@
+/* Digital rain da Matrix nos cantos, portado de nova-notes. Usa var(--accent). */
+
+.rain {
+  position: absolute;
+  width: 168px;
+  height: 320px;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.45;
+  animation: fadeIn 1.2s ease both;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 0.45; }
+}
+
+.tl { top: 0; left: 0; }
+.tr { top: 0; right: 0; }
+.bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.br { bottom: 0; right: 0; transform: scaleY(-1); }
+
+.col {
+  position: absolute;
+  top: 0;
+  width: 14px;
+}
+
+.stream {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.15;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--accent) 25%, transparent),
+    var(--accent) 78%,
+    color-mix(in srgb, var(--accent) 55%, #fff)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+@keyframes fall {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}

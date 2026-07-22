@@ -1,0 +1,8 @@
+/* Estilo base para a demo: tipografia grande e clara sobre fundo escuro. */
+.splitParent {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ededed;
+}

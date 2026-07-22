@@ -1,0 +1,162 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+/* Layout "Customize": controles em colunas responsivas. */
+.bodyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+/* Cada parâmetro é uma "linha-cartão", legível e alinhada como um painel de mixagem. */
+.ctrl {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 11px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: border-color var(--dur) var(--ease);
+}
+.ctrl:hover {
+  border-color: var(--border-strong);
+}
+/* Variante em linha única (cor / switch): rótulo à esquerda, controle à direita. */
+.ctrlRow {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.lab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+.labText {
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+.val {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  outline: 0;
+  cursor: pointer;
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  transition: transform var(--dur-fast) var(--ease), border-color var(--dur) var(--ease);
+}
+.range::-webkit-slider-thumb:hover {
+  transform: scale(1.14);
+  border-color: var(--accent-2);
+}
+.range::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--accent);
+  cursor: pointer;
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex: none;
+}
+.color {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 34px;
+  height: 26px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+.color::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+.color::-webkit-color-swatch {
+  border: none;
+  border-radius: 5px;
+}
+.hex {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  min-width: 62px;
+  text-align: right;
+}
+
+.select {
+  width: 100%;
+  background: var(--bg-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: var(--fs-sm);
+  outline: 0;
+  cursor: pointer;
+}
+
+.switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+  border: 1px solid var(--border);
+  flex: none;
+}
+.switchOn {
+  background: var(--accent);
+  border-color: transparent;
+}
+.knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left var(--dur) var(--ease);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.switchOn .knob {
+  left: 21px;
+}

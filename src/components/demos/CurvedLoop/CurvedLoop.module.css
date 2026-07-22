@@ -1,0 +1,24 @@
+/* Envelope do letreiro curvo: ocupa o palco e centraliza o SVG. */
+.jacket {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.svg {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  width: 100%;
+  aspect-ratio: 100 / 12;
+  overflow: visible;
+  display: block;
+  font-size: 6rem;
+  fill: #ededed;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+}

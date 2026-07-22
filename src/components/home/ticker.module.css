@@ -1,0 +1,60 @@
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  background: var(--bg-2);
+  user-select: none;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: slide 36s linear infinite;
+}
+.ticker:hover .track {
+  animation-play-state: paused;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 13px 0;
+  flex: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+/* Alterna itens cheios e "vazados" pra dar ritmo. */
+.item:nth-child(even) {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--muted);
+}
+
+.sep {
+  color: var(--accent);
+  margin: 0 22px;
+  -webkit-text-stroke: 0;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

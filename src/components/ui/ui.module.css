@@ -1,0 +1,218 @@
+/* Primitivas de UI reutilizáveis (botões, chips, busca, código, badges).
+   Estilo neo-brutalist terminal: mono, cantos duros, sombra offset, lima. */
+
+.btn {
+  cursor: pointer;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-strong);
+  color: var(--text);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 10px 15px;
+  border-radius: var(--radius-md);
+  transition: transform var(--dur-fast) var(--ease), border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease), box-shadow var(--dur) var(--ease), color var(--dur) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:hover {
+  border-color: var(--accent-line);
+  color: #fff;
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-sm);
+}
+.btn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.btnPrimary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+.btnPrimary:hover {
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-hard);
+  filter: brightness(1.06);
+}
+
+.btnGhost {
+  background: transparent;
+  border-color: var(--border);
+  padding: 10px 12px;
+}
+
+/* Botão só-ícone (barra do editor) */
+.iconBtn {
+  cursor: pointer;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-strong);
+  color: var(--text);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--dur-fast) var(--ease), border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.iconBtn:hover {
+  border-color: var(--accent-line);
+  color: var(--accent);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-sm);
+}
+.iconBtn:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+.iconBtnGhost {
+  background: transparent;
+  border-color: var(--border);
+}
+
+.searchbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 9px 12px;
+  transition: border-color var(--dur) var(--ease);
+}
+.searchbox:focus-within {
+  border-color: var(--accent-line);
+}
+.searchbox svg {
+  opacity: 0.6;
+  flex: none;
+}
+.searchInput {
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  font-size: var(--fs-sm);
+  width: 190px;
+  max-width: 42vw;
+}
+.searchInput::placeholder {
+  color: var(--muted);
+}
+
+.chip {
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 8px 13px;
+  border-radius: var(--radius-md);
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+.chip:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.chipActive {
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.badge {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.pill {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 6px 11px;
+  border-radius: var(--radius-md);
+}
+
+/* ---- bloco de código ---- */
+.code {
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+.codeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+.codePre {
+  margin: 0;
+  padding: 14px 16px;
+  overflow: auto;
+  max-height: 340px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.copyBtn {
+  cursor: pointer;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.copyBtn:hover {
+  border-color: var(--accent-line);
+  color: var(--accent);
+}
+.copied {
+  color: var(--accent-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+}

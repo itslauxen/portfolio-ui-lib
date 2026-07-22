@@ -1,0 +1,222 @@
+/* Superfície de vidro com refração via filtro SVG. */
+
+.glassSurface {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.26s ease-out;
+  max-width: 100%;
+}
+
+.glassSurfaceFilter {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  z-index: -1;
+}
+
+.glassSurfaceContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: inherit;
+  position: relative;
+  z-index: 1;
+}
+
+.demoLabel {
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.glassSurfaceSvg {
+  background: light-dark(hsl(0 0% 100% / var(--glass-frost, 0)), hsl(0 0% 0% / var(--glass-frost, 0)));
+  backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1));
+  box-shadow:
+    0 0 2px 1px light-dark(color-mix(in oklch, black, transparent 85%), color-mix(in oklch, white, transparent 65%))
+      inset,
+    0 0 10px 4px light-dark(color-mix(in oklch, black, transparent 90%), color-mix(in oklch, white, transparent 85%))
+      inset,
+    0px 4px 16px rgba(17, 17, 26, 0.05),
+    0px 8px 24px rgba(17, 17, 26, 0.05),
+    0px 16px 56px rgba(17, 17, 26, 0.05),
+    0px 4px 16px rgba(17, 17, 26, 0.05) inset,
+    0px 8px 24px rgba(17, 17, 26, 0.05) inset,
+    0px 16px 56px rgba(17, 17, 26, 0.05) inset;
+}
+
+.glassSurfaceFallback {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.2),
+    0 2px 16px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glassSurfaceFallback {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  .glassSurfaceFallback {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .glassSurfaceFallback::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: inherit;
+    z-index: -1;
+  }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  @media (prefers-color-scheme: dark) {
+    .glassSurfaceFallback {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .glassSurfaceFallback::before {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+.glassSurface:focus-visible {
+  outline: 2px solid light-dark(#c6ff3a, #c6ff3a);
+  outline-offset: 2px;
+}
+
+
+/* ---- Cena da demo: rolagem interna com o vidro preso no centro ---- */
+
+.demoScene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px) 0 0 / 22px 22px,
+    linear-gradient(135deg, #101014, #0a0a0d);
+}
+
+/* Âncora sticky de altura zero: mantém o vidro fixo no centro do palco
+   enquanto o conteúdo rola por baixo dele. */
+.demoSticky {
+  position: sticky;
+  top: 50%;
+  height: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+.demoGlassPin {
+  transform: translateY(-50%);
+  /* Demo: roda do mouse atravessa o vidro e rola o conteúdo. */
+  pointer-events: none;
+}
+
+/* Conteúdo alto que rola: palavras gigantes vazadas + blobs coloridos. */
+.demoRolagem {
+  position: relative;
+  min-height: 1500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 90px;
+  padding: 18% 8%;
+  overflow: hidden;
+}
+
+.demoWord {
+  font-size: clamp(3rem, 11vw, 6rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+.demoWord:nth-child(odd) {
+  -webkit-text-stroke-color: rgba(198, 255, 58, 0.65);
+}
+
+.demoBlobA,
+.demoBlobB,
+.demoBlobC {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: glassFloat 9s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.demoBlobA {
+  width: 55%;
+  height: 26%;
+  left: -10%;
+  top: 2%;
+  background: radial-gradient(circle at 35% 35%, #c6ff3a, rgba(198, 255, 58, 0) 65%);
+}
+.demoBlobB {
+  width: 60%;
+  height: 30%;
+  right: -12%;
+  top: 36%;
+  background: radial-gradient(circle at 60% 40%, #5ff2d8, rgba(95, 242, 216, 0) 62%);
+  animation-delay: -3s;
+}
+.demoBlobC {
+  width: 50%;
+  height: 24%;
+  left: 18%;
+  bottom: 4%;
+  background: radial-gradient(circle at 50% 50%, #ff5ea8, rgba(255, 94, 168, 0) 60%);
+  animation-delay: -6s;
+}
+
+@keyframes glassFloat {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(5%, 6%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demoBlobA,
+  .demoBlobB,
+  .demoBlobC {
+    animation: none;
+  }
+}

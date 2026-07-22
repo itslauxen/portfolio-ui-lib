@@ -1,0 +1,390 @@
+/* ---------- ZONA DO CURSOR DE MIRA ---------- */
+/* O wrapper do cursor vem do demo (confinado, height 100%, overflow hidden);
+   aqui ele vira um wrapper de página. Classe dupla para vencer a especificidade. */
+.cursorZone.cursorZone {
+  height: auto;
+  overflow: visible;
+}
+/* Esconde o cursor nativo em TODOS os descendentes (links/botões trazem o
+   pointer de volta sem isso). Só onde existe mouse de verdade. */
+@media (hover: hover) and (pointer: fine) {
+  .cursorZone :global(*) {
+    cursor: none !important;
+  }
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative;
+  min-height: min(90vh, 860px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  isolation: isolate;
+}
+.heroBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+/* Scrim para legibilidade do texto sobre o terreno 3D. */
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(100deg, color-mix(in srgb, var(--bg) 88%, transparent) 6%, color-mix(in srgb, var(--bg) 40%, transparent) 40%, transparent 64%),
+    linear-gradient(to top, var(--bg) 0%, transparent 26%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--bg) 55%, transparent) 0%, transparent 18%);
+}
+.heroContent {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-8) 0;
+  pointer-events: none;
+}
+.heroContent > * {
+  pointer-events: auto;
+}
+.heroPrompt {
+  margin-top: var(--space-5);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+.heroPromptSign {
+  color: var(--accent);
+  font-weight: 700;
+  margin-right: 8px;
+}
+.heroTitle {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--fs-3xl);
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin: 10px 0 0;
+}
+.heroTitleLine {
+  font-weight: 800;
+}
+/* Sobrenome como texto vazado (outline), bem brutalist. */
+.heroTitleOutline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--accent);
+  text-stroke: 2px var(--accent);
+}
+.heroRole {
+  font-size: var(--fs-lg);
+  color: var(--text);
+  font-weight: 600;
+  margin-top: var(--space-5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.heroTagline {
+  color: var(--text-dim);
+  margin-top: var(--space-3);
+  max-width: 48ch;
+  font-size: var(--fs-md);
+}
+.heroActions {
+  display: flex;
+  gap: 12px;
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+.heroStats {
+  display: flex;
+  gap: 0;
+  margin: var(--space-7) 0 0;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--bg) 42%, transparent);
+  backdrop-filter: blur(6px);
+  width: fit-content;
+  max-width: 100%;
+}
+.heroStat {
+  position: relative;
+  padding: 14px 22px;
+  min-width: 148px;
+}
+.heroStat + .heroStat {
+  border-left: 1px solid var(--border-strong);
+}
+.heroStatIndex {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+}
+.heroStatValue {
+  display: block;
+  margin-top: 8px;
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.heroStatLabel {
+  margin: 4px 0 0;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* ---------- seções ---------- */
+.sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+.sectionTitle {
+  font-size: var(--fs-2xl);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+}
+.sectionSub {
+  color: var(--text-dim);
+  margin-top: 8px;
+  max-width: 56ch;
+}
+
+/* skills */
+.skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-5) var(--space-6);
+}
+.skill {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.skillTop {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-sm);
+}
+.skillCat {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+.skillTop span:first-child {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.bar {
+  height: 8px;
+  border: 1px solid var(--border-strong);
+  background: rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  /* Trilho tracejado de terminal atrás do preenchimento. */
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--border) 0 5px,
+    transparent 5px 10px
+  );
+}
+.barFill {
+  height: 100%;
+  background: var(--accent);
+  box-shadow: 0 0 12px -2px var(--accent-glow);
+}
+
+/* projetos: uma linha por projeto, card e preview alternando de lado */
+.projectRows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.projectRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+/* Linhas pares: o card de projeto vai para a direita, preview pra esquerda. */
+.projectRowFlip > :first-child {
+  order: 2;
+}
+
+/* Card de preview (revelação em pixels). Classe dupla para vencer o
+   width fixo de 300px do CSS do componente de demo. Um pouco mais estreito
+   que a coluna (as prints têm proporção ~62%, sem corte). */
+.projectMedia.projectMedia {
+  width: 92%;
+  margin: 0 auto; /* o card fica dentro do wrapper de tilt, centraliza nele */
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #0a0a0d;
+}
+.mediaFirst {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 26px, rgba(255, 255, 255, 0.02) 26px 27px),
+    linear-gradient(to bottom, #0e0e12, #08080a);
+}
+.mediaHint {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--muted);
+}
+.mediaHint::before {
+  content: "// ";
+  color: var(--accent);
+}
+.mediaName {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent);
+}
+.mediaImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+}
+.mediaLive {
+  width: 100%;
+  height: 100%;
+  background: #050508;
+}
+
+@media (max-width: 860px) {
+  .projectRow {
+    grid-template-columns: 1fr;
+  }
+  .projectRowFlip > :first-child {
+    order: 0;
+  }
+}
+/* O card em si: borda e fundo vêm da moldura <ProjectCard> (borda estelar);
+   aqui fica só o layout interno. Altura natural do conteúdo, sem esticar. */
+.project {
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.projectHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.projectTitle {
+  font-size: var(--fs-lg);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.projectYear {
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+.projectDesc {
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  flex: 1;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: var(--radius-md);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tag::before {
+  content: "#";
+  color: var(--accent);
+  opacity: 0.75;
+}
+.projectLinks {
+  display: flex;
+  gap: 10px;
+}
+
+/* estilos (hover preview) */
+.styleGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* faixa CTA */
+.ctaBand {
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-7);
+  text-align: center;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-glow);
+}
+/* Marca-d'água tracejada de terminal atrás da faixa. */
+.ctaBand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0 22px,
+    var(--accent-soft) 22px 23px
+  );
+  opacity: 0.5;
+}
+.ctaBand > * {
+  position: relative;
+}
+.ctaTitle {
+  font-size: var(--fs-2xl);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+.ctaSub {
+  color: var(--text-dim);
+  margin: 12px auto 0;
+  max-width: 48ch;
+}
+.ctaActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}

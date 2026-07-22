@@ -1,0 +1,138 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(1.1);
+  border-bottom: 1px solid var(--border);
+}
+
+.inner {
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+/* ---- marca: gabriel_lauxen + bloco lima piscando ---- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.mark {
+  width: 11px;
+  height: 15px;
+  background: var(--accent);
+  animation: navblink 1.05s steps(1, end) infinite;
+}
+@keyframes navblink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    opacity: 0.18;
+  }
+}
+.brandName {
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.2px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* ---- links: UPPERCASE tracking, ativo em lima ---- */
+.links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.links::-webkit-scrollbar {
+  display: none;
+}
+
+.link {
+  position: relative;
+  padding: 7px 11px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--muted);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.link:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+/* Ativo: texto lima + colchetes que aparecem nas laterais. */
+.active {
+  color: var(--accent);
+}
+.active::before,
+.active::after {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  color: var(--accent);
+  font-weight: 700;
+}
+.active::before {
+  content: "[";
+  left: 2px;
+}
+.active::after {
+  content: "]";
+  right: 2px;
+}
+
+/* ---- CTA: colchetes, preenche lima no hover ---- */
+.cta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--accent);
+  padding: 8px 13px;
+  border: 1px solid var(--accent-line);
+  background: transparent;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.cta:hover {
+  color: var(--accent-ink);
+  background: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transform: translate(-1px, -1px);
+}
+.cta:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+@media (max-width: 860px) {
+  .inner {
+    gap: var(--space-3);
+  }
+  .links {
+    justify-content: flex-start;
+  }
+}
+@media (max-width: 640px) {
+  .cta {
+    display: none;
+  }
+}

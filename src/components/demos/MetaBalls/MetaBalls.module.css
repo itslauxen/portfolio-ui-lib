@@ -1,0 +1,7 @@
+/* Container do canvas de metaballs */
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}

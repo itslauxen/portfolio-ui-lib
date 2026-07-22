@@ -1,0 +1,14 @@
+/* Container do shader de forma revelada pelo cursor. */
+
+.container {
+  position: relative;
+  width: min(480px, 100%);
+  aspect-ratio: 1;
+  max-height: 100%;
+}
+
+.container :global(canvas) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

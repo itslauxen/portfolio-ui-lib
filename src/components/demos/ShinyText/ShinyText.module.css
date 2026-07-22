@@ -1,0 +1,8 @@
+/* Texto com brilho deslizante; o gradiente e animado via JS. */
+.shiny {
+  display: inline-block;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  user-select: none;
+}

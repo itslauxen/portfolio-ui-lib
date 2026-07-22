@@ -1,0 +1,20 @@
+/* Wrapper do campo magnetico: o padding define a zona de atracao */
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Conteudo padrao de demonstracao */
+.demoPill {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: #15151a;
+  border: 1px solid #2a2a32;
+  color: #c6ff3a;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  user-select: none;
+}

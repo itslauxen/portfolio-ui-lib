@@ -1,0 +1,87 @@
+/* Moldura dos cards de projeto (borda estelar) e wrapper de tilt 3D. */
+
+/* Altura natural do conteúdo (o preview ao lado pode ser mais alto). */
+.cardWrap {
+  height: auto;
+}
+
+.perspective {
+  height: 100%;
+  perspective: 900px;
+}
+
+.tiltBody {
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card {
+  position: relative;
+  height: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  /* 1px de "vão" para as partículas aparecerem como borda. */
+  padding: 1px;
+}
+
+/* Partículas de luz orbitando a borda (lima, alternando topo/baixo). */
+.starBottom,
+.starTop {
+  position: absolute;
+  width: 300%;
+  height: 50%;
+  opacity: 0.7;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent), transparent 10%);
+  z-index: 0;
+  pointer-events: none;
+}
+.starBottom {
+  bottom: -11px;
+  right: -250%;
+  animation: starBottom 6s linear infinite alternate;
+}
+.starTop {
+  top: -10px;
+  left: -250%;
+  animation: starTop 6s linear infinite alternate;
+}
+
+@keyframes starBottom {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+}
+@keyframes starTop {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+}
+
+/* Miolo opaco: cobre as partículas exceto na borda de 1px. */
+.inner {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  border-radius: inherit;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(to bottom, #101014, #0a0a0d);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starBottom,
+  .starTop {
+    animation: none;
+  }
+}

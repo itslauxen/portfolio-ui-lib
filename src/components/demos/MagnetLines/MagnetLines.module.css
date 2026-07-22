@@ -1,0 +1,15 @@
+/* Grade de tracos magneticos */
+
+.container {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.container span {
+  display: block;
+  border-radius: 999px;
+  transform-origin: center;
+  will-change: transform;
+  transform: rotate(var(--rotate));
+}

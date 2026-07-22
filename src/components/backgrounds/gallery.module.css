@@ -1,0 +1,215 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+.spacer {
+  flex: 1;
+}
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  aspect-ratio: 16 / 11;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur-slow) var(--ease),
+    border-color var(--dur-slow) var(--ease);
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  width: 100%;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-ring);
+  box-shadow: 0 20px 50px -20px var(--accent-ring), 0 0 0 1px var(--accent-soft);
+}
+
+.meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 30px 14px 12px;
+  background: linear-gradient(to top, rgba(4, 4, 10, 0.92), rgba(4, 4, 10, 0.4) 55%, transparent);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  pointer-events: none;
+}
+.nm {
+  font-size: var(--fs-base);
+  font-weight: 600;
+}
+.ct {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  margin-top: 3px;
+}
+.openHint {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  font-size: var(--fs-xs);
+  padding: 6px 11px;
+  border-radius: var(--radius-full);
+  color: #fff;
+  background: var(--accent);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 8px 20px -12px var(--accent);
+}
+.card:hover .openHint {
+  opacity: 1;
+  transform: none;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 70px 0;
+}
+
+/* ---------- editor overlay ---------- */
+.editor {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: #000;
+  animation: fade 0.2s ease;
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.stage {
+  position: absolute;
+  inset: 0;
+}
+.edTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  z-index: 3;
+  background: linear-gradient(to bottom, rgba(4, 4, 10, 0.7), transparent);
+}
+.edTitle {
+  font-size: var(--fs-md);
+  font-weight: 650;
+}
+.edTitle small {
+  display: block;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.panel {
+  position: absolute;
+  top: 74px;
+  right: 16px;
+  bottom: 16px;
+  width: 330px;
+  max-width: calc(100vw - 32px);
+  z-index: 3;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ph {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--muted);
+}
+.pbody {
+  padding: 12px 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+.pfoot {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 9px;
+}
+.pfoot > * {
+  flex: 1;
+  justify-content: center;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 11px 18px;
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(12px);
+  font-size: var(--fs-sm);
+  z-index: 100;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  pointer-events: none;
+}
+.toastShow {
+  opacity: 1;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 720px) {
+  .panel {
+    top: auto;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-height: 52vh;
+  }
+  .edTop {
+    flex-wrap: wrap;
+  }
+}

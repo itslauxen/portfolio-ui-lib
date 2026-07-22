@@ -1,0 +1,65 @@
+/* Cartão com holofote seguindo o cursor. */
+
+.cardSpotlight {
+  position: relative;
+  width: min(360px, 100%);
+  min-height: 220px;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #0c0c0e;
+  padding: 2rem;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(255, 255, 255, 0.05);
+}
+
+.cardSpotlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    var(--spotlight-color),
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.cardSpotlight:hover::before,
+.cardSpotlight:focus-within::before {
+  opacity: 0.6;
+}
+
+/* Conteúdo padrão da demo. */
+.demoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #fff;
+}
+
+.demoLabel {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.demoTitle {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.demoText {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.75);
+}

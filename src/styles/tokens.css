@@ -1,0 +1,108 @@
+/* ============================================================================
+   DESIGN TOKENS, fonte única de verdade do visual.
+   Identidade: NEO-BRUTALIST TERMINAL. Monospace em tudo, cor-assinatura lima
+   ácida sobre quase-preto, cantos duros, bordas sólidas, sombras sem blur.
+   Troque as variáveis aqui para repaginar o site inteiro de uma vez.
+   ============================================================================ */
+
+:root {
+  /* ---- Superfícies / neutros (terminal, quase-preto neutro) ---- */
+  --bg: #070708;
+  --bg-2: #0c0c0e;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-strong: rgba(16, 16, 19, 0.86);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --text: #ededed;
+  --text-dim: #b7b7ba;
+  --muted: #7d7d86;
+
+  /* ---- Cor-assinatura: LIMA ÁCIDA (mude estas p/ repaginar) ---- */
+  --accent: #c6ff3a;
+  --accent-ink: #0a0f00; /* texto sobre a lima */
+  --accent-2: #5ff2d8; /* ciano de apoio, uso raro */
+  --accent-3: #ff5c38; /* alerta/quente, uso raro */
+  --good: #7dff9b;
+  --warn: #ffb020;
+
+  /* Derivados de marca */
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 40%, var(--border-strong));
+  --accent-ring: color-mix(in srgb, var(--accent) 55%, transparent);
+  --accent-glow: color-mix(in srgb, var(--accent) 22%, transparent);
+
+  /* Textura de fundo: grade fina de terminal + brilho lima discreto. */
+  --grid-line: rgba(255, 255, 255, 0.028);
+  --grid-size: 46px;
+  --backdrop: radial-gradient(
+      900px 520px at 92% -12%,
+      color-mix(in srgb, var(--accent) 7%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    var(--bg);
+
+  /* ---- Tipografia: MONO em tudo ---- */
+  --font-mono: var(--font-jbmono), "JetBrains Mono", ui-monospace, "SF Mono",
+    "JetBrains Mono", Menlo, Consolas, monospace;
+  --font-sans: var(--font-mono);
+  --fs-xs: 0.7rem;
+  --fs-sm: 0.8rem;
+  --fs-base: 0.9rem;
+  --fs-md: 1.02rem;
+  --fs-lg: 1.28rem;
+  --fs-xl: 1.7rem;
+  --fs-2xl: 2.3rem;
+  --fs-3xl: clamp(2.8rem, 8vw, 6rem);
+  --lh-tight: 1.02;
+  --lh: 1.62;
+  --tracking-wide: 1.4px;
+  --tracking-label: 2.2px;
+
+  /* ---- Espaçamento (escala 4px) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 22px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+  --space-9: 112px;
+
+  /* ---- Raios: cantos duros ---- */
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+  --radius-xl: 4px;
+  --radius-full: 999px;
+
+  /* ---- Sombras: offset duro, sem blur (brutalist) ---- */
+  --shadow-sm: 3px 3px 0 rgba(0, 0, 0, 0.8);
+  --shadow-md: 6px 6px 0 rgba(0, 0, 0, 0.85);
+  --shadow-hard: 4px 4px 0 var(--accent);
+  --shadow-glow: 0 0 0 1px var(--accent-line), 0 0 24px -6px var(--accent-glow);
+
+  /* ---- Layout ---- */
+  --maxw: 1440px;
+  --maxw-prose: 720px;
+  --nav-h: 60px;
+  --blur: 10px;
+
+  /* ---- Motion ---- */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-step: steps(1, end);
+  --dur-fast: 0.12s;
+  --dur: 0.2s;
+  --dur-slow: 0.38s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

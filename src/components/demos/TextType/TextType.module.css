@@ -1,0 +1,23 @@
+/* Maquina de escrever: tipografia grande e clara para a demo. */
+.textType {
+  display: inline-block;
+  white-space: pre-wrap;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ededed;
+}
+
+.content {
+  display: inline;
+}
+
+.cursor {
+  margin-left: 0.25rem;
+  display: inline-block;
+  opacity: 1;
+}
+
+.cursorHidden {
+  display: none;
+}

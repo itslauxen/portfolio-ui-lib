@@ -1,0 +1,41 @@
+/* Grade masonry animada. */
+
+.list {
+  position: relative;
+  width: min(860px, 100%);
+  min-height: 200px;
+}
+
+.itemWrapper {
+  position: absolute;
+  will-change: transform, width, height, opacity;
+  padding: 6px;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+}
+
+.itemWrapper > .itemImg {
+  position: relative;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 50px -10px rgba(0, 0, 0, 0.2);
+}
+
+.colorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(198, 255, 58, 0.5), rgba(0, 150, 255, 0.5));
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 8px;
+}

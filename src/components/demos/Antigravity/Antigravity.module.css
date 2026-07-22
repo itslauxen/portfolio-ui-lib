@@ -1,0 +1,7 @@
+/* Container do canvas 3D de particulas */
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
