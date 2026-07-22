@@ -139,8 +139,7 @@ funciona no PC e no mobile. `count` reduz partículas para aparelhos mais fracos
 ## Créditos / origem dos assets
 
 - **myBackgrounds** — biblioteca original de fundos parametrizados (o `index.html` enviado).
-  Portada aqui para o motor `engine.js` + componentes React. O efeito "cigarro" foi omitido
-  a pedido. Foi adicionado um novo efeito: **Campo de Vetores** (palitinhos que apontam pro mouse).
+  Portada aqui para o motor `engine.js` + componentes React.
 - **Nova Notes** — https://nova-notes-six.vercel.app/ · de onde vieram o **JarvisCore** e o
   **MatrixGlitch**.
 
