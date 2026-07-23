@@ -1,0 +1,110 @@
+export type Lang = "pt" | "en";
+
+type Entry = { pt: string; en: string };
+
+// Dicionário central de tradução (interface + textos das páginas).
+export const messages: Record<string, Entry> = {
+  // ---- nav ----
+  "nav.home": { pt: "início", en: "home" },
+  "nav.library": { pt: "biblioteca", en: "library" },
+  "nav.about": { pt: "sobre", en: "about" },
+  "nav.contact": { pt: "contato", en: "contact" },
+
+  // ---- home / hero ----
+  "home.eyebrow": { pt: "portfólio & biblioteca", en: "portfolio & library" },
+  "home.role": {
+    pt: "Desenvolvedor Fullstack & Creative Developer",
+    en: "Fullstack & Creative Developer",
+  },
+  "home.tagline": {
+    pt: "Do banco de dados ao pixel: aplicações completas com Node e React, e interfaces vivas com WebGL, motion e shaders.",
+    en: "From database to pixel: full apps with Node and React, and living interfaces with WebGL, motion and shaders.",
+  },
+  "home.ctaLibrary": { pt: "Explorar biblioteca", en: "Explore the library" },
+  "home.ctaProjects": { pt: "Ver projetos", en: "View projects" },
+  "home.stat1v": { pt: "90+", en: "90+" },
+  "home.stat1l": { pt: "Componentes parametrizados", en: "Parametrized components" },
+  "home.stat2v": { pt: "Fullstack", en: "Fullstack" },
+  "home.stat2l": { pt: "Front, back e banco de dados", en: "Front, back and database" },
+  "home.stat3v": { pt: "Design", en: "Design" },
+  "home.stat3l": { pt: "+ código, do conceito ao deploy", en: "+ code, concept to deploy" },
+  "home.worksEyebrow": { pt: "Trabalhos", en: "Work" },
+  "home.worksTitle": { pt: "Projetos em destaque", en: "Featured projects" },
+  "home.worksSub": {
+    pt: "Alguns projetos reais. O Nova Notes e o myBackgrounds alimentam componentes que você encontra aqui na biblioteca.",
+    en: "A few real projects. Nova Notes and myBackgrounds feed components you'll find here in the library.",
+  },
+  "home.hoverReveal": { pt: "hover para revelar", en: "hover to reveal" },
+  "home.liveNow": { pt: "Ver ao vivo ↗", en: "View live ↗" },
+  "home.open": { pt: "Abrir →", en: "Open →" },
+  "home.code": { pt: "Código", en: "Code" },
+  "home.ctaTitle": { pt: "Uma biblioteca que também é vitrine", en: "A library that is also a showcase" },
+  "home.ctaSub": {
+    pt: "Organize, reaproveite e mostre seu trabalho: backgrounds parametrizados, componentes e animações, tudo com busca e preview ao vivo.",
+    en: "Organize, reuse and show your work: parametrized backgrounds, components and animations, all with search and live preview.",
+  },
+  "home.ctaOpenLib": { pt: "Abrir biblioteca", en: "Open the library" },
+  "home.ctaAbout": { pt: "Sobre mim", en: "About me" },
+
+  // ---- about ----
+  "about.eyebrow": { pt: "Sobre", en: "About" },
+  "about.factExpV": { pt: "4 anos", en: "4 years" },
+  "about.factExpL": { pt: "de experiência", en: "of experience" },
+  "about.factStackV": { pt: "Fullstack", en: "Fullstack" },
+  "about.factStackL": { pt: "front · back · banco", en: "front · back · database" },
+  "about.factEnV": { pt: "Inglês", en: "English" },
+  "about.factEnL": { pt: "avançado · Austrália", en: "advanced · Australia" },
+  "about.factLocV": { pt: "RS · BR", en: "RS · BR" },
+  "about.factLocL": { pt: "Novo Hamburgo · remoto", en: "Novo Hamburgo · remote" },
+  "about.status": { pt: "aberto a novas oportunidades", en: "open to new opportunities" },
+  "about.labelExperience": { pt: "experiência", en: "experience" },
+  "about.labelEducation": { pt: "formação", en: "education" },
+  "about.labelStack": { pt: "stack", en: "stack" },
+  "about.labelContact": { pt: "contato", en: "contact" },
+  "about.contact": { pt: "Fale comigo", en: "Get in touch" },
+  "about.now": { pt: "atual", en: "present" },
+  "about.catFront": { pt: "Front-end", en: "Front-end" },
+  "about.catBack": { pt: "Back-end & infra", en: "Back-end & infra" },
+  "about.catCreative": { pt: "Criativo & motion", en: "Creative & motion" },
+  "about.catDesign": { pt: "Design & IA", en: "Design & AI" },
+
+  // ---- biblioteca ----
+  "lib.eyebrow": { pt: "Biblioteca", en: "Library" },
+  "lib.search": { pt: "Buscar...", en: "Search..." },
+  "lib.all": { pt: "Todos", en: "All" },
+  "lib.empty": { pt: "Nenhum resultado.", en: "No results." },
+  "lib.open": { pt: "Abrir", en: "Open" },
+  "lib.copyCode": { pt: "Copiar código", en: "Copy code" },
+  "lib.copied": { pt: "Copiado ✓", en: "Copied ✓" },
+  "lib.reset": { pt: "Resetar", en: "Reset" },
+  "lib.randomize": { pt: "Aleatorizar", en: "Randomize" },
+  "lib.searchBg": { pt: "Buscar fundo...", en: "Search a background..." },
+  "lib.items": { pt: "itens", en: "items" },
+  "lib.paramsCount": { pt: "parâmetros", en: "parameters" },
+  "lib.params": { pt: "Parâmetros", en: "Parameters" },
+  "lib.export": { pt: "Exportar", en: "Export" },
+  "lib.copyComponent": { pt: "Copiar componente", en: "Copy component" },
+  "lib.emptyFull": { pt: "Nenhum item encontrado.", en: "No items found." },
+  "lib.tRandom": { pt: "Parâmetros aleatorizados", en: "Parameters randomized" },
+  "lib.tReset": { pt: "Padrão restaurado", en: "Defaults restored" },
+  "lib.tExport": { pt: "HTML exportado", en: "HTML exported" },
+  "lib.tCopiedComp": { pt: "Componente copiado", en: "Component copied" },
+  "lib.tCopiedCode": { pt: "Código copiado", en: "Code copied" },
+  "lib.tCopyFail": { pt: "Não foi possível copiar", en: "Couldn't copy" },
+  "lib.typeComponent": { pt: "Componente", en: "Component" },
+  "lib.typeShaderWebgl": { pt: "Shader WebGL", en: "WebGL shader" },
+  "lib.typeShader": { pt: "Shader", en: "Shader" },
+  "lib.typeCanvas": { pt: "Canvas", en: "Canvas" },
+  "lib.secBackgrounds": { pt: "Backgrounds", en: "Backgrounds" },
+  "lib.secComponentes": { pt: "Componentes", en: "Components" },
+  "lib.secAnimacoes": { pt: "Animações", en: "Animations" },
+  "lib.secTexto": { pt: "Animações de texto", en: "Text animations" },
+  "lib.headerTitle": { pt: "Biblioteca", en: "Library" },
+  "lib.headerLead": {
+    pt: "Backgrounds, componentes e animações num só lugar. Escolha um item na lateral para vê-lo no palco e ajustar cada parâmetro pelos sliders, ao vivo. Cada item tem seu próprio link, então recarregar mantém a seleção.",
+    en: "Backgrounds, components and animations in one place. Pick an item on the side to see it on the stage and tweak every parameter with live sliders. Each item has its own link, so reloading keeps your selection.",
+  },
+
+  // ---- footer ----
+  "footer.rights": { pt: "Todos os direitos reservados.", en: "All rights reserved." },
+};

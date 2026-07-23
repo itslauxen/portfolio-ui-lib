@@ -48,17 +48,22 @@ export const skills: Skill[] = [
 
 export interface ExperienceItem {
   role: string;
+  roleEn: string;
   company: string;
   period: string;
+  periodEn: string;
   location?: string;
   bullets: string[];
+  bulletsEn: string[];
 }
 
 export const experience: ExperienceItem[] = [
   {
     role: "Desenvolvedor Fullstack",
+    roleEn: "Fullstack Developer",
     company: "DKW System",
     period: "jun/2025 — atual",
+    periodEn: "Jun 2025 — present",
     location: "Novo Hamburgo, RS · híbrido",
     bullets: [
       "Desenvolvo, do front ao back, um CRM e sistema de mensageria whitelabel de grande porte (6 repositórios) com React, Node, Sequelize, MUI v5, SQL e Docker.",
@@ -66,45 +71,68 @@ export const experience: ExperienceItem[] = [
       "Construo agentes de IA configuráveis com tools (function calling), front e back, permitindo automações personalizadas por cliente.",
       "Implementei convenções de código, design tokens e boas práticas de frontend adotadas pela equipe.",
     ],
+    bulletsEn: [
+      "I build, front to back, a large-scale whitelabel CRM and messaging system (6 repositories) with React, Node, Sequelize, MUI v5, SQL and Docker.",
+      "Single-handedly led the frontend migration — React 16→18, Node 16→22, MUI v4→v5 and Vite adoption — refactoring thousands of files and greatly improving performance.",
+      "I build configurable AI agents with tools (function calling), front and back, enabling per-client automations.",
+      "Set code conventions, design tokens and frontend best practices adopted by the team.",
+    ],
   },
   {
     role: "Trainee — Programa Crescer",
+    roleEn: "Trainee — Crescer Program",
     company: "CWI Software",
     period: "2024 — 2025",
+    periodEn: "2024 — 2025",
     bullets: [
       "Formação profissional com projetos práticos em React e Java, aprofundando fundamentos de front e back.",
+    ],
+    bulletsEn: [
+      "Professional training with hands-on projects in React and Java, deepening front and back fundamentals.",
     ],
   },
   {
     role: "Desenvolvedor Frontend",
+    roleEn: "Frontend Developer",
     company: "B3Dev",
     period: "dez/2022 — nov/2023",
+    periodEn: "Dec 2022 — Nov 2023",
     location: "Porto Alegre, RS",
     bullets: [
       "Aplicações web e mobile para diversos clientes com Vue.js, Ionic, Quasar e MongoDB.",
       "Entreguei apps híbridos com boa experiência de usuário em múltiplos projetos.",
+    ],
+    bulletsEn: [
+      "Web and mobile apps for various clients with Vue.js, Ionic, Quasar and MongoDB.",
+      "Delivered hybrid apps with good UX across multiple client projects.",
     ],
   },
 ];
 
 export interface EducationItem {
   title: string;
+  titleEn: string;
   org: string;
   period: string;
   note?: string;
+  noteEn?: string;
 }
 
 export const education: EducationItem[] = [
   {
     title: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
+    titleEn: "Technologist in Systems Analysis and Development",
     org: "UNISINOS · São Leopoldo, RS",
     period: "2022 — 2026",
     note: "Concluído",
+    noteEn: "Completed",
   },
   {
     title: "Intercâmbio · imersão em inglês",
+    titleEn: "Exchange · English immersion",
     org: "Austrália",
     period: "2024",
     note: "~6 meses",
+    noteEn: "~6 months",
   },
 ];

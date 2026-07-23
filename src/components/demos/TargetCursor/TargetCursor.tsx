@@ -163,7 +163,18 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
     tickerFnRef.current = tickerFn;
 
+    // Mostra o cursor no primeiro movimento — corrige o caso de a página
+    // carregar com o mouse já dentro dela (quando o "mouseenter" não dispara e
+    // o cursor ficaria invisível, com o nativo escondido).
+    let shown = false;
+    const showCursor = () => {
+      if (shown) return;
+      shown = true;
+      gsap.to(cursor, { opacity: 1, duration: 0.2, overwrite: "auto" });
+    };
+
     const moveHandler = (e: MouseEvent) => {
+      showCursor();
       if (fullPage) {
         // Cursor fixed: coordenadas de viewport direto.
         moveCursor(e.clientX, e.clientY);
@@ -174,11 +185,13 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     };
 
     const enterWrapperHandler = () => {
-      gsap.to(cursor, { opacity: 1, duration: 0.2 });
+      shown = true;
+      gsap.to(cursor, { opacity: 1, duration: 0.2, overwrite: "auto" });
     };
 
     const leaveWrapperHandler = () => {
-      gsap.to(cursor, { opacity: 0, duration: 0.2 });
+      shown = false;
+      gsap.to(cursor, { opacity: 0, duration: 0.2, overwrite: "auto" });
       currentLeaveHandler?.();
     };
 
@@ -282,6 +295,11 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       });
 
       const leaveHandler = () => {
+        // Movimento rápido: se outro alvo já assumiu, não reseta o estado dele.
+        if (activeTarget !== target) {
+          cleanupTarget(target);
+          return;
+        }
         gsap.ticker.remove(tickerFnRef.current!);
 
         targetCornerPositionsRef.current = null;

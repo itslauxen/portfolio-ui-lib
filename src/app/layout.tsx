@@ -4,6 +4,7 @@ import "@/styles/tokens.css";
 import "./globals.css";
 import { Nav } from "@/components/Nav/Nav";
 import { Footer } from "@/components/Footer/Footer";
+import { I18nProvider } from "@/i18n/I18nProvider";
 import { profile } from "@/data/profile";
 
 // Monospace única do site (identidade neo-brutalist terminal).
@@ -24,9 +25,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={jbMono.variable}>
       <body>
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <I18nProvider>
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+        </I18nProvider>
       </body>
     </html>
   );

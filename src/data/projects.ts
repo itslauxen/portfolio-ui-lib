@@ -10,7 +10,7 @@ export const projects: Project[] = [
       "App de notas com editor rico (TipTap), sincronização em nuvem (Supabase) e um núcleo de partículas 3D (JarvisCore) reativo a voz e toque, o mesmo componente disponível aqui na biblioteca.",
     tags: ["React", "Vite", "Supabase", "Canvas 3D", "TipTap"],
     year: "2025",
-    url: "https://nova-notes-six.vercel.app/",
+    url: "https://novanotes.lauxen.dev/",
     featured: true,
     cover: "/nova-notes-preview.png",
   },
