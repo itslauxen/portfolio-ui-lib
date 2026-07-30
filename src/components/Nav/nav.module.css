@@ -14,7 +14,7 @@
   gap: var(--space-5);
 }
 
-/* ---- marca: gabriel_lauxen + bloco lima piscando ---- */
+/* ---- marca ---- */
 .brand {
   display: flex;
   align-items: center;
@@ -45,20 +45,14 @@
   white-space: nowrap;
 }
 
-/* ---- links: UPPERCASE tracking, ativo em lima ---- */
+/* ---- links desktop ---- */
 .links {
   display: flex;
   align-items: center;
   gap: 2px;
   flex: 1;
   justify-content: center;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.links::-webkit-scrollbar {
-  display: none;
-}
-
 .link {
   position: relative;
   padding: 7px 11px;
@@ -75,7 +69,6 @@
   color: var(--text);
   border-color: var(--border);
 }
-/* Ativo: texto lima + colchetes que aparecem nas laterais. */
 .active {
   color: var(--accent);
 }
@@ -96,7 +89,14 @@
   right: 2px;
 }
 
-/* ---- CTA: colchetes, preenche lima no hover ---- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+/* ---- CTA ---- */
 .cta {
   flex: none;
   display: inline-flex;
@@ -123,16 +123,127 @@
   box-shadow: none;
 }
 
+/* ---- botão do menu mobile (hambúrguer -> X) ---- */
+.menuBtn {
+  display: none;
+  flex: none;
+  margin-left: auto;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  cursor: pointer;
+}
+.burger {
+  position: relative;
+  width: 18px;
+  height: 12px;
+}
+.burger span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transition: transform 0.24s var(--ease), opacity 0.18s var(--ease), top 0.24s var(--ease);
+}
+.burger span:nth-child(1) {
+  top: 0;
+}
+.burger span:nth-child(2) {
+  top: 5px;
+}
+.burger span:nth-child(3) {
+  top: 10px;
+}
+.burgerOpen span:nth-child(1) {
+  top: 5px;
+  transform: rotate(45deg);
+}
+.burgerOpen span:nth-child(2) {
+  opacity: 0;
+}
+.burgerOpen span:nth-child(3) {
+  top: 5px;
+  transform: rotate(-45deg);
+}
+
+/* ---- painel do menu mobile ---- */
+.mobileMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-md);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.32s var(--ease);
+}
+.mobileMenuOpen {
+  max-height: 82vh;
+}
+.mobileLinks {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) 0;
+}
+.mobileLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px clamp(20px, 4vw, 40px);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--text-dim);
+  border-left: 3px solid transparent;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+.mobileLink:hover,
+.mobileLinkActive {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--surface);
+}
+.mobileLinkIdx {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  font-weight: 700;
+}
+.mobileLinkActive .mobileLinkIdx {
+  color: var(--accent);
+}
+.mobileFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: var(--space-4) clamp(20px, 4vw, 40px);
+  border-top: 1px solid var(--border);
+}
+
 @media (max-width: 860px) {
   .inner {
     gap: var(--space-3);
   }
-  .links {
-    justify-content: flex-start;
-  }
 }
-@media (max-width: 640px) {
-  .cta {
+@media (max-width: 720px) {
+  .links,
+  .actions {
     display: none;
+  }
+  .menuBtn {
+    display: inline-flex;
+  }
+  .mobileMenu {
+    display: block;
   }
 }

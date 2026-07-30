@@ -48,7 +48,7 @@ export const messages: Record<string, Entry> = {
 
   // ---- about ----
   "about.eyebrow": { pt: "Sobre", en: "About" },
-  "about.factExpV": { pt: "4 anos", en: "4 years" },
+  "about.factExpV": { pt: "3+ anos", en: "3+ years" },
   "about.factExpL": { pt: "de experiência", en: "of experience" },
   "about.factStackV": { pt: "Fullstack", en: "Fullstack" },
   "about.factStackL": { pt: "front · back · banco", en: "front · back · database" },
@@ -107,4 +107,9 @@ export const messages: Record<string, Entry> = {
 
   // ---- footer ----
   "footer.rights": { pt: "Todos os direitos reservados.", en: "All rights reserved." },
+
+  // ---- ticker (faixa de stacks) ----
+  "ticker.fullstack": { pt: "desenvolvedor fullstack", en: "fullstack developer" },
+  "ticker.backgrounds": { pt: "backgrounds parametrizados", en: "parametrized backgrounds" },
+  "ticker.aiAgents": { pt: "agentes de ia", en: "ai agents" },
 };

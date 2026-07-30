@@ -1,94 +1,94 @@
-# gabriel_lauxen — portfólio & biblioteca de componentes
+# gabriel_lauxen — portfolio & component library
 
-Site em **Next.js (App Router) · React · TypeScript · CSS Modules** que é, ao mesmo tempo,
-o **portfólio** do Gabriel Lauxen (desenvolvedor fullstack) e uma **biblioteca reutilizável
-de ~90 componentes visuais parametrizados**.
+A **Next.js (App Router) · React · TypeScript · CSS Modules** site that is, at the same time,
+Gabriel Lauxen's **portfolio** (fullstack developer) and a **reusable library of ~90
+parametrized visual components**.
 
-Identidade **neo-brutalist terminal**: monospace (JetBrains Mono), cor-assinatura lima
-(`#c6ff3a`) sobre quase-preto, cantos duros e sombras sem blur — tudo controlado por design
-tokens centralizados.
+**Neo-brutalist terminal** identity: monospace (JetBrains Mono), lime signature color
+(`#c6ff3a`) over near-black, hard corners and blur-less shadows — all controlled by centralized
+design tokens.
 
 ---
 
-## O que tem dentro
+## What's inside
 
-Uma **biblioteca única**, com busca e preview ao vivo, reunindo:
+A **single library**, with search and live preview, bringing together:
 
-- **Backgrounds (59)** — fundos animados parametrizados misturados num só catálogo:
-  **43** efeitos de um motor próprio em `<canvas>` (2D/WebGL) + **16** shaders em React/OGL
+- **Backgrounds (59)** — parametrized animated backgrounds mixed into one catalog:
+  **43** effects from a custom `<canvas>` engine (2D/WebGL) + **16** React/OGL shaders
   (Aurora, Grainient, LightRays, LiquidEther, PlasmaWave, GradientBlinds, Dither, Beams…).
-  Cada um com **sliders por parâmetro** e **código para copiar**.
-- **Demos (35)** — animações, efeitos de texto e componentes de UI (Dock, MagicBento,
+  Each one with **per-parameter sliders** and **copyable code**.
+- **Demos (35)** — animations, text effects and UI components (Dock, MagicBento,
   TiltedCard, SplitText, ClickSpark, MagnetLines, GooeyNav…).
-- **Destaques autorais** — **JarvisCore** (partículas 3D em canvas puro, sem three.js),
-  **MatrixGlitch** e um **campo de vetores** interativo.
+- **Original highlights** — **JarvisCore** (3D particles in pure canvas, no three.js),
+  **MatrixGlitch** and an interactive **vector field**.
 
 ---
 
-## Como rodar
+## Running it
 
-Requer **Node 18+**.
+Requires **Node 18+**.
 
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run build      # build de produção
-npm start          # sobe o build
-npm run typecheck  # checagem de tipos (tsc --noEmit)
+npm run build      # production build
+npm start          # serve the build
+npm run typecheck  # type checking (tsc --noEmit)
 ```
 
-Dependências principais: `next`, `react`, `ogl` (shaders WebGL), `three` +
-`@react-three/fiber` + `@react-three/drei` + `postprocessing` (efeitos 3D), `gsap` e
-`motion` (animação).
+Main dependencies: `next`, `react`, `ogl` (WebGL shaders), `three` +
+`@react-three/fiber` + `@react-three/drei` + `postprocessing` (3D effects), `gsap` and
+`motion` (animation).
 
 ---
 
-## Estrutura
+## Structure
 
 ```
 src/
 ├─ app/
-│  ├─ layout.tsx        # layout raiz + fonte (JetBrains Mono)
-│  ├─ page.tsx          # HOME / vitrine (hero, projetos, stats)
-│  ├─ backgrounds/      # galeria de fundos + /[id] (editor de parâmetros)
-│  ├─ biblioteca/       # catálogo unificado com busca + /[id] (detalhe)
-│  ├─ sobre/            # sobre, experiência, formação e stack
+│  ├─ layout.tsx        # root layout + font (JetBrains Mono)
+│  ├─ page.tsx          # HOME / showcase (hero, projects, stats)
+│  ├─ backgrounds/      # background gallery + /[id] (parameter editor)
+│  ├─ biblioteca/       # unified catalog with search + /[id] (detail)
+│  ├─ sobre/            # about, experience, education and stack
 │  └─ icon.svg          # favicon </>
 ├─ components/
-│  ├─ AnimatedBackground/   # runner dos efeitos de canvas (motor)
+│  ├─ AnimatedBackground/   # runner for the canvas effects (engine)
 │  ├─ backgrounds/
-│  │  ├─ shaders/           # 15 fundos WebGL/OGL (React)
+│  │  ├─ shaders/           # 15 WebGL/OGL backgrounds (React)
 │  │  └─ BackgroundStudio / Surface / Preview / Controls / ReactBackground
-│  ├─ demos/                # 35 componentes (animações, texto, UI)
+│  ├─ demos/                # 35 components (animations, text, UI)
 │  ├─ JarvisCore/  MatrixGlitch/
 │  └─ home/  Nav/  Footer/  ui/
-├─ data/                # ⇦ SEU CONTEÚDO: profile.ts, projects.ts, animations.ts
+├─ data/                # ⇦ YOUR CONTENT: profile.ts, projects.ts, animations.ts
 ├─ lib/backgrounds/     # engine.js, catalog.ts, react-catalog.ts, demo-catalog.ts, types.ts
 └─ styles/              # tokens.css (design tokens), tokens.ts
 ```
 
 ---
 
-## Como customizar
+## Customizing
 
-### Visual (cores / estilo)
+### Look (colors / style)
 
-Tudo vem de **`src/styles/tokens.css`**. A cor-assinatura é uma variável só:
+Everything comes from **`src/styles/tokens.css`**. The signature color is a single variable:
 
 ```css
---accent: #c6ff3a; /* troque para repaginar o site inteiro */
+--accent: #c6ff3a; /* change it to reskin the whole site */
 ```
 
-Ali também ficam tipografia, espaçamento, cantos e sombras. O site é **dark único** — sem
-seletor de tema nem modo claro.
+Typography, spacing, corners and shadows live there too. The site is **single dark theme** —
+no theme switcher or light mode.
 
-### Conteúdo
+### Content
 
-- **Perfil, skills, experiência e formação:** `src/data/profile.ts`
-- **Projetos:** `src/data/projects.ts`
-- **Animações CSS:** `src/data/animations.ts`
+- **Profile, skills, experience and education:** `src/data/profile.ts`
+- **Projects:** `src/data/projects.ts`
+- **CSS animations:** `src/data/animations.ts`
 
-### Usar um background em qualquer lugar
+### Using a background anywhere
 
 ```tsx
 import { AuroraBackground } from "@/components/backgrounds/effects";
@@ -98,16 +98,16 @@ import { AuroraBackground } from "@/components/backgrounds/effects";
 </div>
 ```
 
-Todos aceitam `params`, `interactive`, `className` e `style`. O container precisa ter tamanho.
+All of them accept `params`, `interactive`, `className` and `style`. The container needs a size.
 
-### Adicionar um novo background
+### Adding a new background
 
-- **Efeito de canvas:** registre com `reg({ id, name, cat, desc, params, fn })` em
-  `src/lib/backgrounds/engine.js` e rode `node scripts/gen-backgrounds.mjs` para regenerar
+- **Canvas effect:** register it with `reg({ id, name, cat, desc, params, fn })` in
+  `src/lib/backgrounds/engine.js` and run `node scripts/gen-backgrounds.mjs` to regenerate
   `catalog.ts` + `effects.tsx`.
-- **Shader React/WebGL:** crie o componente em `src/components/backgrounds/shaders/` e
-  registre-o em `src/lib/backgrounds/react-catalog.ts` (com `params` de slider e um
-  `propsFrom` que converte os valores em props). Entra automático no catálogo unificado.
+- **React/WebGL shader:** create the component in `src/components/backgrounds/shaders/` and
+  register it in `src/lib/backgrounds/react-catalog.ts` (with slider `params` and a
+  `propsFrom` that turns the values into props). It joins the unified catalog automatically.
 
 ### JarvisCore
 
@@ -117,21 +117,24 @@ import JarvisCore from "@/components/JarvisCore/JarvisCore";
 <JarvisCore color="#c6ff3a" count={3000} />
 ```
 
-Canvas 2D com projeção pseudo-3D (sem three.js): arraste para girar/inclinar; funciona no PC
-e no mobile. `count` reduz partículas em aparelhos mais fracos.
+A 2D canvas with pseudo-3D projection (no three.js): drag to rotate/tilt; works on desktop and
+mobile. `count` lowers the particle count on weaker devices.
 
 ---
 
-## Créditos
+## Credits
 
-Vários backgrounds e componentes são **adaptados do [ReactBits](https://reactbits.dev)**
-(licença MIT) — uma biblioteca que admiro e uso como base. O motor de fundos em canvas, o
-**JarvisCore**, o **MatrixGlitch**, o campo de vetores e a arquitetura do site são de autoria
-própria.
+Several backgrounds and components are **adapted from [ReactBits](https://reactbits.dev)**
+(MIT license) — a library I admire and use as a base. The canvas background engine,
+**JarvisCore**, **MatrixGlitch**, the vector field and the site architecture are my own work.
 
-## Observações técnicas
+## Technical notes
 
-- `npm run build` roda a checagem de tipos como rede de segurança; o ESLint não bloqueia o
-  build (rode `npm run lint` à parte).
-- A galeria só executa o preview dos cards visíveis (IntersectionObserver) para não estourar
-  o limite de contextos WebGL do navegador ao rodar dezenas de canvases ao mesmo tempo.
+- `npm run build` runs type checking as a safety net; ESLint doesn't block the build
+  (run `npm run lint` separately).
+- The gallery only runs the preview for visible cards (IntersectionObserver) so it doesn't blow
+  past the browser's WebGL context limit when running dozens of canvases at once.
+
+---
+
+Built by **Gabriel Lauxen** — [github.com/itslauxen](https://github.com/itslauxen) · [LinkedIn](https://www.linkedin.com/in/gabriel-lauxen-36822a231/)

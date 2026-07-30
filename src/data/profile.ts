@@ -6,7 +6,7 @@ export const profile: Profile = {
   role: "Desenvolvedor Fullstack & Creative Developer",
   tagline:
     "Do banco de dados ao pixel: aplicações completas com Node e React, e interfaces vivas com WebGL, motion e shaders.",
-  bio: "Sou desenvolvedor fullstack com 4 anos de experiência: no dia a dia construo aplicações completas com Node, Express, React, TypeScript, Sequelize, SQL e Docker, do modelo de dados à interface. Recentemente venho me aventurando no lado criativo da web com three.js, WebGL, motion e shaders, e este site é o laboratório disso: ao mesmo tempo meu portfólio e minha biblioteca reutilizável de backgrounds, componentes e animações.",
+  bio: "Sou desenvolvedor fullstack com 3+ anos de experiência: no dia a dia construo aplicações completas com Node, Express, React, TypeScript, Sequelize, SQL e Docker, do modelo de dados à interface. Recentemente venho me aventurando no lado criativo da web com three.js, WebGL, motion e shaders, e este site é o laboratório disso: ao mesmo tempo meu portfólio e minha biblioteca reutilizável de backgrounds, componentes e animações.",
   location: "Brasil",
   email: "gabriellauxen11@gmail.com",
   socials: [
@@ -79,16 +79,16 @@ export const experience: ExperienceItem[] = [
     ],
   },
   {
-    role: "Trainee — Programa Crescer",
-    roleEn: "Trainee — Crescer Program",
+    role: "Desenvolvedor de Software",
+    roleEn: "Software Developer",
     company: "CWI Software",
     period: "2024 — 2025",
     periodEn: "2024 — 2025",
     bullets: [
-      "Formação profissional com projetos práticos em React e Java, aprofundando fundamentos de front e back.",
+      "Selecionado para o programa de desenvolvimento de software da CWI (Crescer); entreguei projetos práticos em React e Java ao lado de engenheiros sênior.",
     ],
     bulletsEn: [
-      "Professional training with hands-on projects in React and Java, deepening front and back fundamentals.",
+      "Selected for CWI's software development program (Crescer); delivered hands-on React and Java projects alongside senior engineers.",
     ],
   },
   {
@@ -120,8 +120,8 @@ export interface EducationItem {
 
 export const education: EducationItem[] = [
   {
-    title: "Tecnólogo em Análise e Desenvolvimento de Sistemas",
-    titleEn: "Technologist in Systems Analysis and Development",
+    title: "Graduado em Análise e Desenvolvimento de Sistemas",
+    titleEn: "Graduated in Systems Analysis and Development",
     org: "UNISINOS · São Leopoldo, RS",
     period: "2022 — 2026",
     note: "Concluído",

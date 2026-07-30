@@ -1,7 +1,13 @@
 .footer {
+  position: relative;
   border-top: 1px solid var(--border);
   margin-top: var(--space-9);
   padding: var(--space-7) 0 var(--space-6);
+  /* mesmo vidro fosco do header; o dither (canvas fixed, z-index -1) aparece
+     desfocado por trás */
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
 }
 .inner {
   display: flex;
@@ -19,12 +25,15 @@
 }
 .links {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-2);
   flex-wrap: wrap;
+  /* compensa o padding lateral dos itens pra alinhar com a borda */
+  margin: 0 -11px;
 }
 .links a {
   color: var(--muted);
   font-size: var(--fs-sm);
+  padding: 8px 11px;
   transition: color var(--dur) var(--ease);
 }
 .links a:hover {

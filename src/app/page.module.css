@@ -42,7 +42,7 @@
 .heroContent {
   position: relative;
   z-index: 2;
-  padding: var(--space-8) 0;
+  padding-block: var(--space-8);
   pointer-events: none;
 }
 .heroContent > * {
@@ -280,6 +280,27 @@
   }
   .projectRowFlip > :first-child {
     order: 0;
+  }
+  .heroContent {
+    padding-block: var(--space-7);
+  }
+  .heroStats {
+    width: 100%;
+  }
+  .heroStat {
+    flex: 1 1 130px;
+    min-width: 130px;
+    padding: 12px 16px;
+  }
+}
+@media (max-width: 480px) {
+  .heroActions {
+    flex-wrap: wrap;
+  }
+  .heroActions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
   }
 }
 /* O card em si: borda e fundo vêm da moldura <ProjectCard> (borda estelar);

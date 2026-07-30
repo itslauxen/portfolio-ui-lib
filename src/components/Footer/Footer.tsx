@@ -18,11 +18,15 @@ export function Footer() {
         </div>
         <div className={styles.links}>
           {profile.socials.map((soc) => (
-            <a key={soc.label} href={soc.url} target="_blank" rel="noreferrer">
+            <a key={soc.label} href={soc.url} target="_blank" rel="noreferrer" className="cursor-target">
               {soc.label}
             </a>
           ))}
-          {profile.email && <a href={`mailto:${profile.email}`}>{t("nav.contact")}</a>}
+          {profile.email && (
+            <a href={`mailto:${profile.email}`} className="cursor-target">
+              {t("nav.contact")}
+            </a>
+          )}
         </div>
       </div>
     </footer>

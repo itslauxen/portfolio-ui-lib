@@ -14,6 +14,12 @@ const CAT_KEY: Record<string, string> = {
   "Design & IA": "about.catDesign",
 };
 
+// Skills que não são nomes técnicos universais precisam de versão em inglês.
+const SKILL_EN: Record<string, string> = {
+  "Design de Interface": "Interface Design",
+  "IA generativa": "Generative AI",
+};
+
 export default function SobrePage() {
   const { t, lang } = useI18n();
   const en = lang === "en";
@@ -41,19 +47,19 @@ export default function SobrePage() {
       </div>
 
       <div className={s.facts}>
-        <div className={s.fact}>
+        <div className={`${s.fact} cursor-target`}>
           <div className={s.factValue}>{t("about.factExpV")}</div>
           <div className={s.factLabel}>{t("about.factExpL")}</div>
         </div>
-        <div className={s.fact}>
+        <div className={`${s.fact} cursor-target`}>
           <div className={s.factValue}>{t("about.factStackV")}</div>
           <div className={s.factLabel}>{t("about.factStackL")}</div>
         </div>
-        <div className={s.fact}>
+        <div className={`${s.fact} cursor-target`}>
           <div className={s.factValue}>{t("about.factEnV")}</div>
           <div className={s.factLabel}>{t("about.factEnL")}</div>
         </div>
-        <div className={s.fact}>
+        <div className={`${s.fact} cursor-target`}>
           <div className={s.factValue}>{t("about.factLocV")}</div>
           <div className={s.factLabel}>{t("about.factLocL")}</div>
         </div>
@@ -62,7 +68,7 @@ export default function SobrePage() {
       {en ? (
         <>
           <p className={s.lead}>
-            Fullstack developer with <strong>4 years of experience</strong>: day to day I build
+            Fullstack developer with <strong>3+ years of experience</strong>: day to day I build
             complete applications with <strong>Node</strong>, <strong>Express</strong>,{" "}
             <strong>React</strong>, <strong>TypeScript</strong>, <strong>Sequelize</strong>,{" "}
             <strong>SQL</strong> and <strong>Docker</strong>, from data model to interface. Lately
@@ -81,7 +87,7 @@ export default function SobrePage() {
       ) : (
         <>
           <p className={s.lead}>
-            Desenvolvedor fullstack com <strong>4 anos de experiência</strong>: no dia a dia
+            Desenvolvedor fullstack com <strong>3+ anos de experiência</strong>: no dia a dia
             construo aplicações completas com <strong>Node</strong>, <strong>Express</strong>,{" "}
             <strong>React</strong>, <strong>TypeScript</strong>, <strong>Sequelize</strong>,{" "}
             <strong>SQL</strong> e <strong>Docker</strong>, do modelo de dados à interface.
@@ -161,8 +167,8 @@ export default function SobrePage() {
               <div className={s.groupName}>{t(CAT_KEY[g.cat] ?? g.cat)}</div>
               <div className={s.tags}>
                 {g.items.map((sk) => (
-                  <span key={sk.name} className={ui.pill}>
-                    {sk.name}
+                  <span key={sk.name} className={`${ui.pill} cursor-target`}>
+                    {en ? SKILL_EN[sk.name] ?? sk.name : sk.name}
                   </span>
                 ))}
               </div>

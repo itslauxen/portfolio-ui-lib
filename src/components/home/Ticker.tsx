@@ -1,30 +1,35 @@
-// Faixa marquee brutalist: itens em loop infinito entre linhas de 1px.
-// Puro CSS (barato e confiável); pausa no hover; estático com reduced-motion.
+"use client";
+
+// Faixa marquee brutalist reta: itens em loop infinito entre linhas de 1px.
+// Puro CSS (2 linhas idênticas p/ loop); pausa no hover; itens traduzíveis.
+import { useI18n } from "@/i18n/I18nProvider";
 import styles from "./ticker.module.css";
 
-const ITEMS = [
-  "desenvolvedor fullstack",
-  "node + express",
-  "react",
-  "docker",
-  "sequelize + sql",
-  "three.js + webgl",
-  "shaders glsl",
-  "gsap",
-  "react three fiber",
-  "framer motion",
-  "canvas 2d",
-  "backgrounds parametrizados",
-  "postgresql",
-  "agentes de ia",
-];
-
 export function Ticker() {
-  const row = ITEMS.map((t, i) => (
+  const { t } = useI18n();
+
+  const ITEMS = [
+    t("ticker.fullstack"),
+    "node + express",
+    "react",
+    "docker",
+    "sequelize + sql",
+    "three.js + webgl",
+    "shaders glsl",
+    "gsap",
+    "react three fiber",
+    "framer motion",
+    "canvas 2d",
+    t("ticker.backgrounds"),
+    "postgresql",
+    t("ticker.aiAgents"),
+  ];
+
+  const row = ITEMS.map((label, i) => (
     <span key={i} className={styles.item}>
-      {t}
+      {label}
       <span className={styles.sep} aria-hidden="true">
-        {"///"}
+        ///
       </span>
     </span>
   ));
