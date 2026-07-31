@@ -3,6 +3,7 @@
 import { profile, skills, experience, education } from "@/data/profile";
 import { useI18n } from "@/i18n/I18nProvider";
 import TargetCursor from "@/components/demos/TargetCursor/TargetCursor";
+import { ArticlesList } from "@/components/articles/ArticlesList";
 import ui from "@/components/ui/ui.module.css";
 import s from "./sobre.module.css";
 
@@ -131,6 +132,11 @@ export default function SobrePage() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionLabel}>{t("about.labelArticles")}</div>
+        <ArticlesList />
       </section>
 
       <section className={s.section}>

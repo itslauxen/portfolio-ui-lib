@@ -67,6 +67,10 @@ export const messages: Record<string, Entry> = {
   "about.catBack": { pt: "Back-end & infra", en: "Back-end & infra" },
   "about.catCreative": { pt: "Criativo & motion", en: "Creative & motion" },
   "about.catDesign": { pt: "Design & IA", en: "Design & AI" },
+  "about.labelArticles": { pt: "artigos", en: "articles" },
+  "articles.min": { pt: "min de leitura", en: "min read" },
+  "articles.readMore": { pt: "Ler artigo", en: "Read" },
+  "articles.back": { pt: "← voltar ao sobre", en: "← back to about" },
 
   // ---- biblioteca ----
   "lib.eyebrow": { pt: "Biblioteca", en: "Library" },
