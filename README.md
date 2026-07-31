@@ -8,7 +8,7 @@ parametrized visual components**.
 (`#c6ff3a`) over near-black, hard corners and blur-less shadows — all controlled by centralized
 design tokens.
 
-🔗 **Live demo:** https://lauxen.dev
+🔗 **Live site:** https://lauxen.dev
 
 ![Portfolio and component library](docs/demo.gif)
 
