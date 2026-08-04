@@ -50,8 +50,7 @@ export default function HomePage() {
         <div className={`wrap ${s.heroContent}`}>
           <Reveal mode="mount" y={14}>
             <span className="eyebrow">
-              {profile.location ? `${profile.location} · ` : ""}
-              {t("home.eyebrow")}
+              {t("loc.country")} · {t("home.eyebrow")}
             </span>
             <p className={s.heroPrompt}>
               <span className={s.heroPromptSign}>$</span> whoami

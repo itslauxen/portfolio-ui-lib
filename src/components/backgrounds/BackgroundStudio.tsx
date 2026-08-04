@@ -9,6 +9,7 @@ import {
   LIB_SECTIONS,
   buildExportHTML,
   buildReactSnippet,
+  componentNameOf,
   defaultsOf,
   getEffectMeta,
   randomizeParams,
@@ -17,6 +18,7 @@ import {
 import type { BgValues } from "@/lib/backgrounds/types";
 import { Icon } from "@/components/ui/Icon";
 import { useI18n } from "@/i18n/I18nProvider";
+import { TerminalLoader } from "@/components/ui/TerminalLoader/TerminalLoader";
 import ui from "@/components/ui/ui.module.css";
 import styles from "./studio.module.css";
 
@@ -40,6 +42,12 @@ export function BackgroundStudio({ selectedId: routeId }: Props) {
   const [term, setTerm] = useState("");
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<number | undefined>(undefined);
+  // Enquanto o cliente não montou (bundle + WebGL pesados), mostra o loader —
+  // reserva altura pra o footer não subir e cobre a demora em produção.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const rid = pathname?.split("/").filter(Boolean).pop();
@@ -108,14 +116,46 @@ export function BackgroundStudio({ selectedId: routeId }: Props) {
     showToast(t("lib.tExport"));
   };
   const doCopy = async () => {
-    const code = isJsx ? buildReactSnippet(selectedId, values) : buildExportHTML(selectedId, values);
+    // Componentes React (shaders/demos): copia o Uso + o CÓDIGO-FONTE do
+    // componente (buscado de /component-src), pra pessoa ter o arquivo inteiro.
+    if (isJsx) {
+      const usage = buildReactSnippet(selectedId, values);
+      const name = componentNameOf(selectedId);
+      let payload = usage;
+      if (name) {
+        try {
+          const res = await fetch(`/component-src/${name}.txt`);
+          if (res.ok) {
+            const src = await res.text();
+            payload =
+              `/* ${name} — uso (com os parâmetros atuais) */\n${usage}\n\n` +
+              `/* ============================================================\n` +
+              `   ${name} — código-fonte do componente\n` +
+              `   Cole em src/components/${name}/${name}.tsx (CSS module ao final)\n` +
+              `   ============================================================ */\n${src}`;
+          }
+        } catch {
+          /* sem a fonte, copia só o uso */
+        }
+      }
+      try {
+        await navigator.clipboard.writeText(payload);
+        showToast(t("lib.tCopiedComp"));
+      } catch {
+        showToast(t("lib.tCopyFail"));
+      }
+      return;
+    }
+    // Fundos de canvas (motor): copia o HTML independente.
     try {
-      await navigator.clipboard.writeText(code);
-      showToast(isJsx ? t("lib.tCopiedComp") : t("lib.tCopiedCode"));
+      await navigator.clipboard.writeText(buildExportHTML(selectedId, values));
+      showToast(t("lib.tCopiedCode"));
     } catch {
       showToast(t("lib.tCopyFail"));
     }
   };
+
+  if (!mounted) return <TerminalLoader />;
 
   return (
     <div className={styles.studio}>

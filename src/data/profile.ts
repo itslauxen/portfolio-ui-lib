@@ -53,6 +53,7 @@ export interface ExperienceItem {
   period: string;
   periodEn: string;
   location?: string;
+  locationEn?: string;
   bullets: string[];
   bulletsEn: string[];
 }
@@ -64,7 +65,8 @@ export const experience: ExperienceItem[] = [
     company: "DKW System",
     period: "jun/2025 — atual",
     periodEn: "Jun 2025 — present",
-    location: "Novo Hamburgo, RS · híbrido",
+    location: "Novo Hamburgo, RS, Brasil · híbrido",
+    locationEn: "Novo Hamburgo, RS, Brazil · hybrid",
     bullets: [
       "Desenvolvo, do front ao back, um CRM e sistema de mensageria whitelabel de grande porte (6 repositórios) com React, Node, Sequelize, MUI v5, SQL e Docker.",
       "Coordenei sozinho a migração do frontend — React 16→18, Node 16→22, MUI v4→v5 e adoção do Vite — refatorando milhares de arquivos e elevando bastante a performance.",
@@ -97,7 +99,8 @@ export const experience: ExperienceItem[] = [
     company: "B3Dev",
     period: "dez/2022 — nov/2023",
     periodEn: "Dec 2022 — Nov 2023",
-    location: "Porto Alegre, RS",
+    location: "Porto Alegre, RS, Brasil",
+    locationEn: "Porto Alegre, RS, Brazil",
     bullets: [
       "Aplicações web e mobile para diversos clientes com Vue.js, Ionic, Quasar e MongoDB.",
       "Entreguei apps híbridos com boa experiência de usuário em múltiplos projetos.",

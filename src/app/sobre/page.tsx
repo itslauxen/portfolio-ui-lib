@@ -42,8 +42,7 @@ export default function SobrePage() {
         <span className="eyebrow">{t("about.eyebrow")}</span>
         <h1 className="page-title">{profile.name}</h1>
         <p className="page-lead">
-          {t("home.role")}
-          {profile.location ? ` · ${profile.location}` : ""}
+          {t("home.role")} · {t("loc.country")}
         </p>
       </div>
 
@@ -123,7 +122,9 @@ export default function SobrePage() {
                 </span>
                 <span className={s.jobPeriod}>{en ? job.periodEn : job.period}</span>
               </div>
-              {job.location && <div className={s.jobLoc}>{job.location}</div>}
+              {job.location && (
+                <div className={s.jobLoc}>{en ? job.locationEn ?? job.location : job.location}</div>
+              )}
               <ul className={s.jobBullets}>
                 {(en ? job.bulletsEn : job.bullets).map((b, i) => (
                   <li key={i}>{b}</li>

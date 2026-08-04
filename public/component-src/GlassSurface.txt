@@ -1,0 +1,511 @@
+"use client";
+
+// Superfície de vidro com refração via filtro SVG (displacement map),
+// com fallback em backdrop-filter para navegadores sem suporte.
+import React, { useEffect, useRef, useState, useId } from "react";
+import styles from "./GlassSurface.module.css";
+
+export interface GlassSurfaceProps {
+  children?: React.ReactNode;
+  width?: number | string;
+  height?: number | string;
+  borderRadius?: number;
+  borderWidth?: number;
+  brightness?: number;
+  opacity?: number;
+  blur?: number;
+  displace?: number;
+  backgroundOpacity?: number;
+  saturation?: number;
+  distortionScale?: number;
+  redOffset?: number;
+  greenOffset?: number;
+  blueOffset?: number;
+  xChannel?: "R" | "G" | "B";
+  yChannel?: "R" | "G" | "B";
+  mixBlendMode?:
+    | "normal"
+    | "multiply"
+    | "screen"
+    | "overlay"
+    | "darken"
+    | "lighten"
+    | "color-dodge"
+    | "color-burn"
+    | "hard-light"
+    | "soft-light"
+    | "difference"
+    | "exclusion"
+    | "hue"
+    | "saturation"
+    | "color"
+    | "luminosity"
+    | "plus-darker"
+    | "plus-lighter";
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+const GlassSurface: React.FC<GlassSurfaceProps> = ({
+  children,
+  width = 300,
+  height = 100,
+  borderRadius = 20,
+  borderWidth = 0.07,
+  brightness = 50,
+  opacity = 0.93,
+  blur = 11,
+  displace = 0,
+  backgroundOpacity = 0,
+  saturation = 1,
+  distortionScale = -180,
+  redOffset = 0,
+  greenOffset = 10,
+  blueOffset = 20,
+  xChannel = "R",
+  yChannel = "G",
+  mixBlendMode = "difference",
+  className = "",
+  style = {},
+}) => {
+  // Remove os dois-pontos do useId para gerar ids seguros em url(#...).
+  const rawId = useId().replace(/[:]/g, "");
+  const filterId = `glass-filter-${rawId}`;
+  const redGradId = `red-grad-${rawId}`;
+  const blueGradId = `blue-grad-${rawId}`;
+
+  const [svgSupported, setSvgSupported] = useState<boolean>(false);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const feImageRef = useRef<SVGFEImageElement>(null);
+  const redChannelRef = useRef<SVGFEDisplacementMapElement>(null);
+  const greenChannelRef = useRef<SVGFEDisplacementMapElement>(null);
+  const blueChannelRef = useRef<SVGFEDisplacementMapElement>(null);
+  const gaussianBlurRef = useRef<SVGFEGaussianBlurElement>(null);
+
+  // Gera o mapa de deslocamento como SVG inline (data URI).
+  const generateDisplacementMap = () => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    const actualWidth = rect?.width || 400;
+    const actualHeight = rect?.height || 200;
+    const edgeSize = Math.min(actualWidth, actualHeight) * (borderWidth * 0.5);
+
+    const svgContent = `
+      <svg viewBox="0 0 ${actualWidth} ${actualHeight}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="${redGradId}" x1="100%" y1="0%" x2="0%" y2="0%">
+            <stop offset="0%" stop-color="#0000"/>
+            <stop offset="100%" stop-color="red"/>
+          </linearGradient>
+          <linearGradient id="${blueGradId}" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#0000"/>
+            <stop offset="100%" stop-color="blue"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="${actualWidth}" height="${actualHeight}" fill="black"></rect>
+        <rect x="0" y="0" width="${actualWidth}" height="${actualHeight}" rx="${borderRadius}" fill="url(#${redGradId})" />
+        <rect x="0" y="0" width="${actualWidth}" height="${actualHeight}" rx="${borderRadius}" fill="url(#${blueGradId})" style="mix-blend-mode: ${mixBlendMode}" />
+        <rect x="${edgeSize}" y="${edgeSize}" width="${actualWidth - edgeSize * 2}" height="${actualHeight - edgeSize * 2}" rx="${borderRadius}" fill="hsl(0 0% ${brightness}% / ${opacity})" style="filter:blur(${blur}px)" />
+      </svg>
+    `;
+
+    return `data:image/svg+xml,${encodeURIComponent(svgContent)}`;
+  };
+
+  const updateDisplacementMap = () => {
+    feImageRef.current?.setAttribute("href", generateDisplacementMap());
+  };
+
+  useEffect(() => {
+    updateDisplacementMap();
+    [
+      { ref: redChannelRef, offset: redOffset },
+      { ref: greenChannelRef, offset: greenOffset },
+      { ref: blueChannelRef, offset: blueOffset },
+    ].forEach(({ ref, offset }) => {
+      if (ref.current) {
+        ref.current.setAttribute("scale", (distortionScale + offset).toString());
+        ref.current.setAttribute("xChannelSelector", xChannel);
+        ref.current.setAttribute("yChannelSelector", yChannel);
+      }
+    });
+
+    gaussianBlurRef.current?.setAttribute("stdDeviation", displace.toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    width,
+    height,
+    borderRadius,
+    borderWidth,
+    brightness,
+    opacity,
+    blur,
+    displace,
+    distortionScale,
+    redOffset,
+    greenOffset,
+    blueOffset,
+    xChannel,
+    yChannel,
+    mixBlendMode,
+  ]);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      setTimeout(updateDisplacementMap, 0);
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const supportsSVGFilters = () => {
+    if (typeof window === "undefined" || typeof document === "undefined") {
+      return false;
+    }
+
+    const isWebkit = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    const isFirefox = /Firefox/.test(navigator.userAgent);
+
+    if (isWebkit || isFirefox) {
+      return false;
+    }
+
+    const div = document.createElement("div");
+    div.style.backdropFilter = `url(#${filterId})`;
+
+    return div.style.backdropFilter !== "";
+  };
+
+  useEffect(() => {
+    setSvgSupported(supportsSVGFilters());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const containerStyle: React.CSSProperties = {
+    ...style,
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
+    borderRadius: `${borderRadius}px`,
+    "--glass-frost": backgroundOpacity,
+    "--glass-saturation": saturation,
+    "--filter-id": `url(#${filterId})`,
+  } as React.CSSProperties;
+
+  const vidro = (
+    <div
+      ref={containerRef}
+      className={`${styles.glassSurface} ${svgSupported ? styles.glassSurfaceSvg : styles.glassSurfaceFallback} ${className}`}
+      style={containerStyle}
+    >
+      <svg className={styles.glassSurfaceFilter} xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id={filterId} colorInterpolationFilters="sRGB" x="0%" y="0%" width="100%" height="100%">
+            <feImage ref={feImageRef} x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map" />
+
+            <feDisplacementMap ref={redChannelRef} in="SourceGraphic" in2="map" result="dispRed" />
+            <feColorMatrix
+              in="dispRed"
+              type="matrix"
+              values="1 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 0 1 0"
+              result="red"
+            />
+
+            <feDisplacementMap ref={greenChannelRef} in="SourceGraphic" in2="map" result="dispGreen" />
+            <feColorMatrix
+              in="dispGreen"
+              type="matrix"
+              values="0 0 0 0 0
+                      0 1 0 0 0
+                      0 0 0 0 0
+                      0 0 0 1 0"
+              result="green"
+            />
+
+            <feDisplacementMap ref={blueChannelRef} in="SourceGraphic" in2="map" result="dispBlue" />
+            <feColorMatrix
+              in="dispBlue"
+              type="matrix"
+              values="0 0 0 0 0
+                      0 0 0 0 0
+                      0 0 1 0 0
+                      0 0 0 1 0"
+              result="blue"
+            />
+
+            <feBlend in="red" in2="green" mode="screen" result="rg" />
+            <feBlend in="rg" in2="blue" mode="screen" result="output" />
+            <feGaussianBlur ref={gaussianBlurRef} in="output" stdDeviation="0.7" />
+          </filter>
+        </defs>
+      </svg>
+
+      <div className={styles.glassSurfaceContent}>
+        {children ?? <span className={styles.demoLabel}>Superfície de vidro</span>}
+      </div>
+    </div>
+  );
+
+  // Com children o componente é só o vidro. Sem children (demo da biblioteca),
+  // ganha uma cena colorida com rolagem interna: o vidro fica preso no centro
+  // (sticky) enquanto o conteúdo rola por baixo, refratando em movimento.
+  if (children != null) return vidro;
+
+  const palavras = ["refração", "desfoque", "cores", "vidro", "brilho", "camadas"];
+
+  return (
+    <div className={styles.demoScene}>
+      <div className={styles.demoSticky}>
+        <div className={styles.demoGlassPin}>{vidro}</div>
+      </div>
+      <div className={styles.demoRolagem} aria-hidden="true">
+        <span className={styles.demoBlobA} />
+        <span className={styles.demoBlobB} />
+        <span className={styles.demoBlobC} />
+        {palavras.map((p) => (
+          <span key={p} className={styles.demoWord}>
+            {p}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default GlassSurface;
+
+
+/* ============================================================
+   GlassSurface.module.css
+   ============================================================ */
+/* Superfície de vidro com refração via filtro SVG. */
+
+.glassSurface {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.26s ease-out;
+  max-width: 100%;
+}
+
+.glassSurfaceFilter {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  z-index: -1;
+}
+
+.glassSurfaceContent {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: inherit;
+  position: relative;
+  z-index: 1;
+}
+
+.demoLabel {
+  color: #fff;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.glassSurfaceSvg {
+  background: light-dark(hsl(0 0% 100% / var(--glass-frost, 0)), hsl(0 0% 0% / var(--glass-frost, 0)));
+  backdrop-filter: var(--filter-id) saturate(var(--glass-saturation, 1));
+  box-shadow:
+    0 0 2px 1px light-dark(color-mix(in oklch, black, transparent 85%), color-mix(in oklch, white, transparent 65%))
+      inset,
+    0 0 10px 4px light-dark(color-mix(in oklch, black, transparent 90%), color-mix(in oklch, white, transparent 85%))
+      inset,
+    0px 4px 16px rgba(17, 17, 26, 0.05),
+    0px 8px 24px rgba(17, 17, 26, 0.05),
+    0px 16px 56px rgba(17, 17, 26, 0.05),
+    0px 4px 16px rgba(17, 17, 26, 0.05) inset,
+    0px 8px 24px rgba(17, 17, 26, 0.05) inset,
+    0px 16px 56px rgba(17, 17, 26, 0.05) inset;
+}
+
+.glassSurfaceFallback {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 8px 32px 0 rgba(31, 38, 135, 0.2),
+    0 2px 16px 0 rgba(31, 38, 135, 0.1),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glassSurfaceFallback {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  .glassSurfaceFallback {
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .glassSurfaceFallback::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: inherit;
+    z-index: -1;
+  }
+}
+
+@supports not (backdrop-filter: blur(10px)) {
+  @media (prefers-color-scheme: dark) {
+    .glassSurfaceFallback {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .glassSurfaceFallback::before {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+.glassSurface:focus-visible {
+  outline: 2px solid light-dark(#c6ff3a, #c6ff3a);
+  outline-offset: 2px;
+}
+
+
+/* ---- Cena da demo: rolagem interna com o vidro preso no centro ---- */
+
+.demoScene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px) 0 0 / 22px 22px,
+    linear-gradient(135deg, #101014, #0a0a0d);
+}
+
+/* Âncora sticky de altura zero: mantém o vidro fixo no centro do palco
+   enquanto o conteúdo rola por baixo dele. */
+.demoSticky {
+  position: sticky;
+  top: 50%;
+  height: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+.demoGlassPin {
+  transform: translateY(-50%);
+  /* Demo: roda do mouse atravessa o vidro e rola o conteúdo. */
+  pointer-events: none;
+}
+
+/* Conteúdo alto que rola: palavras gigantes vazadas + blobs coloridos. */
+.demoRolagem {
+  position: relative;
+  min-height: 1500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  gap: 90px;
+  padding: 18% 8%;
+  overflow: hidden;
+}
+
+.demoWord {
+  font-size: clamp(3rem, 11vw, 6rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+}
+.demoWord:nth-child(odd) {
+  -webkit-text-stroke-color: rgba(198, 255, 58, 0.65);
+}
+
+.demoBlobA,
+.demoBlobB,
+.demoBlobC {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  animation: glassFloat 9s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.demoBlobA {
+  width: 55%;
+  height: 26%;
+  left: -10%;
+  top: 2%;
+  background: radial-gradient(circle at 35% 35%, #c6ff3a, rgba(198, 255, 58, 0) 65%);
+}
+.demoBlobB {
+  width: 60%;
+  height: 30%;
+  right: -12%;
+  top: 36%;
+  background: radial-gradient(circle at 60% 40%, #5ff2d8, rgba(95, 242, 216, 0) 62%);
+  animation-delay: -3s;
+}
+.demoBlobC {
+  width: 50%;
+  height: 24%;
+  left: 18%;
+  bottom: 4%;
+  background: radial-gradient(circle at 50% 50%, #ff5ea8, rgba(255, 94, 168, 0) 60%);
+  animation-delay: -6s;
+}
+
+@keyframes glassFloat {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(5%, 6%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demoBlobA,
+  .demoBlobB,
+  .demoBlobC {
+    animation: none;
+  }
+}

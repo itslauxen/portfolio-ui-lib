@@ -5,6 +5,7 @@ import "./globals.css";
 import { Nav } from "@/components/Nav/Nav";
 import { Footer } from "@/components/Footer/Footer";
 import { I18nProvider } from "@/i18n/I18nProvider";
+import { RouteTitle } from "@/components/i18n/RouteTitle";
 import { profile } from "@/data/profile";
 
 // Monospace única do site (identidade neo-brutalist terminal).
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" className={jbMono.variable}>
       <body>
         <I18nProvider>
+          <RouteTitle />
           <Nav />
           <main>{children}</main>
           <Footer />

@@ -166,6 +166,12 @@ export function buildReactSnippet(effectId: string, params: BgValues): string {
   return `<${eff.component}\n${attrs}\n/>`;
 }
 
+/** Nome do componente React de um efeito (react/demo), p/ buscar o arquivo-fonte. */
+export function componentNameOf(effectId: string): string | undefined {
+  const eff = getReactEffect(effectId) ?? getDemoEffect(effectId);
+  return eff?.component;
+}
+
 /**
  * Gera um arquivo HTML autossuficiente que roda o efeito com os parâmetros
  * dados, o mesmo recurso “Exportar HTML / Copiar código” do app original.

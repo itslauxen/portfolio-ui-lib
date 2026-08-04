@@ -9,6 +9,11 @@ export const messages: Record<string, Entry> = {
   "nav.library": { pt: "biblioteca", en: "library" },
   "nav.about": { pt: "sobre", en: "about" },
   "nav.contact": { pt: "contato", en: "contact" },
+  "loc.country": { pt: "Brasil", en: "Brazil" },
+  "meta.home": { pt: "Gabriel Lauxen · Portfólio & Biblioteca", en: "Gabriel Lauxen · Portfolio & Library" },
+  "meta.about": { pt: "Sobre · Gabriel Lauxen", en: "About · Gabriel Lauxen" },
+  "meta.library": { pt: "Biblioteca · Gabriel Lauxen", en: "Library · Gabriel Lauxen" },
+  "meta.articles": { pt: "Artigos · Gabriel Lauxen", en: "Writing · Gabriel Lauxen" },
 
   // ---- home / hero ----
   "home.eyebrow": { pt: "portfólio & biblioteca", en: "portfolio & library" },
