@@ -12,6 +12,7 @@ import { HeroChip } from "@/components/home/HeroChip";
 import { Reveal } from "@/components/ui/Reveal";
 import { TechIcon } from "@/components/ui/TechIcon";
 import { useI18n } from "@/i18n/I18nProvider";
+import { yearsOfExperience } from "@/lib/experience";
 import { profile, skills } from "@/data/profile";
 import { projects } from "@/data/projects";
 import s from "./page.module.css";
@@ -105,8 +106,9 @@ export default function HomePage() {
   const featured = projects.filter((p) => p.featured);
   const isExternal = (url?: string) => !!url && /^https?:\/\//.test(url);
 
+  const years = String(yearsOfExperience());
   const HERO_STATS = [
-    { value: t("home.stat1v"), label: t("home.stat1l") },
+    { value: t("home.stat1v").replace("{years}", years), label: t("home.stat1l") },
     { value: t("home.stat2v"), label: t("home.stat2l") },
     { value: t("home.stat3v"), label: t("home.stat3l") },
   ];
@@ -208,7 +210,7 @@ export default function HomePage() {
             </motion.div>
           </div>
           <motion.div className={s.heroRow} {...rise(0.26)}>
-            <p className={s.heroLead}>{t("home.lead")}</p>
+            <p className={s.heroLead}>{t("home.lead").replace("{years}", years)}</p>
             <div className={s.heroActions}>
               <Link href="/#projetos" className={s.btnSolid} onClick={scrollToProjects}>
                 {t("home.ctaProjects")}

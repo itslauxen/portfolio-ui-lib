@@ -1,4 +1,5 @@
 import type { Profile, Skill } from "@/lib/types";
+import { yearsOfExperience } from "@/lib/experience";
 
 // ⇩ EDITE AQUI seus dados. Tudo que aparece na home/rodapé vem daqui.
 export const profile: Profile = {
@@ -6,7 +7,7 @@ export const profile: Profile = {
   role: "Desenvolvedor Fullstack & Creative Developer",
   tagline:
     "Do banco de dados ao pixel: aplicações completas com Node e React, e interfaces vivas com WebGL, motion e shaders.",
-  bio: "Sou desenvolvedor fullstack com 3+ anos de experiência: no dia a dia construo aplicações completas com Node, Express, React, TypeScript, Sequelize, SQL e Docker, do modelo de dados à interface. Recentemente venho me aventurando no lado criativo da web com three.js, WebGL, motion e shaders, e este site é o laboratório disso: ao mesmo tempo meu portfólio e minha biblioteca reutilizável de backgrounds, componentes e animações.",
+  bio: `Sou desenvolvedor fullstack com ${yearsOfExperience()} anos de experiência: no dia a dia construo aplicações completas com Node, Express, React, TypeScript, Sequelize, SQL e Docker, do modelo de dados à interface. Recentemente venho me aventurando no lado criativo da web com three.js, WebGL, motion e shaders, e este site é o laboratório disso: ao mesmo tempo meu portfólio e minha biblioteca reutilizável de backgrounds, componentes e animações.`,
   location: "Brasil",
   email: "gabriellauxen11@gmail.com",
   whatsapp: "5551980372109",

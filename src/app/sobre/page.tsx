@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { profile, skills, experience, education } from "@/data/profile";
+import { yearsOfExperience } from "@/lib/experience";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ArticlesList } from "@/components/articles/ArticlesList";
 import { TechIcon } from "@/components/ui/TechIcon";
@@ -26,6 +27,7 @@ const SKILL_EN: Record<string, string> = {
 export default function SobrePage() {
   const { t, lang } = useI18n();
   const en = lang === "en";
+  const years = String(yearsOfExperience());
   const rootRef = useRef<HTMLDivElement>(null);
 
   const groups = CATEGORY_ORDER.map((cat) => ({
@@ -88,7 +90,7 @@ export default function SobrePage() {
           </p>
           <dl className={s.facts}>
             {[
-              [t("about.factExpV"), t("about.factExpL")],
+              [t("about.factExpV").replace("{years}", years), t("about.factExpL")],
               [t("about.factStackV"), t("about.factStackL")],
               [t("about.factEnV"), t("about.factEnL")],
               [t("about.factLocV"), t("about.factLocL")],
@@ -106,7 +108,7 @@ export default function SobrePage() {
           {en ? (
             <>
               <p className={s.lead}>
-                Fullstack developer with <strong>3+ years of experience</strong>: day to day I
+                Fullstack developer with <strong>{years} years of experience</strong>: day to day I
                 build complete applications with <strong>Node</strong>, <strong>Express</strong>,{" "}
                 <strong>React</strong>, <strong>TypeScript</strong>, <strong>Sequelize</strong>,{" "}
                 <strong>SQL</strong> and <strong>Docker</strong>, from data model to interface.
@@ -126,7 +128,7 @@ export default function SobrePage() {
           ) : (
             <>
               <p className={s.lead}>
-                Desenvolvedor fullstack com <strong>3+ anos de experiência</strong>: no dia a dia
+                Desenvolvedor fullstack com <strong>{years} anos de experiência</strong>: no dia a dia
                 construo aplicações completas com <strong>Node</strong>, <strong>Express</strong>,{" "}
                 <strong>React</strong>, <strong>TypeScript</strong>, <strong>Sequelize</strong>,{" "}
                 <strong>SQL</strong> e <strong>Docker</strong>, do modelo de dados à interface.

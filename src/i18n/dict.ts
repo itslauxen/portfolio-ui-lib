@@ -28,12 +28,12 @@ export const messages: Record<string, Entry> = {
   "home.t2hl": { pt: "vivas", en: "living" },
   "home.t2post": { pt: ".", en: " interfaces." },
   "home.lead": {
-    pt: "Desenvolvedor fullstack com 3+ anos de experiência — Node, React e TypeScript do modelo de dados à interface, com WebGL, motion e shaders no acabamento.",
-    en: "Fullstack developer with 3+ years of experience — Node, React and TypeScript from data model to interface, with WebGL, motion and shaders as the finish.",
+    pt: "Desenvolvedor fullstack com {years} anos de experiência — Node, React e TypeScript do modelo de dados à interface, com WebGL, motion e shaders no acabamento.",
+    en: "Fullstack developer with {years} years of experience — Node, React and TypeScript from data model to interface, with WebGL, motion and shaders as the finish.",
   },
   "home.ctaLibrary": { pt: "Explorar biblioteca", en: "Explore the library" },
   "home.ctaProjects": { pt: "Ver projetos", en: "View projects" },
-  "home.stat1v": { pt: "3+ anos", en: "3+ years" },
+  "home.stat1v": { pt: "{years} anos", en: "{years} years" },
   "home.stat1l": { pt: "de experiência", en: "of experience" },
   "home.stat2v": { pt: "90+ componentes", en: "90+ components" },
   "home.stat2l": { pt: "na biblioteca própria", en: "in my own library" },
@@ -117,7 +117,7 @@ export const messages: Record<string, Entry> = {
 
   // ---- about ----
   "about.eyebrow": { pt: "Sobre", en: "About" },
-  "about.factExpV": { pt: "3+ anos", en: "3+ years" },
+  "about.factExpV": { pt: "{years} anos", en: "{years} years" },
   "about.factExpL": { pt: "de experiência", en: "of experience" },
   "about.factStackV": { pt: "Fullstack", en: "Fullstack" },
   "about.factStackL": { pt: "front · back · banco", en: "front · back · database" },
