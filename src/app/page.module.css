@@ -707,6 +707,9 @@
   position: relative;
   min-width: 0;
   min-height: 320px;
+  /* alinha a 1ª linha da descrição com o rótulo do 1º botão da esquerda
+     (borda 1px + padding-top 16px do .catBtn) */
+  padding-top: 17px;
 }
 .ghostNum {
   position: absolute;
