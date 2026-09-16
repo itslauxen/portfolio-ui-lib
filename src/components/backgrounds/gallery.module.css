@@ -62,7 +62,6 @@
 .ct {
   font-size: var(--fs-xs);
   color: var(--muted);
-  text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   margin-top: 3px;
 }
@@ -133,7 +132,6 @@
   font-weight: 400;
   font-size: var(--fs-xs);
   letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
   margin-top: 2px;
 }
 
@@ -158,7 +156,6 @@
   padding: 14px 16px 10px;
   border-bottom: 1px solid var(--border);
   font-size: var(--fs-xs);
-  text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   color: var(--muted);
 }

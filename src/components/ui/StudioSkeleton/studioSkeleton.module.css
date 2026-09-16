@@ -1,0 +1,81 @@
+/* Mesma geometria do estúdio (studio.module.css) para a troca ser 1:1. */
+.wrap {
+  display: grid;
+  grid-template-columns: 288px minmax(0, 1fr);
+  gap: var(--space-5);
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-4) clamp(20px, 4vw, 40px);
+  height: calc(100vh - var(--nav-h));
+  height: calc(100dvh - var(--nav-h));
+  overflow: hidden;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: var(--space-3);
+  overflow: hidden;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Osso base com shimmer. */
+.bone {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(100deg, var(--surface) 40%, var(--surface-2) 50%, var(--surface) 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -70% 0;
+  }
+}
+
+.search {
+  height: 38px;
+  border-radius: var(--radius-full);
+  flex: none;
+}
+.item {
+  height: 46px;
+  flex: none;
+}
+.stage {
+  height: clamp(340px, 56vh, 640px);
+  border-radius: var(--radius-lg);
+  flex: none;
+}
+.panel {
+  flex: 1;
+  min-height: 120px;
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 900px) {
+  .wrap {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+  .side {
+    max-height: 300px;
+  }
+}

@@ -4,9 +4,9 @@ A **Next.js (App Router) · React · TypeScript · CSS Modules** site that is, a
 Gabriel Lauxen's **portfolio** (fullstack developer) and a **reusable library of ~90
 parametrized visual components**.
 
-**Neo-brutalist terminal** identity: monospace (JetBrains Mono), lime signature color
-(`#c6ff3a`) over near-black, hard corners and blur-less shadows — all controlled by centralized
-design tokens.
+**Green night** identity (from the "Portfolio Layouts" design canvas): Manrope everywhere,
+solid green signature (`#4ef08c`) over a green-tinted near-black (`#101311`), organic light
+orbs in the hero and a progressive-blur header — all controlled by centralized design tokens.
 
 🔗 **Live site:** https://lauxen.dev
 
@@ -80,7 +80,7 @@ src/
 Everything comes from **`src/styles/tokens.css`**. The signature color is a single variable:
 
 ```css
---accent: #c6ff3a; /* change it to reskin the whole site */
+--accent: #4ef08c; /* change it to reskin the whole site */
 ```
 
 Typography, spacing, corners and shadows live there too. The site is **single dark theme** —

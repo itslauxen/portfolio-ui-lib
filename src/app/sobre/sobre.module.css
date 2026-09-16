@@ -1,85 +1,162 @@
-.lead {
-  color: var(--text-dim);
-  line-height: 1.7;
-  font-size: var(--fs-md);
-  max-width: 70ch;
-}
-.para {
-  color: var(--text-dim);
-  line-height: 1.7;
-  margin-top: var(--space-4);
-  max-width: 70ch;
-}
-.para strong {
-  color: var(--text);
-  font-weight: 600;
-}
-.lead strong {
-  color: var(--accent);
-  font-weight: 600;
+/* Página Sobre — noite verde: glow de fundo, nome em degradê, faixa de
+   fatos em vidro, timeline com linha que se desenha (GSAP) e cards com
+   anel de luz no hover. */
+
+.page {
+  position: relative;
+  isolation: isolate;
+  padding: 48px 0 96px;
+  overflow: hidden;
 }
 
-.facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
-  margin: var(--space-6) 0 var(--space-5);
+/* Glow verde difuso no topo, esmaecendo pra baixo. */
+.glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 760px;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(880px 460px at 16% -8%, rgba(60, 233, 127, 0.15), transparent 62%),
+    radial-gradient(720px 420px at 86% -4%, rgba(74, 240, 165, 0.08), transparent 60%);
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
 }
-.fact {
-  padding: var(--space-4) var(--space-5);
-  background: var(--bg);
+
+/* Ângulo animável do anel de glow (mesmo padrão da home). */
+@property --glowA {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
 }
-.factValue {
-  font-size: var(--fs-lg);
-  font-weight: 700;
-  color: var(--text);
+
+/* ---------- cabeçalho ---------- */
+.head {
+  padding-bottom: 8px;
 }
-.factLabel {
-  font-size: var(--fs-xs);
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  margin-top: 4px;
+.name {
+  margin-top: 16px;
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  letter-spacing: -0.03em;
+  background: linear-gradient(180deg, #ffffff 30%, #c9d2c9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.role {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: var(--text-dim);
+  font-size: var(--fs-md);
 }
 .status {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  margin-top: var(--space-5);
-  font-size: var(--fs-sm);
-  color: var(--text-dim);
+  gap: 8px;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 6px 13px;
+  border-radius: var(--radius-full);
 }
 .statusDot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
   animation: statusPulse 2s ease-in-out infinite;
 }
 @keyframes statusPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
+/* Faixa de fatos em vidro, como no hero da home. */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 30px 0 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+}
+.fact {
+  padding: 16px 24px;
+  min-width: 150px;
+}
+.fact + .fact {
+  border-left: 1px solid var(--border);
+}
+.factValue {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.factLabel {
+  margin: 3px 0 0;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+/* ---------- bio ---------- */
+.lead {
+  color: var(--text);
+  line-height: 1.75;
+  font-size: var(--fs-md);
+  max-width: 72ch;
+}
+.para {
+  color: var(--text-dim);
+  line-height: 1.75;
+  margin-top: var(--space-4);
+  max-width: 72ch;
+}
+.lead strong,
+.para strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+.para strong {
+  color: var(--text);
+}
+
+/* ---------- seções ---------- */
 .section {
   margin-top: var(--space-8);
 }
 .sectionLabel {
-  font-size: var(--fs-xs);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
-  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
   margin-bottom: var(--space-5);
   display: flex;
   align-items: center;
   gap: 12px;
 }
 .sectionLabel::before {
-  content: "//";
-  color: var(--muted);
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--grad-accent);
 }
 .sectionLabel::after {
   content: "";
@@ -88,21 +165,51 @@
   background: var(--border);
 }
 
+/* ---------- timeline de experiência ---------- */
 .timeline {
+  position: relative;
+  padding-left: 34px;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
-.job {
-  border: 1px solid var(--border);
-  border-left: 2px solid var(--accent);
-  background: var(--surface);
-  padding: var(--space-5);
-  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+/* linha que se DESENHA conforme o scroll (GSAP scrub) */
+.timelineLine {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, var(--accent), rgba(60, 233, 127, 0.05));
 }
+.job {
+  position: relative;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+/* nó da timeline */
+.job::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: 30px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(60, 233, 127, 0.15), 0 0 14px var(--accent-glow);
+}
+/* hover: brilho radiante saindo por trás do card */
 .job:hover {
-  border-color: var(--border-strong);
-  transform: translateX(3px);
+  transform: translateY(-2px);
+  background: var(--surface-2);
+  border-color: var(--accent-line);
+  box-shadow: 0 0 44px -8px var(--accent-glow), 0 0 100px -30px var(--accent-glow);
 }
 .jobHead {
   display: flex;
@@ -116,7 +223,10 @@
   font-weight: 700;
 }
 .jobCompany {
-  color: var(--accent);
+  background: var(--grad-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 .jobPeriod {
   color: var(--muted);
@@ -144,62 +254,105 @@
   position: relative;
 }
 .jobBullets li::before {
-  content: "\203A";
+  content: "";
   position: absolute;
   left: 2px;
-  color: var(--accent);
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--grad-accent);
+  opacity: 0.85;
 }
 
-.eduList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+/* ---------- formação ---------- */
+.eduGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-3);
 }
 .edu {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: var(--space-4);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
 }
 .eduTitle {
-  font-weight: 600;
+  font-weight: 700;
 }
 .eduOrg {
   color: var(--muted);
   font-size: var(--fs-sm);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 .eduMeta {
   color: var(--muted);
   font-size: var(--fs-sm);
-  text-align: right;
+  margin-top: 10px;
 }
 .eduNote {
-  color: var(--accent);
+  color: var(--good);
+  font-weight: 600;
 }
 
+/* ---------- stack ---------- */
 .stackGroups {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-3);
+}
+.stackCard {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
 }
 .groupName {
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  color: var(--muted);
-  margin-bottom: 10px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  margin-bottom: 14px;
 }
-.tags {
-  display: flex;
-  flex-wrap: wrap;
+/* itens de tecnologia: logo cinza + nome, em grade alinhada */
+.techGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
   gap: 8px;
 }
-
-.contact {
+.tech {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  padding: 8px 11px;
+  border-radius: 10px;
+  background: rgba(241, 245, 240, 0.03);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.tech:hover {
+  background: rgba(241, 245, 240, 0.07);
+  color: var(--text);
+}
+.tech svg {
+  color: var(--muted);
+  opacity: 0.8;
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .facts {
+    width: 100%;
+  }
+  .fact {
+    flex: 1 1 140px;
+  }
+  .timeline {
+    padding-left: 26px;
+  }
+  .timelineLine {
+    left: 5px;
+  }
+  .job::before {
+    left: -24px;
+  }
 }

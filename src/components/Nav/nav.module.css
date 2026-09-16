@@ -1,125 +1,123 @@
+/* Header clean (design 2a): barra transparente fixa, marca à esquerda,
+   links de texto puro no centro (sem pílula), CTA verde sólido à direita.
+   Embaixo da barra, desfoque PROGRESSIVO em 4 camadas + scrim leve —
+   o conteúdo rola por baixo e derrete num degradê de foco. Sem bordas. */
+
 .header {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(14px) saturate(1.1);
-  border-bottom: 1px solid var(--border);
+}
+
+/* Zona do desfoque: um pouco mais alta que a barra, transborda por baixo.
+   Nasce invisível e só aparece quando a página rola (classe blurZoneOn). */
+.blurZone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 110px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.18s var(--ease);
+}
+.blurZoneOn {
+  opacity: 1;
+}
+.band {
+  position: absolute;
+  inset: 0;
+}
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg) 72%, transparent) 0%,
+    color-mix(in srgb, var(--bg) 35%, transparent) 45%,
+    transparent 80%
+  );
+}
+
+/* Layout de app (estúdio da biblioteca): nada rola por baixo do header,
+   então o desfoque fica confinado à própria barra, sempre ligado (a janela
+   não rola nesse layout). */
+.header[data-app] .blurZone {
+  height: var(--nav-h);
+  opacity: 1;
 }
 
 .inner {
+  position: relative;
+  z-index: 2;
   height: var(--nav-h);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-5);
 }
 
 /* ---- marca ---- */
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   flex: none;
-}
-.mark {
-  width: 11px;
-  height: 15px;
-  background: var(--accent);
-  animation: navblink 1.05s steps(1, end) infinite;
-}
-@keyframes navblink {
-  0%,
-  55% {
-    opacity: 1;
-  }
-  56%,
-  100% {
-    opacity: 0.18;
-  }
-}
-.brandName {
-  font-weight: 700;
-  font-size: var(--fs-sm);
-  letter-spacing: 0.2px;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.01em;
   color: var(--text);
   white-space: nowrap;
 }
 
-/* ---- links desktop ---- */
+/* ---- links desktop: texto puro, sem pílula ---- */
 .links {
   display: flex;
   align-items: center;
-  gap: 2px;
-  flex: 1;
-  justify-content: center;
+  gap: 32px;
 }
 .link {
-  position: relative;
-  padding: 7px 11px;
-  font-size: var(--fs-xs);
+  font-size: 14px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
   color: var(--muted);
   white-space: nowrap;
-  border: 1px solid transparent;
-  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 .link:hover {
   color: var(--text);
-  border-color: var(--border);
 }
 .active {
-  color: var(--accent);
-}
-.active::before,
-.active::after {
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-  color: var(--accent);
-  font-weight: 700;
-}
-.active::before {
-  content: "[";
-  left: 2px;
-}
-.active::after {
-  content: "]";
-  right: 2px;
+  color: var(--text);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex: none;
 }
 
-/* ---- CTA ---- */
+/* ---- CTA: verde sólido, mesmo porte do chip de idioma ---- */
 .cta {
   flex: none;
   display: inline-flex;
   align-items: center;
   font-size: var(--fs-xs);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--accent);
-  padding: 8px 13px;
-  border: 1px solid var(--accent-line);
-  background: transparent;
-  transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+  color: var(--accent-ink);
+  padding: 7px 14px;
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  transition: filter var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 .cta:hover {
-  color: var(--accent-ink);
-  background: var(--accent);
-  box-shadow: var(--shadow-sm);
-  transform: translate(-1px, -1px);
+  filter: brightness(1.06);
+  box-shadow: 0 0 26px -2px var(--accent-glow);
+  transform: translateY(-1px);
 }
 .cta:active {
-  transform: translate(0, 0);
+  transform: translateY(0);
   box-shadow: none;
 }
 
@@ -127,12 +125,12 @@
 .menuBtn {
   display: none;
   flex: none;
-  margin-left: auto;
   width: 42px;
   height: 42px;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
   background: var(--surface);
   cursor: pointer;
 }
@@ -146,7 +144,8 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--accent);
+  border-radius: 2px;
+  background: var(--text);
   transition: transform 0.24s var(--ease), opacity 0.18s var(--ease), top 0.24s var(--ease);
 }
 .burger span:nth-child(1) {
@@ -178,8 +177,11 @@
   left: 0;
   right: 0;
   z-index: 40;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--border-strong);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   box-shadow: var(--shadow-md);
   max-height: 0;
   overflow: hidden;
@@ -198,28 +200,29 @@
   align-items: center;
   gap: 12px;
   padding: 15px clamp(20px, 4vw, 40px);
-  font-size: var(--fs-md);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--text-dim);
-  border-left: 3px solid transparent;
-  transition: color var(--dur) var(--ease), background var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
+  font-size: var(--fs-lg);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.mobileLink::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
 .mobileLink:hover,
 .mobileLinkActive {
-  color: var(--accent);
-  border-left-color: var(--accent);
+  color: var(--text);
   background: var(--surface);
 }
-.mobileLinkIdx {
-  font-size: var(--fs-xs);
-  color: var(--muted);
-  font-weight: 700;
-}
-.mobileLinkActive .mobileLinkIdx {
-  color: var(--accent);
+.mobileLink:hover::before,
+.mobileLinkActive::before {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 .mobileFoot {
   display: flex;
@@ -230,18 +233,19 @@
   border-top: 1px solid var(--border);
 }
 
-@media (max-width: 860px) {
-  .inner {
-    gap: var(--space-3);
+@media (max-width: 960px) {
+  .links {
+    gap: 20px;
   }
 }
-@media (max-width: 720px) {
+@media (max-width: 760px) {
   .links,
   .actions {
     display: none;
   }
   .menuBtn {
     display: inline-flex;
+    margin-left: auto;
   }
   .mobileMenu {
     display: block;

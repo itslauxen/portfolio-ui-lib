@@ -9,6 +9,7 @@ export const profile: Profile = {
   bio: "Sou desenvolvedor fullstack com 3+ anos de experiência: no dia a dia construo aplicações completas com Node, Express, React, TypeScript, Sequelize, SQL e Docker, do modelo de dados à interface. Recentemente venho me aventurando no lado criativo da web com three.js, WebGL, motion e shaders, e este site é o laboratório disso: ao mesmo tempo meu portfólio e minha biblioteca reutilizável de backgrounds, componentes e animações.",
   location: "Brasil",
   email: "gabriellauxen11@gmail.com",
+  whatsapp: "5551980372109",
   socials: [
     { label: "GitHub", url: "https://github.com/itslauxen" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/gabriel-lauxen-36822a231/" },
@@ -44,6 +45,9 @@ export const skills: Skill[] = [
   { name: "Design de Interface", level: 82, category: "Design & IA" },
   { name: "UI/UX", level: 80, category: "Design & IA" },
   { name: "IA generativa", level: 82, category: "Design & IA" },
+  { name: "RAG", level: 78, category: "Design & IA" },
+  { name: "MCP", level: 80, category: "Design & IA" },
+  { name: "Fine-tuning", level: 70, category: "Design & IA" },
 ];
 
 export interface ExperienceItem {

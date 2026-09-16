@@ -16,9 +16,10 @@ import {
   sectionOf,
 } from "@/lib/backgrounds";
 import type { BgValues } from "@/lib/backgrounds/types";
+import { CATALOG_EN, CAT_EN } from "@/lib/backgrounds/catalog-en";
 import { Icon } from "@/components/ui/Icon";
 import { useI18n } from "@/i18n/I18nProvider";
-import { TerminalLoader } from "@/components/ui/TerminalLoader/TerminalLoader";
+import { StudioSkeleton } from "@/components/ui/StudioSkeleton/StudioSkeleton";
 import ui from "@/components/ui/ui.module.css";
 import styles from "./studio.module.css";
 
@@ -35,7 +36,12 @@ const SEC_KEY: Record<string, string> = {
 
 export function BackgroundStudio({ selectedId: routeId }: Props) {
   const pathname = usePathname();
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const en = lang === "en";
+  // Nome/categoria traduzidos em runtime (os catálogos-fonte são pt-BR).
+  const locName = (e: { id: string; name: string }) =>
+    en ? CATALOG_EN[e.id]?.name ?? e.name : e.name;
+  const locCat = (c: string) => (en ? CAT_EN[c] ?? c : c);
   const [selectedId, setSelectedId] = useState(routeId);
   const eff = getEffectMeta(selectedId);
   const [values, setValues] = useState<BgValues>(() => (eff ? defaultsOf(eff) : {}));
@@ -71,8 +77,12 @@ export function BackgroundStudio({ selectedId: routeId }: Props) {
 
   const groups = useMemo(() => {
     const q = term.trim().toLowerCase();
+    // busca casa PT e EN, independentemente do idioma ativo
     const match = (e: (typeof BACKGROUND_CATALOG)[number]) =>
-      !q || `${e.name} ${e.cat} ${e.desc}`.toLowerCase().includes(q);
+      !q ||
+      `${e.name} ${e.cat} ${e.desc} ${CATALOG_EN[e.id]?.name ?? ""} ${CATALOG_EN[e.id]?.desc ?? ""} ${CAT_EN[e.cat] ?? ""}`
+        .toLowerCase()
+        .includes(q);
     return LIB_SECTIONS.map((sec) => ({
       ...sec,
       items: BACKGROUND_CATALOG.filter((e) => sectionOf(e) === sec.key && match(e)),
@@ -155,7 +165,7 @@ export function BackgroundStudio({ selectedId: routeId }: Props) {
     }
   };
 
-  if (!mounted) return <TerminalLoader />;
+  if (!mounted) return <StudioSkeleton />;
 
   return (
     <div className={styles.studio}>
@@ -189,7 +199,7 @@ export function BackgroundStudio({ selectedId: routeId }: Props) {
                   aria-current={e.id === selectedId ? "true" : undefined}
                 >
                   <span className={styles.itemText}>
-                    <span className={styles.itemName}>{e.name}</span>
+                    <span className={styles.itemName}>{locName(e)}</span>
                     <span className={styles.itemCat}>
                       {e.kind === "component"
                         ? t("lib.typeComponent")
@@ -212,12 +222,15 @@ export function BackgroundStudio({ selectedId: routeId }: Props) {
       {eff && (
         <section className={styles.main}>
           <div className={styles.stage}>
-            <BackgroundSurface effectId={selectedId} params={values} interactive />
+            {/* key troca o nó a cada componente: o novo entra num fade suave */}
+            <div key={selectedId} className={styles.stageFade}>
+              <BackgroundSurface effectId={selectedId} params={values} interactive />
+            </div>
             <div className={styles.stageTop}>
               <div className={styles.stageTitle}>
-                {eff.name}
+                {locName(eff)}
                 <small>
-                  {eff.cat} · {eff.params.length} {t("lib.paramsCount")}
+                  {locCat(eff.cat)} · {eff.params.length} {t("lib.paramsCount")}
                 </small>
               </div>
               <div className={styles.stageActions}>

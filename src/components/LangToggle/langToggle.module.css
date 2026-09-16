@@ -1,15 +1,15 @@
 .toggle {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--muted);
-  font-family: var(--font-mono);
   font-size: var(--fs-xs);
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 6px 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 7px 12px;
+  border-radius: var(--radius-full);
   cursor: pointer;
   transition: border-color var(--dur) var(--ease);
 }
@@ -17,7 +17,7 @@
   border-color: var(--border-strong);
 }
 .on {
-  color: var(--accent);
+  color: var(--text);
 }
 .off {
   color: var(--muted);

@@ -66,6 +66,8 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  /** Descrição em inglês (a home escolhe conforme o idioma ativo). */
+  descriptionEn?: string;
   tags: string[];
   year: string;
   /** Link para o projeto ao vivo (opcional). */
@@ -95,5 +97,7 @@ export interface Profile {
   bio: string;
   location?: string;
   email?: string;
+  /** Número em dígitos p/ wa.me (ex.: "5551980372109"). */
+  whatsapp?: string;
   socials: { label: string; url: string }[];
 }

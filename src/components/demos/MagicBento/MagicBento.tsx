@@ -10,6 +10,8 @@ import { gsap } from "gsap";
 import styles from "./MagicBento.module.css";
 
 export interface MagicBentoProps {
+  /** Cartões customizados; sem isso, usa os cartões padrão da demo. */
+  cards?: CartaoBento[];
   textAutoHide?: boolean;
   /** Particulas flutuantes ao passar o mouse. */
   enableStars?: boolean;
@@ -39,7 +41,7 @@ function hexParaRgb(hex: string): string {
   return `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}`;
 }
 
-interface CartaoBento {
+export interface CartaoBento {
   color: string;
   title: string;
   description: string;
@@ -471,6 +473,7 @@ const useDeteccaoMobile = () => {
 };
 
 const MagicBento: React.FC<MagicBentoProps> = ({
+  cards = cardData,
   textAutoHide = true,
   enableStars = true,
   enableSpotlight = true,
@@ -501,7 +504,7 @@ const MagicBento: React.FC<MagicBentoProps> = ({
       )}
 
       <div className={styles.cardGrid} ref={gridRef}>
-        {cardData.map((card, index) => {
+        {cards.map((card, index) => {
           const baseClassName = [
             styles.card,
             textAutoHide ? styles.cardTextAutohide : "",

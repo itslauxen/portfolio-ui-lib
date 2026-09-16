@@ -1,47 +1,66 @@
+/* Estúdio da biblioteca em layout de app: a sidebar fica fixa à esquerda,
+   sempre visível por inteiro (a lista rola por dentro dela); SÓ a coluna da
+   direita rola (cabeçalho, palco e painel de parâmetros). */
+
 .studio {
   display: grid;
-  grid-template-columns: 268px 1fr;
+  grid-template-columns: 288px minmax(0, 1fr);
   gap: var(--space-5);
-  align-items: start;
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-8);
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-4) clamp(20px, 4vw, 40px);
+  height: calc(100vh - var(--nav-h));
+  height: calc(100dvh - var(--nav-h));
+  animation: studioIn 0.5s var(--ease) both;
+}
+@keyframes studioIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ---------------- SIDEBAR ---------------- */
 .sidebar {
-  position: sticky;
-  top: calc(var(--nav-h) + var(--space-3));
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--surface);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   padding: var(--space-3);
-  max-height: calc(100vh - var(--nav-h) - var(--space-5));
 }
 .sideHead {
   display: flex;
   flex-direction: column;
   gap: 9px;
+  flex: none;
 }
 .sideHead :global(label) {
   width: 100%;
 }
 .count {
   font-size: var(--fs-xs);
+  font-weight: 500;
   color: var(--muted);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
+  padding-left: 4px;
 }
 
 .list {
+  flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   margin: 0 calc(var(--space-3) * -1) calc(var(--space-3) * -1);
   padding: 0 var(--space-3) var(--space-3);
+  min-height: 0;
 }
 
 .group {
@@ -49,22 +68,26 @@
   flex-direction: column;
   gap: 2px;
 }
-/* Rótulo de seção: micro-label de terminal com "//" lima. */
+/* Rótulo de seção: barrinha em gradiente + texto normal. */
 .groupLabel {
   position: sticky;
   top: 0;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 4px 6px;
   font-size: var(--fs-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
+  font-weight: 600;
   color: var(--muted);
-  background: linear-gradient(to bottom, var(--bg-2) 78%, transparent);
+  background: linear-gradient(to bottom, var(--bg) 72%, transparent);
 }
 .groupLabel::before {
-  content: "// ";
-  color: var(--accent);
+  content: "";
+  width: 14px;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--grad-accent);
 }
 
 .item {
@@ -74,9 +97,8 @@
   width: 100%;
   text-align: left;
   padding: 8px 10px;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
-  border-left: 2px solid transparent;
   background: transparent;
   color: var(--text-dim);
   cursor: pointer;
@@ -89,7 +111,7 @@
 }
 .itemActive {
   background: var(--accent-soft);
-  border-left-color: var(--accent);
+  border-color: var(--accent-line);
   color: var(--text);
 }
 .itemText {
@@ -105,23 +127,18 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.itemActive .itemName {
-  color: var(--accent);
-}
 .itemCat {
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
 }
 .gpu {
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  padding: 2px 6px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-strong);
-  color: var(--accent);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--accent-line);
+  color: var(--accent-2);
   flex: none;
 }
 .empty {
@@ -130,20 +147,42 @@
   padding: var(--space-5) 4px;
 }
 
-/* ---------------- MAIN ---------------- */
+/* ---------------- MAIN (única área que rola) ---------------- */
 .main {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+  padding-bottom: var(--space-6);
 }
+
 .stage {
   position: relative;
+  flex: none;
   height: clamp(340px, 56vh, 640px);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border-strong);
-  background: #04040a;
+  background: var(--bg);
+}
+/* Troca de componente: o palco novo entra num fade suave. */
+.stageFade {
+  position: absolute;
+  inset: 0;
+  animation: stageIn 0.5s var(--ease) both;
+}
+@keyframes stageIn {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .stageTop {
   position: absolute;
@@ -153,23 +192,23 @@
   justify-content: space-between;
   gap: 12px;
   padding: 14px 16px;
-  background: linear-gradient(to bottom, rgba(4, 4, 10, 0.72), transparent);
+  background: linear-gradient(to bottom, rgba(4, 4, 12, 0.72), transparent);
   pointer-events: none;
+  z-index: 1;
 }
 .stageTitle {
+  font-family: var(--font-display);
   font-size: var(--fs-md);
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: -0.01em;
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
 }
 .stageTitle small {
   display: block;
+  font-family: var(--font-sans);
   color: var(--text-dim);
   font-weight: 400;
   font-size: var(--fs-xs);
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
   margin-top: 2px;
 }
 .stageActions {
@@ -179,8 +218,8 @@
 }
 
 .panel {
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--surface);
   padding: var(--space-4) var(--space-5) var(--space-5);
 }
@@ -193,10 +232,9 @@
   margin-bottom: var(--space-4);
 }
 .panelTitle {
-  font-size: var(--fs-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-dim);
 }
 .panelActions {
   display: flex;
@@ -213,8 +251,9 @@
   background: var(--surface-strong);
   border: 1px solid var(--border);
   color: #fff;
-  padding: 11px 18px;
-  border-radius: var(--radius-md);
+  padding: 11px 20px;
+  border-radius: var(--radius-full);
+  -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   font-size: var(--fs-sm);
   z-index: 100;
@@ -231,12 +270,18 @@
 @media (max-width: 900px) {
   .studio {
     grid-template-columns: 1fr;
+    height: auto;
   }
   .sidebar {
-    position: static;
-    max-height: none;
+    min-height: 0;
   }
   .list {
+    flex: none;
     max-height: 300px;
+  }
+  .main {
+    overflow: visible;
+    min-height: 0;
+    padding-right: 0;
   }
 }

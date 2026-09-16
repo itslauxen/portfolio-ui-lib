@@ -114,7 +114,6 @@
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   font-family: var(--font-mono);
-  text-transform: uppercase;
   min-width: 62px;
   text-align: right;
 }

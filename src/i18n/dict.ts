@@ -5,51 +5,115 @@ type Entry = { pt: string; en: string };
 // Dicionário central de tradução (interface + textos das páginas).
 export const messages: Record<string, Entry> = {
   // ---- nav ----
-  "nav.home": { pt: "início", en: "home" },
-  "nav.library": { pt: "biblioteca", en: "library" },
-  "nav.about": { pt: "sobre", en: "about" },
-  "nav.contact": { pt: "contato", en: "contact" },
+  "nav.home": { pt: "Início", en: "Home" },
+  "nav.projects": { pt: "Projetos", en: "Projects" },
+  "nav.library": { pt: "Biblioteca", en: "Library" },
+  "nav.about": { pt: "Sobre", en: "About" },
+  "nav.contact": { pt: "Fale comigo", en: "Get in touch" },
   "loc.country": { pt: "Brasil", en: "Brazil" },
   "meta.home": { pt: "Gabriel Lauxen · Portfólio & Biblioteca", en: "Gabriel Lauxen · Portfolio & Library" },
   "meta.about": { pt: "Sobre · Gabriel Lauxen", en: "About · Gabriel Lauxen" },
   "meta.library": { pt: "Biblioteca · Gabriel Lauxen", en: "Library · Gabriel Lauxen" },
   "meta.articles": { pt: "Artigos · Gabriel Lauxen", en: "Writing · Gabriel Lauxen" },
 
-  // ---- home / hero ----
-  "home.eyebrow": { pt: "portfólio & biblioteca", en: "portfolio & library" },
+  // ---- home / hero (design 2a) ----
   "home.role": {
     pt: "Desenvolvedor Fullstack & Creative Developer",
     en: "Fullstack & Creative Developer",
   },
-  "home.tagline": {
-    pt: "Do banco de dados ao pixel: aplicações completas com Node e React, e interfaces vivas com WebGL, motion e shaders.",
-    en: "From database to pixel: full apps with Node and React, and living interfaces with WebGL, motion and shaders.",
+  "home.badge": { pt: "Disponível para novos projetos", en: "Available for new projects" },
+  "home.titleLine1": { pt: "Aplicações completas,", en: "Complete applications," },
+  // Linha 2 em três pedaços para o marca-texto cair na palavra certa em cada idioma.
+  "home.t2pre": { pt: "interfaces ", en: "" },
+  "home.t2hl": { pt: "vivas", en: "living" },
+  "home.t2post": { pt: ".", en: " interfaces." },
+  "home.lead": {
+    pt: "Desenvolvedor fullstack com 3+ anos de experiência — Node, React e TypeScript do modelo de dados à interface, com WebGL, motion e shaders no acabamento.",
+    en: "Fullstack developer with 3+ years of experience — Node, React and TypeScript from data model to interface, with WebGL, motion and shaders as the finish.",
   },
   "home.ctaLibrary": { pt: "Explorar biblioteca", en: "Explore the library" },
   "home.ctaProjects": { pt: "Ver projetos", en: "View projects" },
-  "home.stat1v": { pt: "90+", en: "90+" },
-  "home.stat1l": { pt: "Componentes parametrizados", en: "Parametrized components" },
-  "home.stat2v": { pt: "Fullstack", en: "Fullstack" },
-  "home.stat2l": { pt: "Front, back e banco de dados", en: "Front, back and database" },
-  "home.stat3v": { pt: "Design", en: "Design" },
-  "home.stat3l": { pt: "+ código, do conceito ao deploy", en: "+ code, concept to deploy" },
-  "home.worksEyebrow": { pt: "Trabalhos", en: "Work" },
+  "home.stat1v": { pt: "3+ anos", en: "3+ years" },
+  "home.stat1l": { pt: "de experiência", en: "of experience" },
+  "home.stat2v": { pt: "90+ componentes", en: "90+ components" },
+  "home.stat2l": { pt: "na biblioteca própria", en: "in my own library" },
+  "home.stat3v": { pt: "Design + código", en: "Design + code" },
+  "home.stat3l": { pt: "do conceito ao deploy", en: "concept to deploy" },
+  "home.skillsTitle": { pt: "O que eu domino", en: "What I master" },
+  "home.skillsCount": { pt: "tecnologias", en: "technologies" },
+  "home.cat1d": {
+    pt: "Interfaces rápidas e acessíveis, do design system ao app publicado — web e mobile com a mesma base.",
+    en: "Fast, accessible interfaces, from design system to shipped app — web and mobile on the same base.",
+  },
+  "home.cat2d": {
+    pt: "APIs e modelos de dados que aguentam produção: SQL e NoSQL, containers e deploy sem drama.",
+    en: "APIs and data models that survive production: SQL and NoSQL, containers and drama-free deploys.",
+  },
+  "home.cat3d": {
+    pt: "O acabamento que diferencia: 3D no navegador, shaders e animação com propósito.",
+    en: "The finish that sets it apart: 3D in the browser, shaders and animation with purpose.",
+  },
+  "home.cat4d": {
+    pt: "Do wireframe ao fine-tuning: desenho a interface e conecto a inteligência por trás dela.",
+    en: "From wireframe to fine-tuning: I design the interface and wire the intelligence behind it.",
+  },
+  "home.servicesTitle": { pt: "O que eu construo", en: "What I build" },
+  "home.srv1t": { pt: "Agentes de IA personalizados", en: "Custom AI agents" },
+  "home.srv1d": {
+    pt: "Agentes que conhecem de ponta a ponta os processos da sua empresa — e ajudam no dia a dia, nas automações e nos atendimentos.",
+    en: "Agents that know your company's processes end to end — helping with daily work, automations and customer service.",
+  },
+  "home.srv2t": { pt: "Sites modernos que convertem", en: "Modern websites that convert" },
+  "home.srv2d": {
+    pt: "Mostre a qualidade do seu serviço com um site de design atual, rápido e com técnicas de SEO — para novos clientes te encontrarem primeiro.",
+    en: "Show the quality of your work with a modern, fast site built with SEO in mind — so new clients find you first.",
+  },
+  "home.srv3t": { pt: "Automação de processos", en: "Process automation" },
+  "home.srv3d": {
+    pt: "Automatize os processos lentos da sua empresa e ganhe tempo para focar no que realmente importa.",
+    en: "Automate your company's slow processes and win back time to focus on what really matters.",
+  },
+  "home.srv4t": { pt: "Aplicações fullstack completas", en: "Complete fullstack apps" },
+  "home.srv4d": {
+    pt: "Sistemas completos sob medida: centralize a operação, reduza erros manuais e tenha dados confiáveis para decidir.",
+    en: "Complete tailor-made systems: centralize your operation, cut manual errors and get reliable data to decide with.",
+  },
+  "home.libTitle": { pt: "Direto da biblioteca", en: "Straight from the library" },
+  "home.libSub": {
+    pt: "Três fundos rodando ao vivo — abra no estúdio para mexer em cada parâmetro.",
+    en: "Three backgrounds running live — open the studio to tweak every parameter.",
+  },
+  "home.libOpen": { pt: "Abrir no estúdio", en: "Open in the studio" },
+  "home.processTitle": { pt: "Como eu trabalho", en: "How I work" },
+  "home.processTag": { pt: "Do problema ao deploy", en: "From problem to deploy" },
+  "home.step1t": { pt: "Descoberta", en: "Discovery" },
+  "home.step1d": {
+    pt: "Entendo o problema, o usuário e o que é sucesso para o projeto.",
+    en: "I map the problem, the user and what success looks like.",
+  },
+  "home.step2t": { pt: "Protótipo rápido", en: "Fast prototype" },
+  "home.step2d": {
+    pt: "IA como ferramenta: uma versão navegável em dias, não meses.",
+    en: "AI as a tool: a navigable version in days, not months.",
+  },
+  "home.step3t": { pt: "Construção", en: "Build" },
+  "home.step3d": {
+    pt: "Código de produção com convenções, testes e design tokens.",
+    en: "Production code with conventions, tests and design tokens.",
+  },
+  "home.step4t": { pt: "Entrega e iteração", en: "Ship & iterate" },
+  "home.step4d": {
+    pt: "Deploy, medição e evolução contínua com o cliente.",
+    en: "Deploy, measurement and continuous evolution with the client.",
+  },
+  "home.articleTitle": { pt: "Artigo em destaque", en: "Featured writing" },
+  "home.nextProject": { pt: "Em breve, novidades", en: "Soon, news" },
   "home.worksTitle": { pt: "Projetos em destaque", en: "Featured projects" },
-  "home.worksSub": {
-    pt: "Alguns projetos reais. O Nova Notes e o myBackgrounds alimentam componentes que você encontra aqui na biblioteca.",
-    en: "A few real projects. Nova Notes and myBackgrounds feed components you'll find here in the library.",
-  },
-  "home.hoverReveal": { pt: "hover para revelar", en: "hover to reveal" },
-  "home.liveNow": { pt: "Ver ao vivo ↗", en: "View live ↗" },
-  "home.open": { pt: "Abrir →", en: "Open →" },
-  "home.code": { pt: "Código", en: "Code" },
-  "home.ctaTitle": { pt: "Uma biblioteca que também é vitrine", en: "A library that is also a showcase" },
+  "home.ctaTitle": { pt: "Vamos trabalhar juntos?", en: "Let's work together?" },
   "home.ctaSub": {
-    pt: "Organize, reaproveite e mostre seu trabalho: backgrounds parametrizados, componentes e animações, tudo com busca e preview ao vivo.",
-    en: "Organize, reuse and show your work: parametrized backgrounds, components and animations, all with search and live preview.",
+    pt: "Respondo rápido — e-mail, GitHub ou LinkedIn.",
+    en: "I reply fast — email, GitHub or LinkedIn.",
   },
-  "home.ctaOpenLib": { pt: "Abrir biblioteca", en: "Open the library" },
-  "home.ctaAbout": { pt: "Sobre mim", en: "About me" },
 
   // ---- about ----
   "about.eyebrow": { pt: "Sobre", en: "About" },
@@ -78,7 +142,6 @@ export const messages: Record<string, Entry> = {
   "articles.back": { pt: "← voltar ao sobre", en: "← back to about" },
 
   // ---- biblioteca ----
-  "lib.eyebrow": { pt: "Biblioteca", en: "Library" },
   "lib.search": { pt: "Buscar...", en: "Search..." },
   "lib.all": { pt: "Todos", en: "All" },
   "lib.empty": { pt: "Nenhum resultado.", en: "No results." },
@@ -108,17 +171,13 @@ export const messages: Record<string, Entry> = {
   "lib.secComponentes": { pt: "Componentes", en: "Components" },
   "lib.secAnimacoes": { pt: "Animações", en: "Animations" },
   "lib.secTexto": { pt: "Animações de texto", en: "Text animations" },
-  "lib.headerTitle": { pt: "Biblioteca", en: "Library" },
-  "lib.headerLead": {
-    pt: "Backgrounds, componentes e animações num só lugar. Escolha um item na lateral para vê-lo no palco e ajustar cada parâmetro pelos sliders, ao vivo. Cada item tem seu próprio link, então recarregar mantém a seleção.",
-    en: "Backgrounds, components and animations in one place. Pick an item on the side to see it on the stage and tweak every parameter with live sliders. Each item has its own link, so reloading keeps your selection.",
-  },
+
+  // ---- modal de contato ----
+  "contact.title": { pt: "Como você prefere falar?", en: "How do you prefer to talk?" },
+  "contact.emailHint": { pt: "Abre no seu app de e-mail", en: "Opens in your email app" },
+  "contact.whatsHint": { pt: "Conversa direta no WhatsApp", en: "Chat directly on WhatsApp" },
+  "contact.close": { pt: "Fechar", en: "Close" },
 
   // ---- footer ----
   "footer.rights": { pt: "Todos os direitos reservados.", en: "All rights reserved." },
-
-  // ---- ticker (faixa de stacks) ----
-  "ticker.fullstack": { pt: "desenvolvedor fullstack", en: "fullstack developer" },
-  "ticker.backgrounds": { pt: "backgrounds parametrizados", en: "parametrized backgrounds" },
-  "ticker.aiAgents": { pt: "agentes de ia", en: "ai agents" },
 };

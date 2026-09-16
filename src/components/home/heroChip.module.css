@@ -1,0 +1,208 @@
+/* PCB flutuando em 3D: perspectiva no .scene, flutuação no .float, tilt de
+   mouse no .tilt (variáveis --rx/--ry) e camadas separadas em translateZ.
+   O reduced-motion global congela as animações; o tilt é desligado no JS. */
+
+.scene {
+  /* perspectiva mais curta = profundidade mais dramática */
+  perspective: 820px;
+}
+
+.float {
+  animation: float 9s ease-in-out infinite alternate;
+  transform-style: preserve-3d;
+}
+@keyframes float {
+  from {
+    transform: translateY(-12px);
+  }
+  to {
+    transform: translateY(12px);
+  }
+}
+
+.tilt {
+  position: relative;
+  aspect-ratio: 480 / 420;
+  transform-style: preserve-3d;
+  transform: rotateX(calc(20deg + var(--rx, 0deg))) rotateY(calc(-18deg + var(--ry, 0deg)));
+  transition: transform 0.35s var(--ease);
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* Três alturas: placa (0) → componentes baixos (34) → chips (72).
+   O degrau entre camadas é o que gera o parallax ao inclinar. */
+.layerMid {
+  transform: translateZ(34px);
+}
+.layerChips {
+  transform: translateZ(72px);
+}
+
+/* ---- placa ---- */
+.board {
+  fill: rgba(11, 16, 12, 0.9);
+  stroke: rgba(78, 240, 140, 0.32);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 26px rgba(78, 240, 140, 0.14));
+}
+.hole {
+  fill: rgba(16, 19, 17, 0.9);
+  stroke: rgba(241, 245, 240, 0.16);
+  stroke-width: 1;
+}
+
+.trace {
+  stroke: rgba(78, 240, 140, 0.26);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* Pulso: traço curto num ciclo de dash maior que qualquer trilha. */
+.pulse {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 14 420;
+  filter: drop-shadow(0 0 5px rgba(78, 240, 140, 0.8));
+  animation-name: run;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes run {
+  to {
+    stroke-dashoffset: -434;
+  }
+}
+
+.pad {
+  fill: rgba(78, 240, 140, 0.45);
+}
+
+/* Lente de derretimento: desfoca o que está sob o círculo do cursor. */
+.meltLens {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(9px) saturate(1.15);
+  backdrop-filter: blur(9px) saturate(1.15);
+  -webkit-mask-image: radial-gradient(
+    circle 150px at var(--mx, -30%) var(--my, -30%),
+    black 0%,
+    black 30%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(
+    circle 150px at var(--mx, -30%) var(--my, -30%),
+    black 0%,
+    black 30%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Camada revelada (Forma Revelada): circuito aceso mascarado por um círculo
+   suave preso ao cursor — fora dele, invisível. */
+.revealLayer {
+  filter: drop-shadow(0 0 6px rgba(60, 233, 127, 0.9));
+  -webkit-mask-image: radial-gradient(
+    circle 170px at var(--mx, -30%) var(--my, -30%),
+    black 0%,
+    black 35%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    circle 170px at var(--mx, -30%) var(--my, -30%),
+    black 0%,
+    black 35%,
+    transparent 75%
+  );
+}
+.revealTrace {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+.revealPad {
+  fill: var(--accent);
+}
+.via {
+  fill: none;
+  stroke: rgba(78, 240, 140, 0.35);
+  stroke-width: 1.2;
+}
+.smd {
+  fill: rgba(78, 240, 140, 0.2);
+  stroke: rgba(241, 245, 240, 0.14);
+  stroke-width: 0.8;
+}
+.cap {
+  fill: #0d130f;
+  stroke: rgba(78, 240, 140, 0.38);
+  stroke-width: 1.1;
+}
+.capTop {
+  fill: none;
+  stroke: rgba(241, 245, 240, 0.16);
+  stroke-width: 1;
+}
+.crystal {
+  fill: #0d130f;
+  stroke: rgba(241, 245, 240, 0.24);
+  stroke-width: 1.1;
+}
+.hpin {
+  fill: rgba(78, 240, 140, 0.28);
+  stroke: rgba(241, 245, 240, 0.12);
+  stroke-width: 0.8;
+}
+/* serigrafia: rótulos técnicos quase invisíveis, como numa PCB real */
+.silk {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  fill: rgba(241, 245, 240, 0.2);
+}
+
+/* ---- encapsulamentos ---- */
+.pin {
+  fill: rgba(78, 240, 140, 0.42);
+}
+.cpu {
+  fill: #0c120e;
+  stroke: rgba(78, 240, 140, 0.6);
+  stroke-width: 1.4;
+  animation: breathe 4.5s ease-in-out infinite alternate;
+}
+@keyframes breathe {
+  from {
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 8px rgba(78, 240, 140, 0.12));
+  }
+  to {
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 20px rgba(78, 240, 140, 0.34));
+  }
+}
+.die {
+  fill: rgba(78, 240, 140, 0.06);
+  stroke: rgba(241, 245, 240, 0.2);
+  stroke-width: 1;
+}
+.dieGrid {
+  stroke: rgba(241, 245, 240, 0.09);
+  stroke-width: 1;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: var(--accent);
+  text-anchor: middle;
+  dominant-baseline: central;
+}

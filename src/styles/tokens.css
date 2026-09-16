@@ -1,65 +1,82 @@
 /* ============================================================================
    DESIGN TOKENS, fonte única de verdade do visual.
-   Identidade: NEO-BRUTALIST TERMINAL. Monospace em tudo, cor-assinatura lima
-   ácida sobre quase-preto, cantos duros, bordas sólidas, sombras sem blur.
+   Identidade: NOITE VERDE (design 2a do canvas "Portfolio Layouts").
+   Quase-preto esverdeado #101311, acento verde #4ef08c sólido, Manrope em
+   tudo (mono só em código), pílulas, cantos suaves e luz orgânica no hero.
    Troque as variáveis aqui para repaginar o site inteiro de uma vez.
    ============================================================================ */
 
 :root {
-  /* ---- Superfícies / neutros (terminal, quase-preto neutro) ---- */
-  --bg: #070708;
-  --bg-2: #0c0c0e;
-  --surface: rgba(255, 255, 255, 0.035);
-  --surface-2: rgba(255, 255, 255, 0.06);
-  --surface-strong: rgba(16, 16, 19, 0.86);
-  --border: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.28);
-  --text: #ededed;
-  --text-dim: #b7b7ba;
-  --muted: #7d7d86;
+  /* ---- Superfícies / neutros (noite esverdeada) ---- */
+  --bg: #101311;
+  --bg-2: #151a15;
+  --bg-card: #1a201a;
+  --surface: rgba(241, 245, 240, 0.04);
+  --surface-2: rgba(241, 245, 240, 0.07);
+  --surface-strong: rgba(21, 26, 21, 0.72);
+  --border: rgba(241, 245, 240, 0.09);
+  --border-strong: rgba(241, 245, 240, 0.18);
+  --text: #f1f5f0;
+  --text-dim: #c9d2c9;
+  --muted: #a3aca3;
+  --muted-2: #7c857c;
 
-  /* ---- Cor-assinatura: LIMA ÁCIDA (mude estas p/ repaginar) ---- */
-  --accent: #c6ff3a;
-  --accent-ink: #0a0f00; /* texto sobre a lima */
-  --accent-2: #5ff2d8; /* ciano de apoio, uso raro */
-  --accent-3: #ff5c38; /* alerta/quente, uso raro */
-  --good: #7dff9b;
-  --warn: #ffb020;
+  /* ---- Cor-assinatura: VERDE (mude estas p/ repaginar) ---- */
+  --accent: #3ce97f;
+  --accent-ink: #0e1a12; /* texto sobre o verde */
+  --accent-ink-dim: #14522e; /* texto secundário sobre o verde */
+  --accent-2: #7bffb9; /* menta clara, uso raro */
+  --accent-3: #2ecc71; /* verde profundo de apoio */
+  --good: #4ef08c;
+  --warn: #ffc069;
+
+  /* Gradiente-assinatura: quase chapado (a identidade é o verde sólido) */
+  --grad-accent: linear-gradient(120deg, #3ce97f, #4af0a5);
+  --grad-accent-soft: linear-gradient(
+    120deg,
+    rgba(60, 233, 127, 0.28),
+    rgba(74, 240, 165, 0.28)
+  );
 
   /* Derivados de marca */
-  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
-  --accent-line: color-mix(in srgb, var(--accent) 40%, var(--border-strong));
+  --accent-soft: rgba(60, 233, 127, 0.15);
+  --accent-line: color-mix(in srgb, var(--accent) 45%, var(--border-strong));
   --accent-ring: color-mix(in srgb, var(--accent) 55%, transparent);
-  --accent-glow: color-mix(in srgb, var(--accent) 22%, transparent);
+  --accent-glow: color-mix(in srgb, var(--accent) 30%, transparent);
 
-  /* Textura de fundo: grade fina de terminal + brilho lima discreto. */
-  --grid-line: rgba(255, 255, 255, 0.028);
-  --grid-size: 46px;
+  /* Textura de fundo: brilhos verdes bem difusos sobre a noite. */
+  --grid-line: rgba(241, 245, 240, 0.02);
+  --grid-size: 56px;
   --backdrop: radial-gradient(
-      900px 520px at 92% -12%,
-      color-mix(in srgb, var(--accent) 7%, transparent),
+      1000px 620px at 14% -10%,
+      rgba(78, 240, 140, 0.07),
       transparent 60%
     ),
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+    radial-gradient(
+      900px 560px at 88% 108%,
+      rgba(46, 204, 113, 0.05),
+      transparent 60%
+    ),
     var(--bg);
 
-  /* ---- Tipografia: MONO em tudo ---- */
+  /* ---- Tipografia: Manrope em tudo; mono só em código ---- */
+  --font-display: var(--font-manrope), "Manrope", "Avenir Next", system-ui, sans-serif;
+  --font-sans: var(--font-manrope), "Manrope", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
   --font-mono: var(--font-jbmono), "JetBrains Mono", ui-monospace, "SF Mono",
-    "JetBrains Mono", Menlo, Consolas, monospace;
-  --font-sans: var(--font-mono);
-  --fs-xs: 0.7rem;
-  --fs-sm: 0.8rem;
-  --fs-base: 0.9rem;
-  --fs-md: 1.02rem;
-  --fs-lg: 1.28rem;
-  --fs-xl: 1.7rem;
-  --fs-2xl: 2.3rem;
-  --fs-3xl: clamp(2.8rem, 8vw, 6rem);
-  --lh-tight: 1.02;
-  --lh: 1.62;
-  --tracking-wide: 1.4px;
-  --tracking-label: 2.2px;
+    Menlo, Consolas, monospace;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 0.9375rem;
+  --fs-md: 1.09rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: clamp(1.8rem, 3.1vw, 2.25rem);
+  --fs-3xl: clamp(2.8rem, 8.8vw, 6.5rem);
+  --lh-tight: 1.04;
+  --lh: 1.6;
+  --tracking-wide: 0.3px;
+  --tracking-label: 1.2px;
 
   /* ---- Espaçamento (escala 4px) ---- */
   --space-1: 4px;
@@ -69,34 +86,35 @@
   --space-5: 22px;
   --space-6: 32px;
   --space-7: 48px;
-  --space-8: 72px;
+  --space-8: 80px;
   --space-9: 112px;
 
-  /* ---- Raios: cantos duros ---- */
-  --radius-sm: 0px;
-  --radius-md: 2px;
-  --radius-lg: 3px;
-  --radius-xl: 4px;
+  /* ---- Raios: cantos suaves (cards 20-24, bandas 28, pílulas) ---- */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 24px;
+  --radius-xl: 28px;
   --radius-full: 999px;
 
-  /* ---- Sombras: offset duro, sem blur (brutalist) ---- */
-  --shadow-sm: 3px 3px 0 rgba(0, 0, 0, 0.8);
-  --shadow-md: 6px 6px 0 rgba(0, 0, 0, 0.85);
-  --shadow-hard: 4px 4px 0 var(--accent);
-  --shadow-glow: 0 0 0 1px var(--accent-line), 0 0 24px -6px var(--accent-glow);
+  /* ---- Sombras: profundidade suave + glow verde ---- */
+  --shadow-sm: 0 2px 10px rgba(4, 6, 4, 0.35);
+  --shadow-md: 0 16px 40px -12px rgba(4, 6, 4, 0.6);
+  --shadow-hard: 0 10px 30px -8px var(--accent-glow);
+  --shadow-glow: 0 0 0 1px var(--accent-line), 0 8px 40px -10px var(--accent-glow);
 
   /* ---- Layout ---- */
   --maxw: 1440px;
   --maxw-prose: 720px;
-  --nav-h: 60px;
-  --blur: 10px;
+  --nav-h: 64px;
+  --blur: 16px;
 
   /* ---- Motion ---- */
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-step: steps(1, end);
-  --dur-fast: 0.12s;
-  --dur: 0.2s;
-  --dur-slow: 0.38s;
+  --dur-fast: 0.14s;
+  --dur: 0.24s;
+  --dur-slow: 0.45s;
 }
 
 @media (prefers-reduced-motion: reduce) {

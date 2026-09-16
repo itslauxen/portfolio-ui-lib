@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BackgroundStudio } from "@/components/backgrounds/BackgroundStudio";
-import { LibraryHeader } from "@/components/backgrounds/LibraryHeader";
 import { BACKGROUND_CATALOG, getEffectMeta } from "@/lib/backgrounds";
 
 export function generateStaticParams() {
@@ -21,10 +20,7 @@ export default function BibliotecaItemPage({ params }: { params: { id: string } 
   const eff = getEffectMeta(params.id);
   if (!eff) notFound();
 
-  return (
-    <div className="wrap">
-      <LibraryHeader />
-      <BackgroundStudio selectedId={params.id} />
-    </div>
-  );
+  // O estúdio ocupa a viewport inteira abaixo do header (layout de app):
+  // sidebar fixa à esquerda, só a coluna da direita rola.
+  return <BackgroundStudio selectedId={params.id} />;
 }

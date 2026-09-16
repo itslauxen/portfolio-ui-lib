@@ -1,13 +1,6 @@
+/* Rodapé simples do design 2a: uma linha discreta, sem borda nem vidro. */
 .footer {
-  position: relative;
-  border-top: 1px solid var(--border);
-  margin-top: var(--space-9);
-  padding: var(--space-7) 0 var(--space-6);
-  /* mesmo vidro fosco do header; o dither (canvas fixed, z-index -1) aparece
-     desfocado por trás */
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
-  backdrop-filter: blur(14px) saturate(1.1);
+  padding: 36px 0 40px;
 }
 .inner {
   display: flex;
@@ -15,25 +8,17 @@
   gap: var(--space-4);
   align-items: center;
   justify-content: space-between;
-}
-.brand {
-  font-weight: 700;
-}
-.meta {
-  color: var(--muted);
-  font-size: var(--fs-sm);
+  color: var(--muted-2);
+  font-size: 13px;
+  font-weight: 600;
 }
 .links {
   display: flex;
-  gap: var(--space-2);
+  gap: 24px;
   flex-wrap: wrap;
-  /* compensa o padding lateral dos itens pra alinhar com a borda */
-  margin: 0 -11px;
 }
 .links a {
-  color: var(--muted);
-  font-size: var(--fs-sm);
-  padding: 8px 11px;
+  color: var(--muted-2);
   transition: color var(--dur) var(--ease);
 }
 .links a:hover {

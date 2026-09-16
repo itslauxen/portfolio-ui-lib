@@ -1,411 +1,1065 @@
-/* ---------- ZONA DO CURSOR DE MIRA ---------- */
-/* O wrapper do cursor vem do demo (confinado, height 100%, overflow hidden);
-   aqui ele vira um wrapper de página. Classe dupla para vencer a especificidade. */
-.cursorZone.cursorZone {
-  height: auto;
-  overflow: visible;
-}
-/* Esconde o cursor nativo em TODOS os descendentes (links/botões trazem o
-   pointer de volta sem isso). Só onde existe mouse de verdade. */
-@media (hover: hover) and (pointer: fine) {
-  .cursorZone :global(*) {
-    cursor: none !important;
-  }
+/* Home no design 2a: hero com orbe verde e conteúdo assentado embaixo,
+   projetos em grid de 2 cards com imagem, "O que eu domino" em 4 cards
+   (criativo destacado) e banda verde "Vamos trabalhar juntos?". */
+
+/* ---------- PALCO (hero + painel de projetos) ---------- */
+.stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin-top: calc(-1 * var(--nav-h)); /* o fundo flui por baixo do header transparente */
 }
 
 /* ---------- HERO ---------- */
 .hero {
   position: relative;
-  min-height: min(90vh, 860px);
+  min-height: 100svh;
   display: flex;
+  /* centralizado: em telas altas (iMac, tela cheia) o conteúdo não afunda
+     no rodapé da seção; em telas baixas o resultado é o mesmo de antes */
   align-items: center;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  isolation: isolate;
+  z-index: 2;
 }
-.heroBg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-/* Scrim para legibilidade do texto sobre o terreno 3D. */
+
+/* Scrim: escurece topo (barra) e a região do texto do hero, e — em vez de
+   morrer na borda da seção — segue descendo e esmaece DENTRO da área dos
+   projetos, dissolvendo a divisão entre as seções. */
 .heroScrim {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100svh;
   z-index: 1;
   pointer-events: none;
-  background:
-    linear-gradient(100deg, color-mix(in srgb, var(--bg) 88%, transparent) 6%, color-mix(in srgb, var(--bg) 40%, transparent) 40%, transparent 64%),
-    linear-gradient(to top, var(--bg) 0%, transparent 26%),
-    linear-gradient(to bottom, color-mix(in srgb, var(--bg) 55%, transparent) 0%, transparent 18%);
+  /* escurece só o topo (barra) e a BASE (abaixo dos stats) — nada de mancha
+     escura no meio do hero */
+  background: linear-gradient(
+    to bottom,
+    rgba(16, 19, 17, 0.6) 0,
+    transparent 26svh,
+    transparent 74svh,
+    rgba(16, 19, 17, 0.5) 100svh
+  );
 }
+/* Borda "lava" entre hero e projetos: elipses da cor do fundo da página,
+   com degradê radial suave, derivando devagar — a fronteira vira uma linha
+   orgânica em movimento em vez de um corte reto. */
+.heroMelt {
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: -240px;
+  height: 480px;
+  z-index: 1;
+  pointer-events: none;
+}
+/* Base: degradê suave que também ESMAECE no fim — como a cor é a mesma do
+   fundo da página (#101311), a borda inferior do container some de vez. */
+.heroMelt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(16, 19, 17, 0.78) 42%,
+    #101311 58%,
+    #101311 80%,
+    rgba(16, 19, 17, 0) 100%
+  );
+}
+/* Blobs de decaimento MUITO suave (30% → 55% → 0): as sobreposições se
+   fundem sem criar nenhuma ponta; só ondulam a borda organicamente. */
+.heroMelt span {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    #101311 30%,
+    rgba(16, 19, 17, 0.55) 60%,
+    rgba(16, 19, 17, 0) 100%
+  );
+  will-change: transform;
+}
+.heroMelt span:nth-child(1) {
+  width: 60vw;
+  height: 300px;
+  left: -8%;
+  bottom: 150px;
+  animation: meltA 17s ease-in-out infinite alternate;
+}
+.heroMelt span:nth-child(2) {
+  width: 48vw;
+  height: 260px;
+  left: 20%;
+  bottom: 120px;
+  animation: meltB 14s ease-in-out -5s infinite alternate;
+}
+.heroMelt span:nth-child(3) {
+  width: 64vw;
+  height: 320px;
+  left: 44%;
+  bottom: 160px;
+  animation: meltA 21s ease-in-out -9s infinite alternate;
+}
+.heroMelt span:nth-child(4) {
+  width: 46vw;
+  height: 250px;
+  left: 72%;
+  bottom: 180px;
+  animation: meltB 16s ease-in-out -3s infinite alternate;
+}
+/* base cheia por baixo das ondulações */
+.heroMelt span:nth-child(5) {
+  width: 80vw;
+  height: 340px;
+  left: -4%;
+  bottom: 20px;
+  animation: meltA 24s ease-in-out -12s infinite alternate;
+}
+.heroMelt span:nth-child(6) {
+  width: 78vw;
+  height: 350px;
+  left: 38%;
+  bottom: 0;
+  animation: meltB 19s ease-in-out -7s infinite alternate;
+}
+@keyframes meltA {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(30px, -20px) scale(1.08);
+  }
+}
+@keyframes meltB {
+  from {
+    transform: translate(0, 0) scale(1.06);
+  }
+  to {
+    transform: translate(-26px, 16px) scale(0.95);
+  }
+}
+
+/* Conteúdo do hero em coluna cheia: o bloco de texto centraliza no espaço
+   livre e os stats ancoram no rodapé da seção (margens auto dos dois lados). */
 .heroContent {
   position: relative;
   z-index: 2;
-  padding-block: var(--space-8);
-  pointer-events: none;
-}
-.heroContent > * {
-  pointer-events: auto;
-}
-.heroPrompt {
-  margin-top: var(--space-5);
-  font-size: var(--fs-sm);
-  color: var(--text-dim);
-  letter-spacing: 0.5px;
-}
-.heroPromptSign {
-  color: var(--accent);
-  font-weight: 700;
-  margin-right: 8px;
-}
-.heroTitle {
+  padding-top: calc(var(--nav-h) + 24px);
+  padding-bottom: 30px;
+  width: 100%;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  font-size: var(--fs-3xl);
-  line-height: 0.92;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  margin: 10px 0 0;
+  /* filhos NÃO esticam (o badge virava uma pílula de página inteira) */
+  align-items: flex-start;
 }
-.heroTitleLine {
+/* estes dois precisam da largura cheia: o chip ancora à direita do heroTop
+   e a régua dos stats atravessa a página */
+.heroTop,
+.heroStats {
+  align-self: stretch;
+}
+.heroContent > :first-child {
+  margin-top: auto;
+}
+
+/* Chip de disponibilidade */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  flex: none;
+  animation: badgePulse 2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Fundo do hero: Grainient da biblioteca atrás do hero, DISSOLVENDO no
+   fundo escuro da página nos últimos ~250px (máscara em degradê). A linha
+   de dissolução deriva devagar pra cima e pra baixo — a mistura entre os
+   dois fundos fica viva, estilo Stitch. */
+.heroBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* desce um pouco além do hero (extensão curta: mais longa deixava um
+     blob claro do shader reaparecer como "segundo degradê") */
+  height: calc(100svh + 160px);
+  z-index: 0;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100svh - 30px),
+    transparent calc(100svh + 140px)
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0,
+    black calc(100svh - 30px),
+    transparent calc(100svh + 140px)
+  );
+}
+/* Dither mesclado por cima do Grainient: screen faz o preto sumir e só as
+   ondas pixeladas verdes somarem, como uma textura retrô discreta. */
+.heroBgBlend {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  opacity: 0.38;
+}
+
+/* Linha do título: headline à esquerda, chip de circuito flutuando à
+   direita (fora do fluxo, pra não esticar o hero). */
+.heroTop {
+  position: relative;
+}
+.heroAsset {
+  position: absolute;
+  right: clamp(24px, 5vw, 90px);
+  top: 50%;
+  /* `translate` (não `transform`): o motion anima transform e o sobrescreveria */
+  translate: 0 -50%;
+  width: clamp(290px, 28vw, 430px);
+  pointer-events: none;
+}
+/* Halo escuro atrás do chip: o Grainient é claro nessa região, e sem um
+   scrim local as trilhas verdes desapareceriam no verde do fundo. */
+.heroAsset::before {
+  content: "";
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(16, 19, 17, 0.82),
+    rgba(16, 19, 17, 0.45) 55%,
+    transparent 78%
+  );
+}
+@media (max-width: 960px) {
+  .heroAsset {
+    display: none;
+  }
+}
+/* Um degrau menor que o fs-3xl: com os botões empilhados embaixo, o hero
+   inteiro (até os stats) precisa caber na dobra. */
+.heroTitle {
+  margin: 18px 0 0;
+  font-size: clamp(2.5rem, 6.6vw, 4.9rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
   font-weight: 800;
 }
-/* Sobrenome como texto vazado (outline), bem brutalist. */
-.heroTitleOutline {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--accent);
-  text-stroke: 2px var(--accent);
+/* Torus knot wireframe: quadrado, encostado à direita, respirando pra cima
+   (margens negativas) sem empurrar o restante do hero. */
+/* Marca-texto verde na palavra-chave (para antes do espaço do descender). */
+.hl {
+  background: linear-gradient(
+    transparent 55%,
+    rgba(78, 240, 140, 0.35) 55%,
+    rgba(78, 240, 140, 0.35) 88%,
+    transparent 88%
+  );
 }
-.heroRole {
-  font-size: var(--fs-lg);
-  color: var(--text);
-  font-weight: 600;
-  margin-top: var(--space-5);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+
+/* Lead e botões empilhados, tudo alinhado à esquerda. */
+.heroRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+  margin-top: 24px;
 }
-.heroTagline {
+.heroLead {
+  margin: 0;
   color: var(--text-dim);
-  margin-top: var(--space-3);
-  max-width: 48ch;
-  font-size: var(--fs-md);
+  max-width: 46ch;
+  font-size: 17.5px;
 }
 .heroActions {
   display: flex;
-  gap: 12px;
-  margin-top: var(--space-6);
-  flex-wrap: wrap;
+  gap: 14px;
+  flex: none;
 }
+.btnSolid,
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  transition: filter var(--dur) var(--ease), transform var(--dur-fast) var(--ease),
+    box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.btnSolid {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+/* hover: brilho radiante saindo por trás do botão */
+.btnSolid:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 0 40px -4px rgba(60, 233, 127, 0.6), 0 0 90px -18px var(--accent-glow);
+  transform: translateY(-1px);
+}
+.btnOutline {
+  border: 1.5px solid rgba(241, 245, 240, 0.25);
+  color: var(--text);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.btnOutline:hover {
+  border-color: rgba(241, 245, 240, 0.5);
+  box-shadow: 0 0 34px -6px var(--accent-glow);
+  transform: translateY(-1px);
+}
+.btnSolid:active,
+.btnOutline:active {
+  transform: translateY(0);
+}
+
+/* Fatos com divisórias finas: sempre ancorados na parte de BAIXO do hero,
+   qualquer que seja a altura da tela (margin-top: auto no flex column). */
 .heroStats {
   display: flex;
-  gap: 0;
-  margin: var(--space-7) 0 0;
+  gap: 40px;
+  /* ancorados embaixo, mas com uma folga respirando antes do fim do hero */
+  margin: auto 0 clamp(24px, 4vh, 48px);
+  padding-top: 22px;
+  border-top: 1px solid rgba(241, 245, 240, 0.14);
   flex-wrap: wrap;
-  border: 1px solid var(--border-strong);
-  background: color-mix(in srgb, var(--bg) 42%, transparent);
-  backdrop-filter: blur(6px);
-  width: fit-content;
-  max-width: 100%;
 }
 .heroStat {
   position: relative;
-  padding: 14px 22px;
-  min-width: 148px;
 }
 .heroStat + .heroStat {
-  border-left: 1px solid var(--border-strong);
-}
-.heroStatIndex {
-  display: block;
-  font-size: var(--fs-xs);
-  color: var(--accent);
-  font-weight: 700;
-  letter-spacing: var(--tracking-wide);
+  padding-left: 40px;
+  border-left: 1px solid rgba(241, 245, 240, 0.12);
 }
 .heroStatValue {
   display: block;
-  margin-top: 8px;
-  font-size: var(--fs-xl);
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 .heroStatLabel {
-  margin: 4px 0 0;
-  font-size: var(--fs-xs);
+  margin: 2px 0 0;
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* ---------- seções ---------- */
+.sectionTitle {
+  font-size: clamp(1.9rem, 3vw, 2.25rem);
+}
+
+/* PROJETOS: painel flutuando sobre a página, quase do tamanho da tela, com
+   margens visíveis — MESMO tom de fundo das outras seções (base da página
+   + brilho verde sutil), sem destoar em preto. */
+.projects {
+  position: relative;
+  z-index: 2;
+  margin-block: clamp(28px, 5vh, 56px);
+  margin-inline: clamp(12px, 2.2vw, 32px);
+  background:
+    radial-gradient(900px 480px at 82% -6%, rgba(60, 233, 127, 0.06), transparent 60%),
+    var(--bg);
+  border: 1px solid rgba(241, 245, 240, 0.08);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  /* fórmula do painel: viewport − header − margens (cabe inteiro na tela
+     junto com a barra, sem sobra da próxima seção) */
+  min-height: calc(100svh - var(--nav-h) - 2 * clamp(28px, 5vh, 56px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 40px 44px;
+  /* âncora /#projetos: para o scroll com o painel centrado — barra + margem
+     em cima, margem embaixo, sem cortar o topo nem vazar a próxima seção */
+  scroll-margin-top: calc(var(--nav-h) + clamp(28px, 5vh, 56px));
+}
+/* Grid centralizado: 2 projetos + o teaser do próximo, mesmas alturas. */
+.projectGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 32px auto 0;
+  max-width: 1280px;
+}
+.projectGrid > div {
+  height: 100%;
+}
+.projectCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(241, 245, 240, 0.07);
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+/* mesmo anel de luz girante dos cards de "O que eu domino" (desenhado no
+   perímetro interno, porque o card tem overflow hidden pra imagem) */
+.projectCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--glowA),
+    transparent 0turn 0.62turn,
+    var(--accent) 0.82turn,
+    var(--accent-2) 0.88turn,
+    transparent 1turn
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  pointer-events: none;
+}
+.projectCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.projectCard:hover::after {
+  opacity: 1;
+  animation: glowSpin 2.2s linear infinite;
+}
+.projectImg {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top left;
+}
+.projectBody {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.projectDesc {
+  flex: 1;
+}
+.projectHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.projectTitle {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.projectYear {
+  color: var(--muted-2);
+  font-size: 13px;
+  font-weight: 700;
+}
+.projectDesc {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ---- card-teaser "em breve, novidades" ---- */
+.projectCardNext {
+  background: rgba(26, 32, 26, 0.45);
+}
+.nextMedia,
+.nextBone {
+  background: linear-gradient(
+    100deg,
+    rgba(241, 245, 240, 0.05) 40%,
+    rgba(241, 245, 240, 0.11) 50%,
+    rgba(241, 245, 240, 0.05) 60%
+  );
+  background-size: 200% 100%;
+  animation: nextShimmer 1.6s linear infinite;
+}
+.nextMedia {
+  aspect-ratio: 16 / 9;
+}
+.nextBody {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.nextBone {
+  display: block;
+  height: 13px;
+  border-radius: 7px;
+}
+.nextBoneA {
+  width: 55%;
+  height: 17px;
+}
+.nextBoneB {
+  width: 92%;
+}
+.nextBoneC {
+  width: 74%;
+}
+.nextLabel {
+  margin-top: auto;
+  padding-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.nextDots {
+  display: inline-flex;
+  gap: 4px;
+}
+.nextDots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: nextDot 1.2s ease-in-out infinite;
+}
+.nextDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.nextDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes nextDot {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+@keyframes nextShimmer {
+  from {
+    background-position: 130% 0;
+  }
+  to {
+    background-position: -70% 0;
+  }
+}
+.tags {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+.tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(78, 240, 140, 0.12);
+  padding: 6px 13px;
+  border-radius: var(--radius-full);
+}
+
+/* O QUE EU DOMINO: painel interativo (design 1c) — categorias à esquerda,
+   muro tipográfico com glow à direita */
+.skills {
+  position: relative;
+  padding-block: var(--space-8);
+  /* sem clip: o glow atravessa as seções vizinhas; o estouro horizontal
+     é contido pelo overflow-x: clip do body (globals) */
+}
+/* decor: blob orgânico de glow no canto (lóbulos radiais fundidos por
+   blur) — z-index negativo pra ficar atrás do bento da seção de cima */
+.skills::before {
+  content: "";
+  position: absolute;
+  top: -280px;
+  right: -200px;
+  width: 860px;
+  height: 800px;
+  z-index: -1;
+  background:
+    radial-gradient(42% 38% at 40% 42%, rgba(60, 233, 127, 0.17), transparent 70%),
+    radial-gradient(34% 42% at 64% 30%, rgba(60, 233, 127, 0.14), transparent 72%),
+    radial-gradient(40% 34% at 58% 64%, rgba(60, 233, 127, 0.12), transparent 70%),
+    radial-gradient(26% 28% at 30% 66%, rgba(60, 233, 127, 0.1), transparent 75%);
+  filter: blur(26px);
+  pointer-events: none;
+}
+.skills::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(60, 233, 127, 0.08) 1px, transparent 1px);
+  background-size: 10px 10px;
+  -webkit-mask-image: radial-gradient(60% 50% at 80% 20%, #000, transparent);
+  mask-image: radial-gradient(60% 50% at 80% 20%, #000, transparent);
+  pointer-events: none;
+}
+.skillsPanel {
+  position: relative;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 56px;
+  margin-top: 40px;
+}
+.catList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.catBtn {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(241, 245, 240, 0.08);
+  border-radius: 12px;
+  padding: 16px 20px 14px;
+  cursor: pointer;
+  color: var(--muted);
+  font-family: inherit;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+.catBtn:hover {
+  border-color: rgba(60, 233, 127, 0.5);
+  color: var(--text);
+}
+.catBtnOn {
+  background: linear-gradient(90deg, rgba(60, 233, 127, 0.12), transparent);
+  border-color: rgba(60, 233, 127, 0.5);
+  color: var(--text);
+}
+.catRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.catNum {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+.catName {
+  flex: 1;
+  text-align: left;
+  font-size: 19px;
+  font-weight: 700;
+}
+/* barrinha de progresso do botão (acende na frente ativa) */
+.catBar {
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  margin-top: 12px;
+  background: rgba(241, 245, 240, 0.06);
+  transition: background var(--dur) var(--ease);
+}
+.catBtnOn .catBar {
+  background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.1));
+}
+/* painel direito do 3a: numeral fantasma atrás, descrição e muro na frente */
+.wallSide {
+  position: relative;
+  min-width: 0;
+  min-height: 320px;
+}
+.ghostNum {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  font-family: var(--font-mono);
+  font-size: clamp(150px, 19vw, 280px);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(60, 233, 127, 0.14);
+  pointer-events: none;
+}
+.wallDesc {
+  position: relative;
+  margin: 0 0 36px;
+  color: var(--text-dim);
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 480px;
+}
+.techWall {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: baseline;
+  gap: 12px 24px;
+}
+.techWord {
+  font-size: var(--ws, 40px);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  cursor: default;
+  transition: color var(--dur) var(--ease), text-shadow var(--dur) var(--ease);
+}
+.techWordHot {
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(60, 233, 127, 0.45);
+}
+.techWord:hover {
+  color: var(--accent-2, #4af0a5);
+  text-shadow: 0 0 24px rgba(60, 233, 127, 0.6);
+}
+@keyframes glowSpin {
+  to {
+    --glowA: 1turn;
+  }
+}
+/* Ângulo animável do anel de glow (precisa de registro pra interpolar). */
+@property --glowA {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* O QUE EU CONSTRUO: MagicBento da biblioteca, mas SÓ os efeitos —
+   a grade/cards são re-diagramados pro bento largo (7/5 + 5/7) via
+   seletores estruturais sobre o DOM do componente. */
+.services {
+  padding-block: var(--space-8) 0;
+}
+.bentoWrap {
+  margin-top: 36px;
+}
+.bentoWrap > div:last-child {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  grid-template-columns: repeat(12, 1fr) !important;
+  gap: 20px !important;
+  padding: 0 !important;
+  font-size: 1rem !important;
+}
+.bentoWrap > div:last-child > * {
+  aspect-ratio: auto !important;
+  min-height: 230px;
+  grid-column: span 5 !important;
+  grid-row: auto !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 28px !important;
+}
+.bentoWrap > div:last-child > *:nth-child(1),
+.bentoWrap > div:last-child > *:nth-child(4) {
+  grid-column: span 7 !important;
+}
+/* tipografia dos cards no padrão do site */
+.bentoWrap h2 {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.bentoWrap p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 46ch;
+}
+/* label = chips de tecnologia */
+.bentoWrap > div:last-child > * > div:first-child > div {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+}
+@media (max-width: 900px) {
+  .bentoWrap > div:last-child > * {
+    grid-column: span 12 !important;
+    min-height: 0;
+  }
+}
+
+/* COMO EU TRABALHO (design 2a): faixa horizontal — 4 etapas sobre um
+   trilho contínuo que se desenha com o scroll */
+.process {
+  padding-block: var(--space-8) 0;
+}
 .sectionHead {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
-  flex-wrap: wrap;
+  gap: 24px;
 }
-.sectionTitle {
-  font-size: var(--fs-2xl);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  margin-top: 10px;
-}
-.sectionSub {
-  color: var(--text-dim);
-  margin-top: 8px;
-  max-width: 56ch;
-}
-
-/* skills */
-.skills {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-5) var(--space-6);
-}
-.skill {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.skillTop {
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--fs-sm);
-}
-.skillCat {
+.sectionTag {
+  font-size: 13px;
   color: var(--muted);
-  font-size: var(--fs-xs);
-}
-.skillTop span:first-child {
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  padding-bottom: 8px;
+  white-space: nowrap;
 }
-.bar {
-  height: 8px;
-  border: 1px solid var(--border-strong);
-  background: rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-  /* Trilho tracejado de terminal atrás do preenchimento. */
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--border) 0 5px,
-    transparent 5px 10px
-  );
+.sectionTagMono {
+  font-family: var(--font-mono);
 }
-.barFill {
-  height: 100%;
+.stepTrack {
+  position: relative;
+  margin-top: 64px;
+}
+/* trilho (o Motion anima o scaleX) */
+.trackLine {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.15));
+  transform-origin: left center;
+}
+.stepRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 36px;
+}
+.step {
+  position: relative;
+  padding-top: 40px;
+  transition: transform var(--dur) var(--ease);
+}
+.step:hover {
+  transform: translateY(-4px);
+}
+/* nós sobre o trilho: intensidade decrescente, o último vazado (futuro) */
+.stepDot {
+  position: absolute;
+  /* centro do nó (7px) = centro do trilho (top 6px + 1px de espessura) */
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+.dotA {
   background: var(--accent);
-  box-shadow: 0 0 12px -2px var(--accent-glow);
+  box-shadow: 0 0 16px rgba(60, 233, 127, 0.8);
 }
-
-/* projetos: uma linha por projeto, card e preview alternando de lado */
-.projectRows {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-8);
+.dotB {
+  background: rgba(60, 233, 127, 0.7);
 }
-.projectRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
-  align-items: center;
+.dotC {
+  background: rgba(60, 233, 127, 0.45);
 }
-/* Linhas pares: o card de projeto vai para a direita, preview pra esquerda. */
-.projectRowFlip > :first-child {
-  order: 2;
+.dotD {
+  border: 2px solid rgba(60, 233, 127, 0.6);
+  background: var(--bg);
+  box-sizing: border-box;
 }
-
-/* Card de preview (revelação em pixels). Classe dupla para vencer o
-   width fixo de 300px do CSS do componente de demo. Um pouco mais estreito
-   que a coluna (as prints têm proporção ~62%, sem corte). */
-.projectMedia.projectMedia {
-  width: 92%;
-  margin: 0 auto; /* o card fica dentro do wrapper de tilt, centraliza nele */
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background: #0a0a0d;
-}
-.mediaFirst {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background:
-    repeating-linear-gradient(-45deg, transparent 0 26px, rgba(255, 255, 255, 0.02) 26px 27px),
-    linear-gradient(to bottom, #0e0e12, #08080a);
-}
-.mediaHint {
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  color: var(--muted);
-}
-.mediaHint::before {
-  content: "// ";
-  color: var(--accent);
-}
-.mediaName {
-  font-size: var(--fs-xl);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--accent);
-}
-.mediaImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top left;
+.stepBigNum {
   display: block;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 18px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(60, 233, 127, 0.5);
 }
-.mediaLive {
-  width: 100%;
-  height: 100%;
-  background: #050508;
+.stepName {
+  font-size: 20px;
+  font-weight: 700;
+}
+.stepDesc {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-@media (max-width: 860px) {
-  .projectRow {
+/* ARTIGO EM DESTAQUE (com respiro antes da banda verde) */
+.articleSec {
+  padding-block: var(--space-8);
+}
+.articleGrid {
+  margin-top: 40px;
+  max-width: 460px;
+}
+
+/* MARQUEE de logos cinza: entre projetos e serviços, com respiro */
+.logosBand {
+  margin-top: clamp(40px, 6vh, 72px);
+  padding-block: 28px;
+  border-top: 1px solid rgba(241, 245, 240, 0.07);
+  border-bottom: 1px solid rgba(241, 245, 240, 0.07);
+}
+.logoItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(241, 245, 240, 0.42);
+  font-weight: 600;
+  font-size: 15px;
+  white-space: nowrap;
+}
+.logoItem svg {
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .span7,
+  .span5 {
+    grid-column: span 12;
+  }
+  .buildCard {
+    min-height: 0;
+  }
+}
+@media (max-width: 900px) {
+  .stepRow {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 44px;
+  }
+  .trackLine {
+    display: none;
+  }
+  .stepDot {
+    position: static;
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+  .step {
+    padding-top: 0;
+  }
+}
+@media (max-width: 560px) {
+  .stepRow {
     grid-template-columns: 1fr;
   }
-  .projectRowFlip > :first-child {
-    order: 0;
+}
+
+/* VAMOS TRABALHAR JUNTOS: banda verde */
+.ctaBand {
+  margin-bottom: var(--space-8);
+  background: var(--accent);
+  border-radius: var(--radius-xl);
+  padding: 72px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.ctaTitle {
+  margin: 0;
+  font-size: clamp(1.9rem, 3.2vw, 2.375rem);
+  color: var(--accent-ink);
+}
+.ctaSub {
+  margin: 12px 0 0;
+  color: var(--accent-ink-dim);
+  font-size: 16px;
+  font-weight: 600;
+}
+.ctaEmail {
+  display: inline-flex;
+  padding: 17px 32px;
+  font-weight: 800;
+  font-size: 16px;
+  background: var(--accent-ink);
+  color: var(--accent);
+  border: 0;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  flex: none;
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.ctaEmail:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px -10px rgba(14, 26, 18, 0.55);
+}
+
+/* ---------- responsivo ---------- */
+@media (max-width: 960px) {
+  .skillsPanel {
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
-  .heroContent {
-    padding-block: var(--space-7);
+  .wallSide {
+    min-height: 0;
   }
-  .heroStats {
-    width: 100%;
-  }
-  .heroStat {
-    flex: 1 1 130px;
-    min-width: 130px;
-    padding: 12px 16px;
+  .techWord {
+    font-size: calc(var(--ws, 40px) * 0.75);
   }
 }
-@media (max-width: 480px) {
+@media (max-width: 1100px) {
+  .projectGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 860px) {
+  .projectGrid {
+    grid-template-columns: 1fr;
+  }
+  .ctaBand {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 48px 36px;
+  }
+  .ctaEmail {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-width: 640px) {
+  .heroStats {
+    gap: 20px;
+  }
+  .heroStat + .heroStat {
+    padding-left: 20px;
+  }
   .heroActions {
     flex-wrap: wrap;
   }
-  .heroActions > * {
-    flex: 1 1 auto;
-    justify-content: center;
-    text-align: center;
+  .heroContent {
+    padding-bottom: 40px;
   }
-}
-/* O card em si: borda e fundo vêm da moldura <ProjectCard> (borda estelar);
-   aqui fica só o layout interno. Altura natural do conteúdo, sem esticar. */
-.project {
-  border-radius: var(--radius-md);
-  padding: var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-.projectHead {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
-}
-.projectTitle {
-  font-size: var(--fs-lg);
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-}
-.projectYear {
-  color: var(--accent);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-}
-.projectDesc {
-  color: var(--text-dim);
-  font-size: var(--fs-sm);
-  line-height: 1.6;
-  flex: 1;
-}
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.tag {
-  font-size: var(--fs-xs);
-  color: var(--muted);
-  border: 1px solid var(--border);
-  padding: 3px 8px;
-  border-radius: var(--radius-md);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.tag::before {
-  content: "#";
-  color: var(--accent);
-  opacity: 0.75;
-}
-.projectLinks {
-  display: flex;
-  gap: 10px;
-}
-
-/* estilos (hover preview) */
-.styleGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-}
-
-/* faixa CTA */
-.ctaBand {
-  border: 1px solid var(--accent-line);
-  border-radius: var(--radius-md);
-  padding: var(--space-8) var(--space-7);
-  text-align: center;
-  background: var(--surface);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-glow);
-}
-/* Marca-d'água tracejada de terminal atrás da faixa. */
-.ctaBand::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent 0 22px,
-    var(--accent-soft) 22px 23px
-  );
-  opacity: 0.5;
-}
-.ctaBand > * {
-  position: relative;
-}
-.ctaTitle {
-  font-size: var(--fs-2xl);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-}
-.ctaSub {
-  color: var(--text-dim);
-  margin: 12px auto 0;
-  max-width: 48ch;
-}
-.ctaActions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: var(--space-6);
-  flex-wrap: wrap;
 }

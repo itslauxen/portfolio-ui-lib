@@ -1,5 +1,5 @@
-import { TerminalLoader } from "@/components/ui/TerminalLoader/TerminalLoader";
+import { StudioSkeleton } from "@/components/ui/StudioSkeleton/StudioSkeleton";
 
 export default function Loading() {
-  return <TerminalLoader />;
+  return <StudioSkeleton />;
 }
