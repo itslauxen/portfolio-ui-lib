@@ -369,25 +369,6 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className={s.skillsPanel}>
-              <div className={s.catList}>
-                {SKILL_CARDS.map((c, i) => (
-                  <button
-                    key={c.cat}
-                    type="button"
-                    className={`${s.catBtn} ${i === activeSkill ? s.catBtnOn : ""}`}
-                    onClick={() => {
-                      setActiveSkill(i);
-                      setSkillAuto(false);
-                    }}
-                  >
-                    <span className={s.catRow}>
-                      <span className={s.catNum}>{String(i + 1).padStart(2, "0")}</span>
-                      <span className={s.catName}>{t(c.key)}</span>
-                    </span>
-                    <span className={s.catBar} aria-hidden="true" />
-                  </button>
-                ))}
-              </div>
               <div className={s.wallSide}>
                 <motion.div
                   key={`ghost-${activeSkill}`}
@@ -399,12 +380,22 @@ export default function HomePage() {
                 >
                   {String(activeSkill + 1).padStart(2, "0")}
                 </motion.div>
+                <motion.h3
+                  key={`title-${activeSkill}`}
+                  className={s.catTitle}
+                  initial={reduced ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: EASE }}
+                >
+                  <span className={s.catNum}>{String(activeSkill + 1).padStart(2, "0")}</span>
+                  {t(SKILL_CARDS[activeSkill].key)}
+                </motion.h3>
                 <motion.p
                   key={`desc-${activeSkill}`}
                   className={s.wallDesc}
                   initial={reduced ? false : { opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: EASE }}
+                  transition={{ duration: 0.4, ease: EASE, delay: 0.06 }}
                 >
                   {t(`home.cat${activeSkill + 1}d`)}
                 </motion.p>
@@ -422,6 +413,21 @@ export default function HomePage() {
                     </motion.span>
                   ))}
                 </div>
+              </div>
+              {/* navegação do carrossel: barrinhas, uma por frente */}
+              <div className={s.dots}>
+                {SKILL_CARDS.map((c, i) => (
+                  <button
+                    key={c.cat}
+                    type="button"
+                    aria-label={t(c.key)}
+                    className={`${s.dot} ${i === activeSkill ? s.dotOn : ""}`}
+                    onClick={() => {
+                      setActiveSkill(i);
+                      setSkillAuto(false);
+                    }}
+                  />
+                ))}
               </div>
             </div>
           </Reveal>

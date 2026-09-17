@@ -28,8 +28,8 @@ export const messages: Record<string, Entry> = {
   "home.t2hl": { pt: "vivas", en: "living" },
   "home.t2post": { pt: ".", en: " interfaces." },
   "home.lead": {
-    pt: "Desenvolvedor fullstack com {years} anos de experiência — Node, React e TypeScript do modelo de dados à interface, com WebGL, motion e shaders no acabamento.",
-    en: "Fullstack developer with {years} years of experience — Node, React and TypeScript from data model to interface, with WebGL, motion and shaders as the finish.",
+    pt: "Desenvolvedor fullstack com {years} anos de experiência — Node, React e TypeScript do modelo de dados à interface, com foco em agentes de IA, RAG e LLMs em produção.",
+    en: "Fullstack developer with {years} years of experience — Node, React and TypeScript from data model to interface, focused on AI agents, RAG and LLMs in production.",
   },
   "home.ctaLibrary": { pt: "Explorar biblioteca", en: "Explore the library" },
   "home.ctaProjects": { pt: "Ver projetos", en: "View projects" },

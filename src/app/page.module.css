@@ -638,78 +638,57 @@
   mask-image: radial-gradient(60% 50% at 80% 20%, #000, transparent);
   pointer-events: none;
 }
+/* carrossel: um slide por frente (título + descrição + muro), sem lista */
 .skillsPanel {
   position: relative;
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 56px;
   margin-top: 40px;
 }
-.catList {
+.catTitle {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.catBtn {
-  display: block;
-  width: 100%;
-  background: transparent;
-  border: 1px solid rgba(241, 245, 240, 0.08);
-  border-radius: 12px;
-  padding: 16px 20px 14px;
-  cursor: pointer;
-  color: var(--muted);
-  font-family: inherit;
-  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease),
-    background var(--dur) var(--ease);
-}
-.catBtn:hover {
-  border-color: rgba(60, 233, 127, 0.5);
-  color: var(--text);
-}
-.catBtnOn {
-  background: linear-gradient(90deg, rgba(60, 233, 127, 0.12), transparent);
-  border-color: rgba(60, 233, 127, 0.5);
-  color: var(--text);
-}
-.catRow {
-  display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 14px;
+  margin: 0 0 14px;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 .catNum {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  opacity: 0.6;
+  color: var(--accent);
+  opacity: 0.85;
 }
-.catName {
-  flex: 1;
-  text-align: left;
-  font-size: 19px;
-  font-weight: 700;
+/* navegação do carrossel: barrinhas clicáveis */
+.dots {
+  display: flex;
+  gap: 10px;
+  margin-top: 32px;
 }
-/* barrinha de progresso do botão (acende na frente ativa) */
-.catBar {
-  display: block;
-  height: 2px;
+.dot {
+  width: 36px;
+  height: 4px;
   border-radius: 2px;
-  margin-top: 12px;
-  background: rgba(241, 245, 240, 0.06);
-  transition: background var(--dur) var(--ease);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: rgba(241, 245, 240, 0.12);
+  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-.catBtnOn .catBar {
-  background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.1));
+.dot:hover {
+  background: rgba(60, 233, 127, 0.45);
 }
-/* painel direito do 3a: numeral fantasma atrás, descrição e muro na frente */
+.dotOn {
+  background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.35));
+  box-shadow: 0 0 12px rgba(60, 233, 127, 0.35);
+}
+/* slide do carrossel: numeral fantasma atrás, conteúdo na frente */
 .wallSide {
   position: relative;
   min-width: 0;
-  min-height: 320px;
-  /* alinha a 1ª linha da descrição com o rótulo do 1º botão da esquerda
-     (borda 1px + padding-top 16px do .catBtn) */
-  padding-top: 17px;
+  min-height: 300px;
 }
 .ghostNum {
   position: absolute;
@@ -818,7 +797,11 @@
   color: var(--accent);
 }
 @media (max-width: 900px) {
-  .bentoWrap > div:last-child > * {
+  /* repete os nth-child pra ganhar dos overrides de desktop (mesma
+     especificidade + ordem posterior), senão os cards 1 e 4 ficam span 7 */
+  .bentoWrap > div:last-child > *,
+  .bentoWrap > div:last-child > *:nth-child(1),
+  .bentoWrap > div:last-child > *:nth-child(4) {
     grid-column: span 12 !important;
     min-height: 0;
   }
@@ -1022,10 +1005,6 @@
 
 /* ---------- responsivo ---------- */
 @media (max-width: 960px) {
-  .skillsPanel {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
   .wallSide {
     min-height: 0;
   }
@@ -1053,16 +1032,36 @@
   }
 }
 @media (max-width: 640px) {
+  /* no mobile os stats quebram de linha: sem divisórias verticais */
   .heroStats {
-    gap: 20px;
+    gap: 16px 28px;
   }
   .heroStat + .heroStat {
-    padding-left: 20px;
+    padding-left: 0;
+    border-left: 0;
   }
   .heroActions {
     flex-wrap: wrap;
   }
   .heroContent {
     padding-bottom: 40px;
+  }
+  /* título + tag empilhados (a tag em nowrap estourava a largura) */
+  .sectionHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .sectionTag {
+    padding-bottom: 0;
+    white-space: normal;
+  }
+  /* blob de glow contido: right negativo esticava o scrollWidth e o
+     navegador mobile dava zoom-out na página inteira */
+  .skills::before {
+    top: -120px;
+    right: 0;
+    width: 70vw;
+    height: 60vh;
   }
 }
