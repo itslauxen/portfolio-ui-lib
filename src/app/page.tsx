@@ -369,7 +369,23 @@ export default function HomePage() {
           </Reveal>
           <Reveal delay={0.08}>
             <div className={s.skillsPanel}>
-              <div className={s.wallSide}>
+              {/* pilha de slides no MESMO grid cell: o container fica com a
+                  altura do slide mais alto — trocar de página não empurra o
+                  resto. Arrastável no eixo X (swipe) via Motion. */}
+              <motion.div
+                className={s.slideStack}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.15}
+                onDragEnd={(_, info) => {
+                  if (Math.abs(info.offset.x) < 60) return;
+                  setSkillAuto(false);
+                  setActiveSkill(
+                    (v) =>
+                      (v + (info.offset.x < 0 ? 1 : SKILL_CARDS.length - 1)) % SKILL_CARDS.length
+                  );
+                }}
+              >
                 <motion.div
                   key={`ghost-${activeSkill}`}
                   className={s.ghostNum}
@@ -380,40 +396,47 @@ export default function HomePage() {
                 >
                   {String(activeSkill + 1).padStart(2, "0")}
                 </motion.div>
-                <motion.h3
-                  key={`title-${activeSkill}`}
-                  className={s.catTitle}
-                  initial={reduced ? false : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: EASE }}
-                >
-                  <span className={s.catNum}>{String(activeSkill + 1).padStart(2, "0")}</span>
-                  {t(SKILL_CARDS[activeSkill].key)}
-                </motion.h3>
-                <motion.p
-                  key={`desc-${activeSkill}`}
-                  className={s.wallDesc}
-                  initial={reduced ? false : { opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, ease: EASE, delay: 0.06 }}
-                >
-                  {t(`home.cat${activeSkill + 1}d`)}
-                </motion.p>
-                <div className={s.techWall}>
-                  {activeTechs.map((sk, i) => (
-                    <motion.span
-                      key={`${activeSkill}-${sk.name}`}
-                      className={`${s.techWord} ${i % 3 === 0 ? s.techWordHot : ""}`}
-                      style={{ "--ws": `${WALL_SIZES[i % WALL_SIZES.length]}px` } as React.CSSProperties}
-                      initial={reduced ? false : { opacity: 0, y: 14 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.45, ease: EASE, delay: i * 0.045 }}
+                {SKILL_CARDS.map((c, ci) => {
+                  const active = ci === activeSkill;
+                  return (
+                    <div
+                      key={c.cat}
+                      className={s.slide}
+                      data-active={active || undefined}
+                      aria-hidden={!active}
                     >
-                      {en ? SKILL_EN[sk.name] ?? sk.name : sk.name}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
+                      <h3 className={s.catTitle}>
+                        <span className={s.catNum}>{String(ci + 1).padStart(2, "0")}</span>
+                        {t(c.key)}
+                      </h3>
+                      <p className={s.wallDesc}>{t(`home.cat${ci + 1}d`)}</p>
+                      <div className={s.techWall}>
+                        {skills
+                          .filter((sk) => sk.category === c.cat)
+                          .map((sk, i) => (
+                            <motion.span
+                              key={sk.name}
+                              className={`${s.techWord} ${i % 3 === 0 ? s.techWordHot : ""}`}
+                              style={{ "--ws": `${WALL_SIZES[i % WALL_SIZES.length]}px` } as React.CSSProperties}
+                              animate={
+                                reduced
+                                  ? undefined
+                                  : { opacity: active ? 1 : 0, y: active ? 0 : 14 }
+                              }
+                              transition={{
+                                duration: 0.45,
+                                ease: EASE,
+                                delay: active ? i * 0.045 : 0,
+                              }}
+                            >
+                              {en ? SKILL_EN[sk.name] ?? sk.name : sk.name}
+                            </motion.span>
+                          ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
               {/* navegação do carrossel: barrinhas, uma por frente */}
               <div className={s.dots}>
                 {SKILL_CARDS.map((c, i) => (
@@ -489,7 +512,8 @@ export default function HomePage() {
               <p className={s.ctaSub}>{t("home.ctaSub")}</p>
             </div>
             <button type="button" className={s.ctaEmail} onClick={() => setContactOpen(true)}>
-              {profile.email}
+              <span className={s.ctaEmailFull}>{profile.email}</span>
+              <span className={s.ctaEmailShort}>{t("nav.contact")}</span>
             </button>
           </div>
         </Reveal>

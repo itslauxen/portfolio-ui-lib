@@ -21,7 +21,7 @@ export const messages: Record<string, Entry> = {
     pt: "Desenvolvedor Fullstack & Creative Developer",
     en: "Fullstack & Creative Developer",
   },
-  "home.badge": { pt: "Disponível para novos projetos", en: "Available for new projects" },
+  "home.badge": { pt: "status: online", en: "status: online" },
   "home.titleLine1": { pt: "Aplicações completas,", en: "Complete applications," },
   // Linha 2 em três pedaços para o marca-texto cair na palavra certa em cada idioma.
   "home.t2pre": { pt: "interfaces ", en: "" },

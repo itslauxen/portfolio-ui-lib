@@ -5,7 +5,10 @@
 .page {
   position: relative;
   isolation: isolate;
-  padding: 48px 0 96px;
+  /* sobe por baixo do header (como a home): o glow fica contínuo atrás
+     da barra em vez de deixar uma faixa escura de "fundo" nela */
+  margin-top: calc(-1 * var(--nav-h));
+  padding: calc(var(--nav-h) + 48px) 0 96px;
   overflow: hidden;
 }
 

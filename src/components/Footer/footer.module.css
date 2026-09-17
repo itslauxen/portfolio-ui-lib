@@ -24,3 +24,16 @@
 .links a:hover {
   color: var(--text);
 }
+
+/* mobile: tudo centralizado, empilhado */
+@media (max-width: 640px) {
+  .inner {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: var(--space-3);
+  }
+  .links {
+    justify-content: center;
+  }
+}

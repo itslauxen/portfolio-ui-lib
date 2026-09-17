@@ -167,12 +167,15 @@
 }
 
 /* Chip de disponibilidade */
+/* badge estilo terminal: mono + bolinha pulsando como indicador de status */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  font-family: var(--font-mono);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.04em;
   background: var(--accent-soft);
   color: var(--accent);
   padding: 8px 16px;
@@ -684,11 +687,36 @@
   background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.35));
   box-shadow: 0 0 12px rgba(60, 233, 127, 0.35);
 }
-/* slide do carrossel: numeral fantasma atrás, conteúdo na frente */
-.wallSide {
+/* pilha de slides (mesma célula de grid): altura = a do slide mais alto,
+   então trocar de página não move o resto do layout; arrastável no X */
+.slideStack {
   position: relative;
+  display: grid;
   min-width: 0;
-  min-height: 300px;
+  touch-action: pan-y;
+  cursor: grab;
+  /* arrastar não pode virar seleção de texto */
+  user-select: none;
+  -webkit-user-select: none;
+}
+.slideStack:active {
+  cursor: grabbing;
+}
+.slide {
+  grid-area: 1 / 1;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), visibility 0s 0.4s;
+}
+.slide[data-active] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), visibility 0s 0s;
 }
 .ghostNum {
   position: absolute;
@@ -1002,12 +1030,21 @@
   transform: translateY(-1px);
   box-shadow: 0 12px 30px -10px rgba(14, 26, 18, 0.55);
 }
+/* no celular o e-mail quebrava linha: mostra "Fale comigo" no lugar */
+.ctaEmailShort {
+  display: none;
+}
+@media (max-width: 640px) {
+  .ctaEmailFull {
+    display: none;
+  }
+  .ctaEmailShort {
+    display: inline;
+  }
+}
 
 /* ---------- responsivo ---------- */
 @media (max-width: 960px) {
-  .wallSide {
-    min-height: 0;
-  }
   .techWord {
     font-size: calc(var(--ws, 40px) * 0.75);
   }

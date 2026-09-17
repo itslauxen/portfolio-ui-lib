@@ -94,18 +94,22 @@ export function Nav() {
     setOpen(false);
   }, [pathname]);
 
-  // Trava o scroll do fundo enquanto o menu está aberto.
+  // Trava o scroll do fundo enquanto o menu está aberto (body E html:
+  // só o body não segura o wheel em todos os casos).
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
+    const prevBody = document.body.style.overflow;
+    const prevHtml = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     return () => {
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevHtml;
     };
   }, [open]);
 
   return (
-    <header className={styles.header} data-app={isApp || undefined}>
+    <header className={styles.header} data-app={isApp || undefined} data-open={open || undefined}>
       <div
         className={`${styles.blurZone} ${scrolled ? styles.blurZoneOn : ""}`}
         aria-hidden="true"
@@ -157,9 +161,19 @@ export function Nav() {
         </button>
       </div>
 
+      {/* overlay clicável: fecha a gaveta ao tocar fora dela */}
+      <div
+        className={`${styles.overlay} ${open ? styles.overlayOn : ""}`}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+
       <div className={`${styles.mobileMenu} ${open ? styles.mobileMenuOpen : ""}`}>
+        <span className={styles.drawerBrand} aria-hidden="true">
+          GL
+        </span>
         <nav className={styles.mobileLinks} aria-label="Navigation">
-          {LINKS.map((l) => (
+          {LINKS.map((l, i) => (
             <Link
               key={l.href}
               href={l.href}
@@ -170,10 +184,14 @@ export function Nav() {
                 setOpen(false);
               }}
             >
+              <span className={styles.mobileNum}>{String(i + 1).padStart(2, "0")}</span>
               {t(l.key)}
             </Link>
           ))}
         </nav>
+        <span className={styles.drawerCode} aria-hidden="true">
+          {"</>"}
+        </span>
         <div className={styles.mobileFoot}>
           <LangToggle />
           <button
