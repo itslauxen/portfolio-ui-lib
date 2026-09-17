@@ -102,8 +102,8 @@ export const experience: ExperienceItem[] = [
     role: "Desenvolvedor Frontend",
     roleEn: "Frontend Developer",
     company: "B3Dev",
-    period: "dez/2022 — nov/2023",
-    periodEn: "Dec 2022 — Nov 2023",
+    period: "set/2022 — nov/2023",
+    periodEn: "Sep 2022 — Nov 2023",
     location: "Porto Alegre, RS, Brasil",
     locationEn: "Porto Alegre, RS, Brazil",
     bullets: [
