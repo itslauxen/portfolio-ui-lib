@@ -880,9 +880,16 @@
 .step {
   position: relative;
   padding-top: 40px;
+}
+/* hover: só o conteúdo levanta — o nó fica parado no trilho */
+.stepBigNum,
+.stepName,
+.stepDesc {
   transition: transform var(--dur) var(--ease);
 }
-.step:hover {
+.step:hover .stepBigNum,
+.step:hover .stepName,
+.step:hover .stepDesc {
   transform: translateY(-4px);
 }
 /* nós sobre o trilho: intensidade decrescente, o último vazado (futuro) */

@@ -12,7 +12,7 @@ import { HeroChip } from "@/components/home/HeroChip";
 import { Reveal } from "@/components/ui/Reveal";
 import { TechIcon } from "@/components/ui/TechIcon";
 import { useI18n } from "@/i18n/I18nProvider";
-import { yearsOfExperience } from "@/lib/experience";
+import { experienceLabel } from "@/lib/experience";
 import { profile, skills } from "@/data/profile";
 import { projects } from "@/data/projects";
 import s from "./page.module.css";
@@ -103,10 +103,40 @@ export default function HomePage() {
     const id = setInterval(() => setActiveSkill((v) => (v + 1) % SKILL_CARDS.length), 4000);
     return () => clearInterval(id);
   }, [skillAuto, reduced]);
+
+  // Scroll horizontal do touchpad também navega o carrossel. Listener
+  // manual não-passivo: o onWheel do React é passivo e não deixaria
+  // prevenir o gesto de voltar página do macOS. Delta acumulado + cooldown
+  // pra um gesto contar como UMA troca, não uma rajada.
+  const stackRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = stackRef.current;
+    if (!el) return;
+    let accum = 0;
+    let lockUntil = 0;
+    let lastEvent = 0;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      const now = performance.now();
+      if (now - lastEvent > 300) accum = 0;
+      lastEvent = now;
+      if (now < lockUntil) return;
+      accum += e.deltaX;
+      if (Math.abs(accum) < 60) return;
+      const forward = accum > 0;
+      accum = 0;
+      lockUntil = now + 650;
+      setSkillAuto(false);
+      setActiveSkill((v) => (v + (forward ? 1 : SKILL_CARDS.length - 1)) % SKILL_CARDS.length);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
   const featured = projects.filter((p) => p.featured);
   const isExternal = (url?: string) => !!url && /^https?:\/\//.test(url);
 
-  const years = String(yearsOfExperience());
+  const years = experienceLabel();
   const HERO_STATS = [
     { value: t("home.stat1v").replace("{years}", years), label: t("home.stat1l") },
     { value: t("home.stat2v"), label: t("home.stat2l") },
@@ -373,6 +403,7 @@ export default function HomePage() {
                   altura do slide mais alto — trocar de página não empurra o
                   resto. Arrastável no eixo X (swipe) via Motion. */}
               <motion.div
+                ref={stackRef}
                 className={s.slideStack}
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}

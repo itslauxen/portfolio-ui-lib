@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { profile, skills, experience, education } from "@/data/profile";
-import { yearsOfExperience } from "@/lib/experience";
+import { experienceLabel } from "@/lib/experience";
 import { useI18n } from "@/i18n/I18nProvider";
 import { ArticlesList } from "@/components/articles/ArticlesList";
 import { TechIcon } from "@/components/ui/TechIcon";
@@ -27,7 +27,7 @@ const SKILL_EN: Record<string, string> = {
 export default function SobrePage() {
   const { t, lang } = useI18n();
   const en = lang === "en";
-  const years = String(yearsOfExperience());
+  const years = experienceLabel();
   const rootRef = useRef<HTMLDivElement>(null);
 
   const groups = CATEGORY_ORDER.map((cat) => ({

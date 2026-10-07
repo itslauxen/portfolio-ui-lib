@@ -7,3 +7,9 @@ export function yearsOfExperience(now = new Date()): number {
   if (now.getMonth() < CAREER_START.month) years -= 1;
   return years;
 }
+
+// Rótulo exibido no site ("3+ anos" / "3+ years"), alinhado ao currículo.
+// Conta só experiência profissional comprovável pelas datas do histórico.
+export function experienceLabel(): string {
+  return "3+";
+}
