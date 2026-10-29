@@ -463,6 +463,11 @@
 }
 /* card único: demo em cima (340px), texto embaixo */
 .mCard {
+  /* arrastável no X; a rolagem vertical da página continua livre */
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
   margin-top: 12px;
   border-radius: 22px;
   background: #1d241d;

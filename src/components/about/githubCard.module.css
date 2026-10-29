@@ -11,7 +11,8 @@
   padding: 24px 26px;
   color: inherit;
   border-radius: var(--radius-lg);
-  background: var(--bg-2);
+  /* dois degraus acima do fundo (mesmo tom do painel do "O que eu construo") */
+  background: #1d241d;
   overflow: clip;
   transition: transform 0.35s var(--ease), background 0.35s var(--ease),
     box-shadow 0.35s var(--ease);
@@ -46,7 +47,7 @@
 /* hover: levanta, clareia um degrau e ganha um anel de luz */
 .card:hover {
   transform: translateY(-4px);
-  background: var(--bg-card);
+  background: #222a22;
   box-shadow: 0 0 0 1px var(--accent-line), 0 30px 60px -34px var(--accent-glow);
 }
 .head {
@@ -60,13 +61,13 @@
   border-radius: 50%;
   object-fit: cover;
   /* anel verde do avatar */
-  box-shadow: 0 0 0 2px var(--bg-2), 0 0 0 4px var(--accent);
+  box-shadow: 0 0 0 2px #1d241d, 0 0 0 4px var(--accent);
   flex: none;
   transition: box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
 }
 .card:hover .avatar {
   transform: scale(1.04);
-  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--accent), 0 0 26px var(--accent-glow);
+  box-shadow: 0 0 0 2px #222a22, 0 0 0 4px var(--accent), 0 0 26px var(--accent-glow);
 }
 .who {
   min-width: 0;

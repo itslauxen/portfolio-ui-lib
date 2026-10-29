@@ -101,8 +101,21 @@ export function ServicesShowcase() {
             </button>
           ))}
         </div>
-        {/* demo + texto no MESMO card: cabe numa tela de celular sem rolar */}
-        <div className={s.mCard}>
+        {/* demo + texto no MESMO card: cabe numa tela de celular sem rolar.
+            Arrastar pro lado troca de serviço (como as pílulas). */}
+        <motion.div
+          className={s.mCard}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.18}
+          dragDirectionLock
+          onDragEnd={(_, info) => {
+            const dx = info.offset.x;
+            if (Math.abs(dx) < 50 && Math.abs(info.velocity.x) < 400) return;
+            const n = SERVICES.length;
+            setActive((v) => (dx < 0 ? (v + 1) % n : (v + n - 1) % n));
+          }}
+        >
           <div className={`${s.stage} ${s.stageMobile}`} aria-live="polite">
             <div className={s.dots} aria-hidden="true" />
             {demo}
@@ -119,7 +132,7 @@ export function ServicesShowcase() {
             <h3 className={s.curTitle}>{t(cur.t)}</h3>
             <p className={s.curDesc}>{t(cur.d)}</p>
           </div>
-        </div>
+        </motion.div>
       </div>
     );
   }
