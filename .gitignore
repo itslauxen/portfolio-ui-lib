@@ -35,3 +35,4 @@ next-env.d.ts
 .agents
 # ferramentas locais (agents/skills)
 skills-lock.json
+.taste-skill/

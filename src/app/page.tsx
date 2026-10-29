@@ -7,8 +7,9 @@ import { ArticlesList } from "@/components/articles/ArticlesList";
 import { BackgroundSurface } from "@/components/backgrounds/BackgroundSurface";
 import { ContactModal } from "@/components/ContactModal/ContactModal";
 import LogoLoop from "@/components/demos/LogoLoop/LogoLoop";
-import MagicBento from "@/components/demos/MagicBento/MagicBento";
 import { HeroChip } from "@/components/home/HeroChip";
+import { ProjectCase } from "@/components/home/ProjectCase";
+import { ServicesShowcase } from "@/components/home/ServicesShowcase";
 import { Reveal } from "@/components/ui/Reveal";
 import { TechIcon } from "@/components/ui/TechIcon";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -55,16 +56,8 @@ const SKILL_EN: Record<string, string> = {
   "IA generativa": "Generative AI",
 };
 
-// Tamanhos do muro tipográfico (design 3a): ciclo de corpos variados.
-const WALL_SIZES = [48, 36, 42, 32, 40, 34, 38, 36] as const;
-
-// Serviços ("O que eu construo"): chaves do dicionário + chips de tecnologia.
-const SERVICES = [
-  { t: "home.srv1t", d: "home.srv1d", tags: ["Function calling", "RAG", "MCP"] },
-  { t: "home.srv2t", d: "home.srv2d", tags: ["Next.js", "SEO", "Motion"] },
-  { t: "home.srv3t", d: "home.srv3d", tags: ["APIs", "Webhooks", "Bots"] },
-  { t: "home.srv4t", d: "home.srv4d", tags: ["Node", "SQL", "Docker"] },
-] as const;
+// Tamanhos do muro tipográfico (design 3a): ciclo de três corpos.
+const WALL_SIZES = [48, 36, 40, 36, 48, 36, 40, 36] as const;
 
 // Passos do processo ("Como eu trabalho") — sequência real, números fazem sentido.
 const STEPS = [
@@ -134,7 +127,6 @@ export default function HomePage() {
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
   const featured = projects.filter((p) => p.featured);
-  const isExternal = (url?: string) => !!url && /^https?:\/\//.test(url);
 
   const years = experienceLabel();
   const HERO_STATS = [
@@ -150,37 +142,37 @@ export default function HomePage() {
     transition: { duration: 0.8, ease: EASE, delay },
   });
 
-  // Painel de projetos cresce levemente conforme entra na tela: escala
-  // ligada ao progresso do scroll (0.94 → 1), reversível ao rolar de volta.
+  // Painel de projetos sobe e aparece conforme entra na tela, ligado ao
+  // progresso do scroll e reversível ao rolar de volta. (Sem scale: com 4
+  // vitrines o painel tem ~4 telas, e re-rasterizar isso a cada frame travava
+  // a rolagem rápida.)
   const projectsRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: projectsRef,
     // curso longo (termina só perto do topo): o painel viaja mais, fica fluido
     offset: ["start end", "start 0.18"],
   });
-  // Mecânica estilo Stitch: o painel SOBE (y) enquanto cresce (scale), com
-  // molas por cima dos valores crus pra ter inércia em vez do 1:1 travado.
-  const rawScale = useTransform(scrollYProgress, [0, 1], [0.92, 1]);
+  // Mecânica estilo Stitch: o painel SOBE (y) enquanto aparece, com molas
+  // por cima dos valores crus pra ter inércia em vez do 1:1 travado.
   const rawY = useTransform(scrollYProgress, [0, 1], [110, 0]);
   const rawOpacity = useTransform(scrollYProgress, [0, 0.45], [0, 1]);
   const spring = { stiffness: 90, damping: 24, mass: 0.6 };
-  const panelScale = useSpring(rawScale, spring);
   const panelY = useSpring(rawY, spring);
   const panelOpacity = useSpring(rawOpacity, spring);
 
-  // "Como eu trabalho" (2a): o trilho horizontal se desenha conforme a
-  // faixa entra na tela — scaleX 0→1 com mola por cima pra ter inércia.
+  // "Como eu trabalho": o trilho vertical se desenha conforme a lista
+  // passa pela tela — scaleY 0→1 com mola por cima pra ter inércia.
   const processRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: processProgress } = useScroll({
     target: processRef,
-    offset: ["start 0.9", "start 0.4"],
+    offset: ["start 0.85", "end 0.6"],
   });
   const trackScale = useSpring(processProgress, { stiffness: 120, damping: 28, mass: 0.5 });
 
   // Rolagem suave até os projetos: posição de LAYOUT via offsetTop (imune
   // aos transforms da animação de entrada) menos o scroll-margin-top.
   const scrollToProjects = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const el = document.getElementById("projetos");
+    const el = document.getElementById("projects");
     if (!el) return;
     e.preventDefault();
     const behavior = reduced ? ("auto" as const) : ("smooth" as const);
@@ -192,10 +184,9 @@ export default function HomePage() {
     }
     const margin = parseFloat(getComputedStyle(el).scrollMarginTop || "0") || 0;
     window.scrollTo({ top: top - margin, behavior });
-    window.history.pushState(null, "", "#projetos");
+    window.history.pushState(null, "", "#projects");
   };
 
-  const activeTechs = skills.filter((sk) => sk.category === SKILL_CARDS[activeSkill].cat);
 
   return (
     <>
@@ -223,10 +214,6 @@ export default function HomePage() {
           <span />
         </div>
         <div className={`wrap ${s.heroContent}`}>
-          <motion.span className={s.badge} {...rise(0)}>
-            <span className={s.badgeDot} aria-hidden="true" />
-            {t("home.badge")}
-          </motion.span>
           <div className={s.heroTop}>
             <motion.h1 className={s.heroTitle} {...rise(0.12)}>
               {t("home.titleLine1")}
@@ -242,7 +229,7 @@ export default function HomePage() {
           <motion.div className={s.heroRow} {...rise(0.26)}>
             <p className={s.heroLead}>{t("home.lead").replace("{years}", years)}</p>
             <div className={s.heroActions}>
-              <Link href="/#projetos" className={s.btnSolid} onClick={scrollToProjects}>
+              <Link href="/#projects" className={s.btnSolid} onClick={scrollToProjects}>
                 {t("home.ctaProjects")}
               </Link>
               <Link href="/biblioteca" className={s.btnOutline}>
@@ -265,75 +252,21 @@ export default function HomePage() {
       <motion.section
         ref={projectsRef}
         className={s.projects}
-        id="projetos"
-        style={reduced ? undefined : { scale: panelScale, opacity: panelOpacity, y: panelY }}
+        id="projects"
+        style={reduced ? undefined : { opacity: panelOpacity, y: panelY }}
       >
         <div className="wrap">
           <Reveal>
             <h2 className={s.sectionTitle}>{t("home.worksTitle")}</h2>
           </Reveal>
-          <div className={s.projectGrid}>
-            {featured.map((p, pi) => {
-              const desc = en && p.descriptionEn ? p.descriptionEn : p.description;
-              const body = (
-                <>
-                  {p.cover && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={p.cover} alt={p.title} className={s.projectImg} />
-                  )}
-                  <div className={s.projectBody}>
-                    <div className={s.projectHead}>
-                      <h3 className={s.projectTitle}>{p.title}</h3>
-                      <span className={s.projectYear}>{p.year}</span>
-                    </div>
-                    <p className={s.projectDesc}>{desc}</p>
-                    <div className={s.tags}>
-                      {p.tags.map((tag) => (
-                        <span key={tag} className={s.tag}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              );
-              return (
-                <Reveal key={p.id} delay={pi * 0.08}>
-                  {p.url ? (
-                    isExternal(p.url) ? (
-                      <a href={p.url} target="_blank" rel="noreferrer" className={s.projectCard}>
-                        {body}
-                      </a>
-                    ) : (
-                      <Link href={p.url} className={s.projectCard}>
-                        {body}
-                      </Link>
-                    )
-                  ) : (
-                    <div className={s.projectCard}>{body}</div>
-                  )}
-                </Reveal>
-              );
-            })}
-            {/* card-teaser: o próximo projeto "carregando" (skeleton animado) */}
-            <Reveal delay={featured.length * 0.08}>
-              <div className={`${s.projectCard} ${s.projectCardNext}`}>
-                <div className={s.nextMedia} aria-hidden="true" />
-                <div className={s.nextBody}>
-                  <span className={`${s.nextBone} ${s.nextBoneA}`} aria-hidden="true" />
-                  <span className={`${s.nextBone} ${s.nextBoneB}`} aria-hidden="true" />
-                  <span className={`${s.nextBone} ${s.nextBoneC}`} aria-hidden="true" />
-                  <span className={s.nextLabel}>
-                    {t("home.nextProject")}
-                    <span className={s.nextDots} aria-hidden="true">
-                      <span />
-                      <span />
-                      <span />
-                    </span>
-                  </span>
-                </div>
-              </div>
-            </Reveal>
+          {/* uma vitrine grande por projeto: telas reais (web, celular,
+              app nativo, efeitos ao vivo) em vez de cards pequenos */}
+          <div className={s.projectList}>
+            {featured.map((p) => (
+              <Reveal key={p.id}>
+                <ProjectCase project={p} />
+              </Reveal>
+            ))}
           </div>
         </div>
       </motion.section>
@@ -360,27 +293,11 @@ export default function HomePage() {
         />
       </section>
 
-      {/* O QUE EU CONSTRUO: MagicBento da biblioteca com os serviços */}
+      {/* O QUE EU CONSTRUO (design 1b): lista + micro-interface do serviço ativo */}
       <section className="wrap">
         <div className={s.services}>
           <Reveal>
-            <h2 className={s.sectionTitle}>{t("home.servicesTitle")}</h2>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className={s.bentoWrap}>
-              <MagicBento
-                cards={SERVICES.map((sv) => ({
-                  color: "#151a15",
-                  label: sv.tags.join(" · "),
-                  title: t(sv.t),
-                  description: t(sv.d),
-                }))}
-                glowColor="#3ce97f"
-                textAutoHide={false}
-                enableTilt
-                spotlightRadius={340}
-              />
-            </div>
+            <ServicesShowcase />
           </Reveal>
         </div>
       </section>
@@ -390,12 +307,7 @@ export default function HomePage() {
       <section className="wrap">
         <div className={s.skills}>
           <Reveal>
-            <div className={s.sectionHead}>
-              <h2 className={s.sectionTitle}>{t("home.skillsTitle")}</h2>
-              <span className={`${s.sectionTag} ${s.sectionTagMono}`}>
-                {activeTechs.length} {t("home.skillsCount")}
-              </span>
-            </div>
+            <h2 className={s.sectionTitle}>{t("home.skillsTitle")}</h2>
           </Reveal>
           <Reveal delay={0.08}>
             <div className={s.skillsPanel}>
@@ -436,10 +348,7 @@ export default function HomePage() {
                       data-active={active || undefined}
                       aria-hidden={!active}
                     >
-                      <h3 className={s.catTitle}>
-                        <span className={s.catNum}>{String(ci + 1).padStart(2, "0")}</span>
-                        {t(c.key)}
-                      </h3>
+                      <h3 className={s.catTitle}>{t(c.key)}</h3>
                       <p className={s.wallDesc}>{t(`home.cat${ci + 1}d`)}</p>
                       <div className={s.techWall}>
                         {skills
@@ -488,20 +397,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* COMO EU TRABALHO (design 2a): 4 etapas sobre um trilho contínuo */}
+      {/* COMO EU TRABALHO: 4 etapas numa lista vertical com trilho à esquerda */}
       <section className="wrap">
         <div className={s.process}>
           <Reveal>
-            <div className={s.sectionHead}>
-              <h2 className={s.sectionTitle}>{t("home.processTitle")}</h2>
-              <span className={s.sectionTag}>{t("home.processTag")}</span>
-            </div>
+            <h2 className={s.sectionTitle}>{t("home.processTitle")}</h2>
           </Reveal>
           <div className={s.stepTrack} ref={processRef}>
             <motion.span
               className={s.trackLine}
               aria-hidden="true"
-              style={reduced ? undefined : { scaleX: trackScale }}
+              style={reduced ? undefined : { scaleY: trackScale }}
             />
             <div className={s.stepRow}>
               {STEPS.map((st, i) => (
@@ -512,8 +418,10 @@ export default function HomePage() {
                       aria-hidden="true"
                     />
                     <span className={s.stepBigNum}>{String(i + 1).padStart(2, "0")}</span>
-                    <div className={s.stepName}>{t(st.t)}</div>
-                    <p className={s.stepDesc}>{t(st.d)}</p>
+                    <div className={s.stepBody}>
+                      <div className={s.stepName}>{t(st.t)}</div>
+                      <p className={s.stepDesc}>{t(st.d)}</p>
+                    </div>
                   </div>
                 </Reveal>
               ))}
@@ -528,9 +436,11 @@ export default function HomePage() {
           <Reveal>
             <h2 className={s.sectionTitle}>{t("home.articleTitle")}</h2>
           </Reveal>
-          <div className={s.articleGrid}>
-            <ArticlesList />
-          </div>
+          <Reveal delay={0.08}>
+            <div className={s.articleGrid}>
+              <ArticlesList />
+            </div>
+          </Reveal>
         </div>
       </section>
 

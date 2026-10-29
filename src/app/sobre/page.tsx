@@ -1,15 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { profile, skills, experience, education } from "@/data/profile";
+import { AsciiPortrait } from "@/components/about/AsciiPortrait";
+import { GithubCard } from "@/components/about/GithubCard";
+import { profile, skills, experience } from "@/data/profile";
 import { experienceLabel } from "@/lib/experience";
 import { useI18n } from "@/i18n/I18nProvider";
-import { ArticlesList } from "@/components/articles/ArticlesList";
-import { TechIcon } from "@/components/ui/TechIcon";
 import s from "./sobre.module.css";
 
+// Sobre no design 1d do canvas "Explorações" (revista: nome gigante, bio como
+// texto de abertura, experiência em tabela tipográfica, hierarquia pelo tipo e
+// por uma coluna de 200px) com a Stack do 1e (pílulas por frente + muro
+// tipográfico).
 const CATEGORY_ORDER = ["Front-end", "Back-end & infra", "Criativo & motion", "Design & IA"];
 const CAT_KEY: Record<string, string> = {
   "Front-end": "about.catFront",
@@ -17,37 +21,44 @@ const CAT_KEY: Record<string, string> = {
   "Criativo & motion": "about.catCreative",
   "Design & IA": "about.catDesign",
 };
-
 // Skills que não são nomes técnicos universais precisam de versão em inglês.
 const SKILL_EN: Record<string, string> = {
   "Design de Interface": "Interface Design",
   "IA generativa": "Generative AI",
 };
+// Muro tipográfico (2a): ciclo de corpos; a cada 3 palavras uma em verde/bold.
+const WALL_SIZES = [44, 32, 36, 32] as const;
 
 export default function SobrePage() {
   const { t, lang } = useI18n();
   const en = lang === "en";
   const years = experienceLabel();
   const rootRef = useRef<HTMLDivElement>(null);
+  const [stackTab, setStackTab] = useState(0);
+  const [first, ...rest] = profile.name.split(" ");
 
-  const groups = CATEGORY_ORDER.map((cat) => ({
-    cat,
-    items: skills.filter((sk) => sk.category === cat),
-  })).filter((g) => g.items.length > 0);
-
-  // Motion com GSAP: intro do cabeçalho em cascata, seções revelando ao
-  // entrar na viewport (ScrollTrigger) e a linha da timeline se desenhando
-  // conforme o scroll. Nada roda com prefers-reduced-motion.
+  // Motion com GSAP: intro do cabeçalho em cascata e seções revelando ao
+  // entrar na viewport (ScrollTrigger). Nada roda com prefers-reduced-motion.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     gsap.registerPlugin(ScrollTrigger);
     const ctx = gsap.context(() => {
-      gsap.from('[data-anim="head"] > *', {
+      gsap.from('[data-anim="head"] > * > *', {
         y: 28,
         opacity: 0,
         duration: 0.85,
         ease: "power3.out",
         stagger: 0.09,
+      });
+      // fatos + bio (logo abaixo da foto): entram junto com a abertura, sem
+      // esperar o scroll — na maioria das telas já estão na primeira dobra
+      gsap.from('[data-anim="intro"] > a, [data-anim="intro"] p', {
+        y: 28,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+        stagger: 0.07,
+        delay: 0.35,
       });
       gsap.utils.toArray<HTMLElement>('[data-anim="section"]').forEach((el) => {
         gsap.from(el.children, {
@@ -59,186 +70,162 @@ export default function SobrePage() {
           scrollTrigger: { trigger: el, start: "top 82%" },
         });
       });
-      gsap.from('[data-anim="line"]', {
-        scaleY: 0,
-        transformOrigin: "top center",
-        ease: "none",
-        scrollTrigger: {
-          trigger: '[data-anim="timeline"]',
-          start: "top 78%",
-          end: "bottom 55%",
-          scrub: 0.6,
-        },
-      });
     }, rootRef);
     return () => ctx.revert();
   }, []);
+
+  const facts = [
+    [t("about.factExpV").replace("{years}", years), t("about.factExpL")],
+    [t("about.factStackV"), t("about.factStackL")],
+    [t("about.factEnV"), t("about.factEnL")],
+    [t("about.factLocV"), t("about.factLocL")],
+  ];
+  const stackWords = skills.filter((sk) => sk.category === CATEGORY_ORDER[stackTab]);
 
   return (
     <div className={s.page} ref={rootRef}>
       <div className={s.glow} aria-hidden="true" />
       <div className="wrap">
-        {/* -------- cabeçalho -------- */}
-        <header className={s.head} data-anim="head">
-          <span className="eyebrow">{t("about.eyebrow")}</span>
-          <h1 className={s.name}>{profile.name}</h1>
-          <p className={s.role}>
-            {t("home.role")}
-            <span className={s.status}>
-              <span className={s.statusDot} aria-hidden="true" /> {t("about.status")}
-            </span>
-          </p>
-          <dl className={s.facts}>
-            {[
-              [t("about.factExpV").replace("{years}", years), t("about.factExpL")],
-              [t("about.factStackV"), t("about.factStackL")],
-              [t("about.factEnV"), t("about.factEnL")],
-              [t("about.factLocV"), t("about.factLocL")],
-            ].map(([v, l]) => (
-              <div key={l} className={s.fact}>
-                <dt className={s.factValue}>{v}</dt>
-                <dd className={s.factLabel}>{l}</dd>
-              </div>
-            ))}
-          </dl>
+        {/* -------- abertura (5a): nome girado na margem esquerda como lombada
+            de livro, retrato grande no centro, cargo + fatos 2×2 à direita -------- */}
+        <header className={s.hero} data-anim="head">
+          <h1 className={s.name}>
+            {first} <span className={s.nameOutline}>{rest.join(" ")}</span>
+          </h1>
+          <div className={s.portrait}>
+            {/* retrato em ASCII verde: clique/toque revela a foto (versão quase P&B) */}
+            <AsciiPortrait
+              src="/gabriel.webp"
+              photoSrc="/gabriel-dim.webp"
+              alt={profile.name}
+              label={t("about.photoToggle")}
+            />
+          </div>
+          <div className={s.heroText}>
+            <span className={s.eyebrow}>{t("about.eyebrow")}</span>
+            <p className={s.role}>{t("home.role")}</p>
+            <dl className={s.facts}>
+              {facts.map(([v, l]) => (
+                <div key={l} className={s.fact}>
+                  <dt className={s.factValue}>{v}</dt>
+                  <dd className={s.factLabel}>{l}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </header>
 
-        {/* -------- bio -------- */}
-        <section className={s.section} data-anim="section">
-          {en ? (
-            <>
-              <p className={s.lead}>
-                Fullstack developer with <strong>{years} years of experience</strong>: day to day I
-                build complete applications with <strong>Node</strong>, <strong>Express</strong>,{" "}
-                <strong>React</strong>, <strong>TypeScript</strong>, <strong>Sequelize</strong>,{" "}
-                <strong>SQL</strong> and <strong>Docker</strong>, from data model to interface.
-                Lately I&apos;ve been exploring the creative side of the web —{" "}
-                <strong>three.js</strong>, <strong>WebGL</strong>, <strong>motion</strong> and{" "}
-                <strong>shaders</strong> — and this site is the lab for it.
-              </p>
-              <p className={s.para}>
-                Product-oriented: I think about the user and the delivery first, code second. I use
-                AI as a real tool — I build <strong>agents with function calling</strong> in
-                production and lean on LLMs to prototype and refactor fast, always reviewing and
-                finishing by hand. I like leaving conventions,{" "}
-                <strong>design tokens</strong> and reusable components so the whole team moves
-                faster.
-              </p>
-            </>
-          ) : (
-            <>
-              <p className={s.lead}>
-                Desenvolvedor fullstack com <strong>{years} anos de experiência</strong>: no dia a dia
-                construo aplicações completas com <strong>Node</strong>, <strong>Express</strong>,{" "}
-                <strong>React</strong>, <strong>TypeScript</strong>, <strong>Sequelize</strong>,{" "}
-                <strong>SQL</strong> e <strong>Docker</strong>, do modelo de dados à interface.
-                Ultimamente venho explorando o lado criativo da web — <strong>three.js</strong>,{" "}
-                <strong>WebGL</strong>, <strong>motion</strong> e <strong>shaders</strong> — e este
-                site é o laboratório disso.
-              </p>
-              <p className={s.para}>
-                Trabalho orientado a produto: penso primeiro no usuário e na entrega, depois no
-                código. No dia a dia uso IA como ferramenta de verdade — construo{" "}
-                <strong>agentes com function calling</strong> em produção e apoio LLMs para
-                prototipar e refatorar rápido, sempre revisando e finalizando à mão. Gosto de deixar convenções, <strong>design tokens</strong> e
-                componentes reutilizáveis para o time inteiro ganhar velocidade.
-              </p>
-            </>
-          )}
+        {/* -------- card do GitHub | bio de abertura -------- */}
+        <section className={s.intro} data-anim="intro">
+          <GithubCard />
+          <div className={s.bio}>
+            {en ? (
+              <>
+                <p className={s.lead}>
+                  Fullstack developer with <strong>{years} years of experience</strong>: day to day I
+                  build complete applications with Node, Express, React, TypeScript, Sequelize, SQL
+                  and Docker, from data model to interface.
+                </p>
+                <p className={s.para}>
+                  Today my focus is <strong>AI agent orchestration</strong> — agents with tools,
+                  function calling and MCP working together in production — and complete products:
+                  web apps with Next.js and React, and <strong>native Swift and SwiftUI apps</strong>{" "}
+                  that sync with the same backend. This site is the lab for the creative side:
+                  three.js, WebGL, motion and shaders.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className={s.lead}>
+                  Desenvolvedor fullstack com <strong>{years} anos de experiência</strong>: no dia a
+                  dia construo aplicações completas com Node, Express, React, TypeScript, Sequelize,
+                  SQL e Docker, do modelo de dados à interface.
+                </p>
+                <p className={s.para}>
+                  Hoje meu foco é <strong>orquestração de agentes de IA</strong> — agentes com
+                  tools, function calling e MCP trabalhando juntos em produção — e produtos
+                  completos: aplicativos web com Next.js e React, e{" "}
+                  <strong>apps nativos em Swift e SwiftUI</strong> que sincronizam com a mesma base.
+                  Este site é o laboratório do lado criativo: three.js, WebGL, motion e shaders.
+                </p>
+              </>
+            )}
+          </div>
         </section>
 
-        {/* -------- experiência -------- */}
+        {/* -------- experiência: tabela tipográfica -------- */}
         <section className={s.section} data-anim="section">
-          <div className={s.sectionLabel}>{t("about.labelExperience")}</div>
-          <div className={s.timeline} data-anim="timeline">
-            <span className={s.timelineLine} data-anim="line" aria-hidden="true" />
+          <h2 className={s.sectionTitle}>{t("about.expTitle")}</h2>
+          <div className={s.jobs}>
             {experience.map((job) => (
               <article key={job.company} className={s.job}>
-                <div className={s.jobHead}>
-                  <span className={s.jobRole}>
-                    {en ? job.roleEn : job.role}{" "}
-                    <span className={s.jobCompany}>@ {job.company}</span>
-                  </span>
-                  <span className={s.jobPeriod}>{en ? job.periodEn : job.period}</span>
+                <span className={s.jobYear} aria-hidden="true">
+                  {job.year}
+                </span>
+                <div className={s.jobWho}>
+                  <div className={s.jobCompany}>{job.company}</div>
+                  <div className={s.jobRole}>{en ? job.roleEn : job.role}</div>
+                  <div className={s.jobPeriod}>{en ? job.periodEn : job.period}</div>
                 </div>
-                {job.location && (
-                  <div className={s.jobLoc}>{en ? job.locationEn ?? job.location : job.location}</div>
-                )}
-                <ul className={s.jobBullets}>
-                  {(en ? job.bulletsEn : job.bullets).map((b, i) => (
-                    <li key={i}>{b}</li>
-                  ))}
-                </ul>
+                <p className={s.jobSummary}>{en ? job.summaryEn : job.summary}</p>
               </article>
             ))}
-            {/* a graduação fecha a timeline: onde tudo começou (2022 — 2026) */}
+            {/* a graduação fecha a tabela: onde tudo começou (2022 — 2026) */}
             <article className={s.job}>
-              <div className={s.jobHead}>
-                <span className={s.jobRole}>
-                  {en
-                    ? "Systems Analysis and Development"
-                    : "Análise e Desenvolvimento de Sistemas"}{" "}
-                  <span className={s.jobCompany}>@ UNISINOS</span>
-                </span>
-                <span className={s.jobPeriod}>2022 — 2026</span>
+              <span className={s.jobYear} aria-hidden="true">
+                2022
+              </span>
+              <div className={s.jobWho}>
+                <div className={s.jobCompany}>UNISINOS</div>
+                <div className={s.jobRole}>{t("about.uniRole")}</div>
+                <div className={s.jobPeriod}>{t("about.uniPeriod")}</div>
               </div>
-              <div className={s.jobLoc}>
-                {en ? "São Leopoldo, RS, Brazil" : "São Leopoldo, RS, Brasil"}
-              </div>
-              <ul className={s.jobBullets}>
-                <li>
-                  {en
-                    ? "Undergraduate degree — software engineering, databases and web development."
-                    : "Graduação — engenharia de software, banco de dados e desenvolvimento web."}
-                </li>
-              </ul>
+              <p className={s.jobSummary}>{t("about.uniSummary")}</p>
             </article>
           </div>
         </section>
 
-        {/* -------- artigos -------- */}
+        {/* -------- stack (2a): frentes numeradas na coluna de 200px, à direita
+            a descrição da frente ativa, numeral vazado e o muro de palavras -------- */}
         <section className={s.section} data-anim="section">
-          <div className={s.sectionLabel}>{t("about.labelArticles")}</div>
-          <ArticlesList />
-        </section>
-
-        {/* -------- formação -------- */}
-        <section className={s.section} data-anim="section">
-          <div className={s.sectionLabel}>{t("about.labelEducation")}</div>
-          <div className={s.eduGrid}>
-            {education.map((e) => {
-              const note = en ? e.noteEn : e.note;
-              return (
-                <div key={e.title} className={s.edu}>
-                  <div className={s.eduTitle}>{en ? e.titleEn : e.title}</div>
-                  <div className={s.eduOrg}>{e.org}</div>
-                  <div className={s.eduMeta}>
-                    {e.period}
-                    {note ? <span className={s.eduNote}> · {note}</span> : null}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* -------- stack -------- */}
-        <section className={s.section} data-anim="section">
-          <div className={s.sectionLabel}>{t("about.labelStack")}</div>
-          <div className={s.stackGroups}>
-            {groups.map((g) => (
-              <div key={g.cat} className={s.stackCard}>
-                <div className={s.groupName}>{t(CAT_KEY[g.cat] ?? g.cat)}</div>
-                <div className={s.techGrid}>
-                  {g.items.map((sk) => (
-                    <span key={sk.name} className={s.tech}>
-                      <TechIcon name={sk.name} size={15} />
-                      {en ? SKILL_EN[sk.name] ?? sk.name : sk.name}
-                    </span>
-                  ))}
-                </div>
+          <h2 className={s.sectionTitle}>{t("about.stackTitle")}</h2>
+          <div className={s.stack}>
+            <div className={s.stackCats} role="tablist" aria-label={t("about.stackTitle")}>
+              {CATEGORY_ORDER.map((cat, i) => {
+                const on = i === stackTab;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    role="tab"
+                    aria-selected={on}
+                    className={`${s.stackCat} ${on ? s.stackCatOn : ""}`}
+                    onClick={() => setStackTab(i)}
+                    onMouseEnter={() => setStackTab(i)}
+                  >
+                    <span className={s.stackNum}>{String(i + 1).padStart(2, "0")}</span>
+                    <span className={s.stackName}>{t(CAT_KEY[cat])}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className={s.stackPanel} key={stackTab}>
+              <span className={s.ghostNum} aria-hidden="true">
+                {String(stackTab + 1).padStart(2, "0")}
+              </span>
+              <p className={s.stackDesc}>{t(`home.cat${stackTab + 1}d`)}</p>
+              <div className={s.wall}>
+                {stackWords.map((sk, i) => (
+                  <span
+                    key={sk.name}
+                    className={`${s.word} ${i % 3 === 0 ? s.wordHot : ""}`}
+                    style={{ fontSize: `${WALL_SIZES[i % WALL_SIZES.length]}px` }}
+                  >
+                    {en ? SKILL_EN[sk.name] ?? sk.name : sk.name}
+                  </span>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </section>
       </div>

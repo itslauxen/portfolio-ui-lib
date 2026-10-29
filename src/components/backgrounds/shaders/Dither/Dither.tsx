@@ -289,13 +289,21 @@ export default function Dither({
         (uniforms.mousePos.value as THREE.Vector2).copy(mouseRef);
       }
 
-      composer.render();
+      if (visible && !document.hidden) composer.render();
       raf = requestAnimationFrame(animate);
     };
+    // fora da tela (ou aba oculta) o loop fica vivo mas não renderiza: o
+    // composer em tela cheia estava pesando na rolagem bem longe do hero
+    let visible = true;
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+    });
+    io.observe(renderer.domElement);
     raf = requestAnimationFrame(animate);
 
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
       ro.disconnect();
       renderer.domElement.removeEventListener("pointermove", onPointerMove);
       composer.dispose();

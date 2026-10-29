@@ -6,7 +6,9 @@
 .stage {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  /* clip (não hidden): hidden vira "scroll container" e capturava o
+     scroll-snap das vitrines de projeto, que precisa ser do viewport */
+  overflow: clip;
   margin-top: calc(-1 * var(--nav-h)); /* o fundo flui por baixo do header transparente */
 }
 
@@ -166,41 +168,6 @@
   margin-top: auto;
 }
 
-/* Chip de disponibilidade */
-/* badge estilo terminal: mono + bolinha pulsando como indicador de status */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  background: var(--accent-soft);
-  color: var(--accent);
-  padding: 8px 16px;
-  border-radius: var(--radius-full);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-}
-.badgeDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent-glow);
-  flex: none;
-  animation: badgePulse 2s ease-in-out infinite;
-}
-@keyframes badgePulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
 
 /* Fundo do hero: Grainient da biblioteca atrás do hero, DISSOLVENDO no
    fundo escuro da página nos últimos ~250px (máscara em degradê). A linha
@@ -246,8 +213,9 @@
   position: absolute;
   right: clamp(24px, 5vw, 90px);
   top: 50%;
-  /* `translate` (não `transform`): o motion anima transform e o sobrescreveria */
-  translate: 0 -50%;
+  /* `translate` (não `transform`): o motion anima transform e o sobrescreveria.
+     +44px: o chip desce pra alinhar com o bloco título + lead */
+  translate: 0 calc(-50% + 44px);
   width: clamp(290px, 28vw, 430px);
   pointer-events: none;
 }
@@ -275,21 +243,10 @@
    inteiro (até os stats) precisa caber na dobra. */
 .heroTitle {
   margin: 18px 0 0;
-  font-size: clamp(2.5rem, 6.6vw, 4.9rem);
+  font-size: clamp(2.1rem, 6.6vw, 4.9rem);
   line-height: 1;
   letter-spacing: -0.045em;
   font-weight: 800;
-}
-/* Torus knot wireframe: quadrado, encostado à direita, respirando pra cima
-   (margens negativas) sem empurrar o restante do hero. */
-/* Marca-texto verde na palavra-chave (para antes do espaço do descender). */
-.hl {
-  background: linear-gradient(
-    transparent 55%,
-    rgba(78, 240, 140, 0.35) 55%,
-    rgba(78, 240, 140, 0.35) 88%,
-    transparent 88%
-  );
 }
 
 /* Lead e botões empilhados, tudo alinhado à esquerda. */
@@ -304,7 +261,7 @@
   margin: 0;
   color: var(--text-dim);
   max-width: 46ch;
-  font-size: 17.5px;
+  font-size: 18px;
 }
 .heroActions {
   display: flex;
@@ -317,31 +274,27 @@
   align-items: center;
   padding: 12px 24px;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   border-radius: var(--radius-full);
   white-space: nowrap;
   transition: filter var(--dur) var(--ease), transform var(--dur-fast) var(--ease),
-    box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    background var(--dur) var(--ease);
 }
 .btnSolid {
   background: var(--accent);
   color: var(--accent-ink);
 }
-/* hover: brilho radiante saindo por trás do botão */
 .btnSolid:hover {
-  filter: brightness(1.06);
-  box-shadow: 0 0 40px -4px rgba(60, 233, 127, 0.6), 0 0 90px -18px var(--accent-glow);
+  filter: brightness(1.08);
   transform: translateY(-1px);
 }
+/* secundário: superfície um degrau mais clara que o fundo, sem contorno */
 .btnOutline {
-  border: 1.5px solid rgba(241, 245, 240, 0.25);
+  background: rgba(241, 245, 240, 0.1);
   color: var(--text);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
 }
 .btnOutline:hover {
-  border-color: rgba(241, 245, 240, 0.5);
-  box-shadow: 0 0 34px -6px var(--accent-glow);
+  background: rgba(241, 245, 240, 0.16);
   transform: translateY(-1px);
 }
 .btnSolid:active,
@@ -349,23 +302,18 @@
   transform: translateY(0);
 }
 
-/* Fatos com divisórias finas: sempre ancorados na parte de BAIXO do hero,
-   qualquer que seja a altura da tela (margin-top: auto no flex column). */
+/* Fatos separados só por espaço: sempre ancorados na parte de BAIXO do
+   hero, qualquer que seja a altura da tela (margin-top: auto no flex column). */
 .heroStats {
   display: flex;
-  gap: 40px;
+  gap: 24px 64px;
   /* ancorados embaixo, mas com uma folga respirando antes do fim do hero */
   margin: auto 0 clamp(24px, 4vh, 48px);
   padding-top: 22px;
-  border-top: 1px solid rgba(241, 245, 240, 0.14);
   flex-wrap: wrap;
 }
 .heroStat {
   position: relative;
-}
-.heroStat + .heroStat {
-  padding-left: 40px;
-  border-left: 1px solid rgba(241, 245, 240, 0.12);
 }
 .heroStatValue {
   display: block;
@@ -376,7 +324,7 @@
 .heroStatLabel {
   margin: 2px 0 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -386,20 +334,15 @@
 }
 
 /* PROJETOS: painel flutuando sobre a página, quase do tamanho da tela, com
-   margens visíveis — MESMO tom de fundo das outras seções (base da página
-   + brilho verde sutil), sem destoar em preto. */
+   margens visíveis — um degrau de tom acima do fundo (sem borda nem sombra). */
 .projects {
   position: relative;
   z-index: 2;
   margin-block: clamp(28px, 5vh, 56px);
   margin-inline: clamp(12px, 2.2vw, 32px);
-  background:
-    radial-gradient(900px 480px at 82% -6%, rgba(60, 233, 127, 0.06), transparent 60%),
-    var(--bg);
-  border: 1px solid rgba(241, 245, 240, 0.08);
+  background: var(--bg-2);
   border-radius: 32px;
-  overflow: hidden;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  overflow: clip;
   /* fórmula do painel: viewport − header − margens (cabe inteiro na tela
      junto com a barra, sem sobra da próxima seção) */
   min-height: calc(100svh - var(--nav-h) - 2 * clamp(28px, 5vh, 56px));
@@ -407,202 +350,18 @@
   flex-direction: column;
   justify-content: center;
   padding-block: 40px 44px;
-  /* âncora /#projetos: para o scroll com o painel centrado — barra + margem
+  /* âncora /#projects: para o scroll com o painel centrado — barra + margem
      em cima, margem embaixo, sem cortar o topo nem vazar a próxima seção */
   scroll-margin-top: calc(var(--nav-h) + clamp(28px, 5vh, 56px));
 }
-/* Grid centralizado: 2 projetos + o teaser do próximo, mesmas alturas. */
-.projectGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  margin: 32px auto 0;
-  max-width: 1280px;
+/* Lista de vitrines: separadas por um degrau de tom (fundo alternado). */
+.projectList {
+  margin-top: 8px;
 }
-.projectGrid > div {
-  height: 100%;
-}
-.projectCard {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: var(--bg-card);
+.projectList > div:nth-child(even) > article {
+  background: var(--bg);
   border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid rgba(241, 245, 240, 0.07);
-  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease);
-}
-/* mesmo anel de luz girante dos cards de "O que eu domino" (desenhado no
-   perímetro interno, porque o card tem overflow hidden pra imagem) */
-.projectCard::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--glowA),
-    transparent 0turn 0.62turn,
-    var(--accent) 0.82turn,
-    var(--accent-2) 0.88turn,
-    transparent 1turn
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s var(--ease);
-  pointer-events: none;
-}
-.projectCard:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-}
-.projectCard:hover::after {
-  opacity: 1;
-  animation: glowSpin 2.2s linear infinite;
-}
-.projectImg {
-  width: 100%;
-  display: block;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: top left;
-}
-.projectBody {
-  padding: 20px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-.projectDesc {
-  flex: 1;
-}
-.projectHead {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
-}
-.projectTitle {
-  margin: 0;
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-.projectYear {
-  color: var(--muted-2);
-  font-size: 13px;
-  font-weight: 700;
-}
-.projectDesc {
-  margin: 8px 0 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-/* ---- card-teaser "em breve, novidades" ---- */
-.projectCardNext {
-  background: rgba(26, 32, 26, 0.45);
-}
-.nextMedia,
-.nextBone {
-  background: linear-gradient(
-    100deg,
-    rgba(241, 245, 240, 0.05) 40%,
-    rgba(241, 245, 240, 0.11) 50%,
-    rgba(241, 245, 240, 0.05) 60%
-  );
-  background-size: 200% 100%;
-  animation: nextShimmer 1.6s linear infinite;
-}
-.nextMedia {
-  aspect-ratio: 16 / 9;
-}
-.nextBody {
-  padding: 20px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-.nextBone {
-  display: block;
-  height: 13px;
-  border-radius: 7px;
-}
-.nextBoneA {
-  width: 55%;
-  height: 17px;
-}
-.nextBoneB {
-  width: 92%;
-}
-.nextBoneC {
-  width: 74%;
-}
-.nextLabel {
-  margin-top: auto;
-  padding-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-}
-.nextDots {
-  display: inline-flex;
-  gap: 4px;
-}
-.nextDots span {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: nextDot 1.2s ease-in-out infinite;
-}
-.nextDots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.nextDots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-@keyframes nextDot {
-  0%,
-  100% {
-    opacity: 0.25;
-    transform: translateY(0);
-  }
-  40% {
-    opacity: 1;
-    transform: translateY(-3px);
-  }
-}
-@keyframes nextShimmer {
-  from {
-    background-position: 130% 0;
-  }
-  to {
-    background-position: -70% 0;
-  }
-}
-.tags {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-.tag {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-  background: rgba(78, 240, 140, 0.12);
-  padding: 6px 13px;
-  border-radius: var(--radius-full);
+  padding-inline: clamp(20px, 3vw, 40px);
 }
 
 /* O QUE EU DOMINO: painel interativo (design 1c) — categorias à esquerda,
@@ -610,16 +369,18 @@
 .skills {
   position: relative;
   padding-block: var(--space-8);
-  /* sem clip: o glow atravessa as seções vizinhas; o estouro horizontal
-     é contido pelo overflow-x: clip do body (globals) */
+  /* sem clip: o glow atravessa as seções vizinhas. O blob termina
+     exatamente na borda da janela (right = padding do .wrap), então não
+     alarga o documento — alargar deixava a página rolar de lado ao focar
+     um botão */
 }
 /* decor: blob orgânico de glow no canto (lóbulos radiais fundidos por
    blur) — z-index negativo pra ficar atrás do bento da seção de cima */
 .skills::before {
   content: "";
   position: absolute;
-  top: -280px;
-  right: -200px;
+  top: -48px; /* abaixo do painel da seção anterior, senão parece cortado */
+  right: calc(-1 * clamp(20px, 4vw, 40px));
   width: 860px;
   height: 800px;
   z-index: -1;
@@ -648,21 +409,10 @@
 }
 .catTitle {
   position: relative;
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
   margin: 0 0 14px;
   font-size: clamp(24px, 3vw, 32px);
   font-weight: 800;
   letter-spacing: -0.01em;
-}
-.catNum {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  opacity: 0.85;
 }
 /* navegação do carrossel: barrinhas clicáveis */
 .dots {
@@ -678,14 +428,13 @@
   padding: 0;
   cursor: pointer;
   background: rgba(241, 245, 240, 0.12);
-  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  transition: background var(--dur) var(--ease);
 }
 .dot:hover {
   background: rgba(60, 233, 127, 0.45);
 }
 .dotOn {
-  background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.35));
-  box-shadow: 0 0 12px rgba(60, 233, 127, 0.35);
+  background: var(--accent);
 }
 /* pilha de slides (mesma célula de grid): altura = a do slide mais alto,
    então trocar de página não move o resto do layout; arrastável no X */
@@ -722,7 +471,6 @@
   position: absolute;
   top: -40px;
   right: -10px;
-  font-family: var(--font-mono);
   font-size: clamp(150px, 19vw, 280px);
   font-weight: 800;
   line-height: 1;
@@ -734,9 +482,9 @@
   position: relative;
   margin: 0 0 36px;
   color: var(--text-dim);
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.7;
-  max-width: 480px;
+  max-width: 520px;
 }
 .techWall {
   position: relative;
@@ -753,16 +501,14 @@
   letter-spacing: -0.01em;
   color: var(--text);
   cursor: default;
-  transition: color var(--dur) var(--ease), text-shadow var(--dur) var(--ease);
+  transition: color var(--dur) var(--ease);
 }
 .techWordHot {
   font-weight: 800;
   color: var(--accent);
-  text-shadow: 0 0 30px rgba(60, 233, 127, 0.45);
 }
 .techWord:hover {
   color: var(--accent-2, #4af0a5);
-  text-shadow: 0 0 24px rgba(60, 233, 127, 0.6);
 }
 @keyframes glowSpin {
   to {
@@ -776,135 +522,62 @@
   initial-value: 0deg;
 }
 
-/* O QUE EU CONSTRUO: MagicBento da biblioteca, mas SÓ os efeitos —
-   a grade/cards são re-diagramados pro bento largo (7/5 + 5/7) via
-   seletores estruturais sobre o DOM do componente. */
+/* O QUE EU CONSTRUO: lista + micro-interface (ServicesShowcase) */
 .services {
   padding-block: var(--space-8) 0;
 }
-.bentoWrap {
-  margin-top: 36px;
-}
-.bentoWrap > div:last-child {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  grid-template-columns: repeat(12, 1fr) !important;
-  gap: 20px !important;
-  padding: 0 !important;
-  font-size: 1rem !important;
-}
-.bentoWrap > div:last-child > * {
-  aspect-ratio: auto !important;
-  min-height: 230px;
-  grid-column: span 5 !important;
-  grid-row: auto !important;
-  border-radius: var(--radius-lg) !important;
-  padding: 28px !important;
-}
-.bentoWrap > div:last-child > *:nth-child(1),
-.bentoWrap > div:last-child > *:nth-child(4) {
-  grid-column: span 7 !important;
-}
-/* tipografia dos cards no padrão do site */
-.bentoWrap h2 {
-  font-size: 19px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-.bentoWrap p {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-  max-width: 46ch;
-}
-/* label = chips de tecnologia */
-.bentoWrap > div:last-child > * > div:first-child > div {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-}
-@media (max-width: 900px) {
-  /* repete os nth-child pra ganhar dos overrides de desktop (mesma
-     especificidade + ordem posterior), senão os cards 1 e 4 ficam span 7 */
-  .bentoWrap > div:last-child > *,
-  .bentoWrap > div:last-child > *:nth-child(1),
-  .bentoWrap > div:last-child > *:nth-child(4) {
-    grid-column: span 12 !important;
-    min-height: 0;
-  }
-}
 
-/* COMO EU TRABALHO (design 2a): faixa horizontal — 4 etapas sobre um
-   trilho contínuo que se desenha com o scroll */
+/* COMO EU TRABALHO: lista vertical — trilho à esquerda que se desenha com
+   o scroll (desktop), bolinha à esquerda do número, nome e descrição ao lado */
 .process {
   padding-block: var(--space-8) 0;
 }
-.sectionHead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-}
-.sectionTag {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding-bottom: 8px;
-  white-space: nowrap;
-}
-.sectionTagMono {
-  font-family: var(--font-mono);
-}
 .stepTrack {
   position: relative;
-  margin-top: 64px;
+  margin-top: 48px;
 }
-/* trilho (o Motion anima o scaleX) */
+/* trilho vertical passando pelo centro das bolinhas (o Motion anima o scaleY) */
 .trackLine {
   position: absolute;
-  top: 6px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), rgba(60, 233, 127, 0.15));
-  transform-origin: left center;
+  top: 10px;
+  bottom: 10px;
+  left: 6px;
+  width: 2px;
+  background: var(--accent);
+  transform-origin: top center;
 }
 .stepRow {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 36px;
+  grid-template-columns: 1fr;
+  row-gap: 44px;
 }
 .step {
   position: relative;
-  padding-top: 40px;
+  display: grid;
+  grid-template-columns: 14px 64px minmax(0, 1fr);
+  column-gap: 22px;
+  align-items: start;
 }
 /* hover: só o conteúdo levanta — o nó fica parado no trilho */
 .stepBigNum,
-.stepName,
-.stepDesc {
+.stepBody {
   transition: transform var(--dur) var(--ease);
 }
 .step:hover .stepBigNum,
-.step:hover .stepName,
-.step:hover .stepDesc {
+.step:hover .stepBody {
   transform: translateY(-4px);
 }
 /* nós sobre o trilho: intensidade decrescente, o último vazado (futuro) */
 .stepDot {
-  position: absolute;
-  /* centro do nó (7px) = centro do trilho (top 6px + 1px de espessura) */
-  top: 0;
-  left: 0;
   width: 14px;
   height: 14px;
+  margin-top: 17px; /* centro alinhado ao meio do numeral de 48px */
   border-radius: 50%;
+  position: relative;
+  z-index: 1;
 }
 .dotA {
   background: var(--accent);
-  box-shadow: 0 0 16px rgba(60, 233, 127, 0.8);
 }
 .dotB {
   background: rgba(60, 233, 127, 0.7);
@@ -922,36 +595,65 @@
   font-size: 48px;
   font-weight: 800;
   line-height: 1;
-  margin-bottom: 18px;
   color: transparent;
   -webkit-text-stroke: 1px rgba(60, 233, 127, 0.5);
+}
+.stepBody {
+  padding-top: 6px;
+  max-width: 60ch;
 }
 .stepName {
   font-size: 20px;
   font-weight: 700;
 }
 .stepDesc {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.7;
+  margin: 8px 0 0;
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1.6;
 }
 
-/* ARTIGO EM DESTAQUE (com respiro antes da banda verde) */
+/* ARTIGO EM DESTAQUE (com respiro antes da banda verde): título numa
+   coluna, o card deitado ocupando o resto da largura — nada de meia página
+   vazia à direita. */
 .articleSec {
   padding-block: var(--space-8);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 32px 48px;
+  align-items: start;
 }
-.articleGrid {
-  margin-top: 40px;
-  max-width: 460px;
+.articleGrid > div {
+  grid-template-columns: 1fr;
+}
+.articleGrid a {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "meta title read"
+    "meta sub read";
+  align-items: center;
+  column-gap: 28px;
+  padding: 32px 36px;
+}
+.articleGrid a > :nth-child(1) {
+  grid-area: meta;
+}
+.articleGrid a > :nth-child(2) {
+  grid-area: title;
+}
+.articleGrid a > :nth-child(3) {
+  grid-area: sub;
+}
+.articleGrid a > :nth-child(4) {
+  grid-area: read;
 }
 
 /* MARQUEE de logos cinza: entre projetos e serviços, com respiro */
 .logosBand {
   margin-top: clamp(40px, 6vh, 72px);
   padding-block: 28px;
-  border-top: 1px solid rgba(241, 245, 240, 0.07);
-  border-bottom: 1px solid rgba(241, 245, 240, 0.07);
+  overflow-x: clip;
 }
 .logoItem {
   display: inline-flex;
@@ -959,7 +661,7 @@
   gap: 10px;
   color: rgba(241, 245, 240, 0.42);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
   white-space: nowrap;
 }
 .logoItem svg {
@@ -976,25 +678,13 @@
   }
 }
 @media (max-width: 900px) {
-  .stepRow {
-    grid-template-columns: 1fr 1fr;
-    row-gap: 44px;
-  }
-  .trackLine {
-    display: none;
-  }
-  .stepDot {
-    position: static;
-    display: inline-block;
-    margin-bottom: 14px;
-  }
+  /* trilho continua no celular/tablet; só aperta as colunas */
   .step {
-    padding-top: 0;
+    grid-template-columns: 14px 56px minmax(0, 1fr);
+    column-gap: 16px;
   }
-}
-@media (max-width: 560px) {
   .stepRow {
-    grid-template-columns: 1fr;
+    row-gap: 36px;
   }
 }
 
@@ -1056,14 +746,13 @@
     font-size: calc(var(--ws, 40px) * 0.75);
   }
 }
-@media (max-width: 1100px) {
-  .projectGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
 @media (max-width: 860px) {
-  .projectGrid {
+  .articleSec {
     grid-template-columns: 1fr;
+  }
+  .articleGrid a {
+    display: flex;
+    padding: var(--space-5);
   }
   .ctaBand {
     flex-direction: column;
@@ -1076,6 +765,11 @@
   }
 }
 @media (max-width: 640px) {
+  /* título em no máximo 2 linhas: "Complete applications," mede ~10.7em,
+     então o corpo segue a largura da tela (8.3vw cabe de 360px pra cima) */
+  .heroTitle {
+    font-size: clamp(1.75rem, 8.3vw, 2.4rem);
+  }
   /* no mobile os stats quebram de linha: sem divisórias verticais */
   .heroStats {
     gap: 16px 28px;
@@ -1089,16 +783,6 @@
   }
   .heroContent {
     padding-bottom: 40px;
-  }
-  /* título + tag empilhados (a tag em nowrap estourava a largura) */
-  .sectionHead {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .sectionTag {
-    padding-bottom: 0;
-    white-space: normal;
   }
   /* blob de glow contido: right negativo esticava o scrollWidth e o
      navegador mobile dava zoom-out na página inteira */

@@ -62,6 +62,38 @@ export type LibraryAsset = AnimationAsset | BackgroundAsset | PromptAsset;
 // Portfólio (vitrine)
 // ---------------------------------------------------------------------------
 
+/** Texto curto nos dois idiomas (rótulos de mídia dos projetos). */
+export interface Localized {
+  pt: string;
+  en: string;
+}
+
+/** Uma tela/mídia de um projeto, mostrada na seção de vitrine da home. */
+export interface ProjectShot {
+  /** Como exibir: tela de desktop, tela de celular, painel (recorte com
+   *  transparência), vídeo em loop ou um efeito AO VIVO da biblioteca. */
+  kind: "desktop" | "phone" | "panel" | "video" | "live";
+  /** Caminho em /public (imagem ou vídeo). Não usado em `live`. */
+  src?: string;
+  /** Quadro de capa do vídeo. */
+  poster?: string;
+  /** Id do efeito da biblioteca, quando `kind` é `live`. */
+  effect?: string;
+  /** Rótulo da aba/legenda. */
+  label: Localized;
+  /** Texto alternativo da imagem. */
+  alt: Localized;
+}
+
+/** Grupo de telas de uma mesma versão do projeto (ex.: Web, iOS nativo). */
+export interface ProjectMediaGroup {
+  label: Localized;
+  /** `gallery`: uma tela grande por vez, abas embaixo. `phones`: fileira
+   *  de celulares lado a lado. */
+  layout: "gallery" | "phones";
+  shots: ProjectShot[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -81,6 +113,8 @@ export interface Project {
   previewEffect?: string;
   /** Aparece em destaque na home quando true. */
   featured?: boolean;
+  /** Telas da vitrine na home: cada grupo é uma versão (Web, iOS…). */
+  media?: ProjectMediaGroup[];
 }
 
 export interface Skill {

@@ -1,0 +1,163 @@
+/* Card do GitHub (Sobre): superfície um degrau acima do fundo, sem contorno,
+   compacto e largo — mesma altura do texto ao lado (o botão fica no pé). */
+/* duas colunas internas (perfil | repositórios): largo e baixo. Quando o
+   card fica estreito (celular) as colunas empilham sozinhas (auto-fit). */
+.card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px 32px;
+  padding: 24px 26px;
+  color: inherit;
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+  overflow: clip;
+  transition: transform 0.35s var(--ease), background 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+.colA,
+.colB {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.colB {
+  justify-content: center;
+}
+/* brilho que segue o cursor (só aparece no hover) */
+.spot {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(60, 233, 127, 0.12),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.card:hover .spot {
+  opacity: 1;
+}
+/* hover: levanta, clareia um degrau e ganha um anel de luz */
+.card:hover {
+  transform: translateY(-4px);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 1px var(--accent-line), 0 30px 60px -34px var(--accent-glow);
+}
+.head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* anel verde do avatar */
+  box-shadow: 0 0 0 2px var(--bg-2), 0 0 0 4px var(--accent);
+  flex: none;
+  transition: box-shadow 0.35s var(--ease), transform 0.35s var(--ease);
+}
+.card:hover .avatar {
+  transform: scale(1.04);
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--accent), 0 0 26px var(--accent-glow);
+}
+.who {
+  min-width: 0;
+  flex: 1;
+}
+.name {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.login {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.mark {
+  color: var(--text);
+  flex: none;
+  display: inline-flex;
+  transition: color 0.35s var(--ease), transform 0.5s var(--ease-out-expo);
+}
+.card:hover .mark {
+  color: var(--accent);
+  transform: rotate(-10deg) scale(1.12);
+}
+.bio {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.meta strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.featured {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.repos {
+  list-style: none;
+  margin: -6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.repo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 6px 0;
+}
+.repoName {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text);
+  transition: color var(--dur) var(--ease);
+}
+
+.repoStack {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:hover,
+  .card:hover .avatar,
+  .card:hover .mark {
+    transform: none;
+  }
+}

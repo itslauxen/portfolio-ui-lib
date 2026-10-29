@@ -12,11 +12,13 @@ body {
   min-height: 100%;
 }
 
-/* Rolagem suave nas âncoras (ex.: nav → #projetos). O Next desliga isso
+/* Rolagem suave nas âncoras (ex.: nav → #projects). O Next desliga isso
    momentaneamente nas trocas de rota, então não afeta navegação entre
    páginas; quem prefere menos movimento rola direto. */
 html {
   scroll-behavior: smooth;
+  /* sem scroll-snap nem encaixe por JS: os dois brigavam com a inércia do
+     trackpad e deixavam a rolagem tremendo */
 }
 @media (prefers-reduced-motion: reduce) {
   html {

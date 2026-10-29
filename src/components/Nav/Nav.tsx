@@ -11,7 +11,7 @@ import styles from "./nav.module.css";
 
 const LINKS = [
   { href: "/", key: "nav.home" },
-  { href: "/#projetos", key: "nav.projects" },
+  { href: "/#projects", key: "nav.projects" },
   { href: "/sobre", key: "nav.about" },
   { href: "/biblioteca", key: "nav.library" },
 ];

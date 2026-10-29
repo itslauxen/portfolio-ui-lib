@@ -10,12 +10,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: var(--surface);
+  background: var(--surface-2);
   padding: var(--space-5);
-  transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease),
-    background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 /* anel de luz girante no hover (mesmo dos cards de skill/projeto) */
 .card::after {
@@ -40,7 +39,7 @@
   pointer-events: none;
 }
 .card:hover {
-  background: var(--surface-2);
+  background: rgba(241, 245, 240, 0.1);
   transform: translateY(-3px);
   box-shadow: 0 0 44px -8px var(--accent-glow);
 }
@@ -54,7 +53,7 @@
   }
 }
 .cardMeta {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
   color: var(--muted);
   letter-spacing: var(--tracking-wide);
 }
@@ -67,12 +66,12 @@
 }
 .cardSub {
   color: var(--text-dim);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   line-height: 1.5;
   flex: 1;
 }
 .cardRead {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-sm);
   color: var(--accent);
   font-weight: 700;
   letter-spacing: var(--tracking-wide);

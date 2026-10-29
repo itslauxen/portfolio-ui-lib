@@ -1,361 +1,418 @@
-/* Página Sobre — noite verde: glow de fundo, nome em degradê, faixa de
-   fatos em vidro, timeline com linha que se desenha (GSAP) e cards com
-   anel de luz no hover. */
-
+/* Página Sobre — design 1d ("Sobre editorial") do canvas Explorações, com a
+   Stack do 1e. Revista: nome gigante, bio como texto de abertura, experiência
+   em tabela tipográfica (ano vazado · empresa · resumo) e stack como muro de
+   palavras. Zero cards; a hierarquia vem do tamanho do tipo e do alinhamento
+   numa coluna de 200px (--col). */
 .page {
+  --col: 200px;
+  --colgap: 48px;
+  /* conteúdo numa coluna de 1200px centrada (largura do canvas 2a), em vez
+     de ocupar os 1440px do .wrap */
+  --inner: 1200px;
   position: relative;
   isolation: isolate;
   /* sobe por baixo do header (como a home): o glow fica contínuo atrás
      da barra em vez de deixar uma faixa escura de "fundo" nela */
   margin-top: calc(-1 * var(--nav-h));
-  padding: calc(var(--nav-h) + 48px) 0 96px;
-  overflow: hidden;
+  padding: calc(var(--nav-h) + 56px) 0 112px;
+  overflow: clip;
 }
-
 /* Glow verde difuso no topo, esmaecendo pra baixo. */
 .glow {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 760px;
+  height: 600px;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(880px 460px at 16% -8%, rgba(60, 233, 127, 0.15), transparent 62%),
-    radial-gradient(720px 420px at 86% -4%, rgba(74, 240, 165, 0.08), transparent 60%);
-  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  background: radial-gradient(800px 420px at 16% -8%, rgba(60, 233, 127, 0.14), transparent 62%);
 }
 
-/* Ângulo animável do anel de glow (mesmo padrão da home). */
-@property --glowA {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
+/* ---------- abertura (5a): nome na vertical | retrato | cargo + fatos ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 40px;
+  align-items: center;
 }
-
-/* ---------- cabeçalho ---------- */
-.head {
-  padding-bottom: 8px;
-}
+/* lombada de livro: gira 180° pra ler de baixo pra cima */
 .name {
-  margin-top: 16px;
-  font-size: clamp(2.6rem, 6vw, 4.4rem);
-  letter-spacing: -0.03em;
-  background: linear-gradient(180deg, #ffffff 30%, #c9d2c9 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  /* "Gabriel Lauxen" mede ~8,4× o corpo: a 66px cabe nos 560px do retrato,
+     então a lombada nunca passa do bloco (nem fica cortada na dobra) */
+  font-size: clamp(2.6rem, 4.5vw, 4.125rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  max-height: 560px;
+  align-self: center;
+}
+/* contorno sem as linhas internas: a Manrope (variável) tem contornos
+   sobrepostos e o text-stroke desenha todos. Traço com o dobro da espessura
+   + preenchimento na cor do fundo POR CIMA (paint-order) cobre a metade
+   interna e as sobreposições; fica só o contorno externo de 1,5px. */
+.nameOutline {
+  color: var(--bg);
+  -webkit-text-stroke: 3px rgba(241, 245, 240, 0.6);
+  paint-order: stroke fill;
+}
+.portrait {
+  --portrait-w: 100%;
+  width: 100%;
+  max-width: 560px;
+  justify-self: center;
+}
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+.eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dim);
 }
 .role {
-  margin-top: 14px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  color: var(--text-dim);
-  font-size: var(--fs-md);
-}
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--fs-xs);
+  font-size: clamp(1.375rem, 1.9vw, 1.625rem);
   font-weight: 700;
-  color: var(--accent);
-  background: var(--accent-soft);
-  padding: 6px 13px;
-  border-radius: var(--radius-full);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
-.statusDot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent-glow);
-  animation: statusPulse 2s ease-in-out infinite;
-}
-@keyframes statusPulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-/* Faixa de fatos em vidro, como no hero da home. */
 .facts {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 30px 0 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  width: fit-content;
-  max-width: 100%;
-  overflow: hidden;
-}
-.fact {
-  padding: 16px 24px;
-  min-width: 150px;
-}
-.fact + .fact {
-  border-left: 1px solid var(--border);
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 24px;
 }
 .factValue {
-  font-family: var(--font-display);
-  font-size: var(--fs-lg);
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.01em;
 }
 .factLabel {
-  margin: 3px 0 0;
-  font-size: var(--fs-sm);
+  margin: 0;
+  font-size: 12.5px;
   color: var(--muted);
 }
 
-/* ---------- bio ---------- */
+/* ---------- card do GitHub | bio de abertura ---------- */
+/* card largo (≈48%) e texto alinhados pelo centro */
+.intro {
+  margin-top: 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 11fr) minmax(0, 12fr);
+  gap: 40px;
+  align-items: center;
+}
+.bio {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
 .lead {
-  color: var(--text);
-  line-height: 1.75;
-  font-size: var(--fs-md);
-  max-width: 72ch;
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  line-height: 1.55;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  max-width: 52ch;
+}
+.lead strong {
+  color: var(--accent);
+  font-weight: 700;
 }
 .para {
-  color: var(--text-dim);
+  font-size: 17px;
   line-height: 1.75;
-  margin-top: var(--space-4);
-  max-width: 72ch;
-}
-.lead strong,
-.para strong {
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--text-dim);
+  max-width: 66ch;
 }
 .para strong {
   color: var(--text);
+  font-weight: 700;
 }
 
 /* ---------- seções ---------- */
 .section {
-  margin-top: var(--space-8);
+  margin-top: 88px;
 }
-.sectionLabel {
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: var(--space-5);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.sectionLabel::before {
-  content: "";
-  width: 22px;
-  height: 2px;
-  border-radius: var(--radius-full);
-  background: var(--grad-accent);
-}
-.sectionLabel::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--border);
+.sectionTitle {
+  font-size: 32px;
+  margin-bottom: 28px;
 }
 
-/* ---------- timeline de experiência ---------- */
-.timeline {
-  position: relative;
-  padding-left: 34px;
+/* ---------- experiência: tabela tipográfica ---------- */
+.jobs {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-}
-/* linha que se DESENHA conforme o scroll (GSAP scrub) */
-.timelineLine {
-  position: absolute;
-  left: 8px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  border-radius: 2px;
-  background: linear-gradient(to bottom, var(--accent), rgba(60, 233, 127, 0.05));
 }
 .job {
-  position: relative;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-5);
-  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
-    box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  display: grid;
+  grid-template-columns: var(--col) minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: var(--colgap);
+  padding: 28px 0;
+  border-top: 1px solid rgba(241, 245, 240, 0.12);
+  align-items: start;
 }
-/* nó da timeline */
-.job::before {
-  content: "";
-  position: absolute;
-  left: -30px;
-  top: 30px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px rgba(60, 233, 127, 0.15), 0 0 14px var(--accent-glow);
-}
-/* hover: brilho radiante saindo por trás do card */
-.job:hover {
-  transform: translateY(-2px);
-  background: var(--surface-2);
-  border-color: var(--accent-line);
-  box-shadow: 0 0 44px -8px var(--accent-glow), 0 0 100px -30px var(--accent-glow);
-}
-.jobHead {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-}
-.jobRole {
-  font-size: var(--fs-md);
-  font-weight: 700;
+.jobYear {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(60, 233, 127, 0.55);
 }
 .jobCompany {
-  background: var(--grad-accent);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: 20px;
+  font-weight: 800;
 }
-.jobPeriod {
-  color: var(--muted);
-  font-size: var(--fs-sm);
-  white-space: nowrap;
-}
-.jobLoc {
-  color: var(--muted);
-  font-size: var(--fs-sm);
+.jobRole {
+  color: var(--text-dim);
+  font-size: 15px;
   margin-top: 2px;
 }
-.jobBullets {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-3) 0 0;
+.jobPeriod {
+  color: var(--muted-2);
+  font-size: 13px;
+  margin-top: 6px;
+}
+.jobSummary {
+  color: var(--text-dim);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* ---------- stack (2a) ---------- */
+.stack {
+  display: grid;
+  grid-template-columns: var(--col) minmax(0, 1fr);
+  gap: var(--colgap);
+  align-items: start;
+  padding-top: 28px;
+  border-top: 1px solid rgba(241, 245, 240, 0.12);
+}
+.stackCats {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
-.jobBullets li {
-  color: var(--text-dim);
-  line-height: 1.6;
-  font-size: var(--fs-sm);
-  padding-left: 18px;
+.stackCat {
   position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 10px 0 10px 18px;
+  font: inherit;
+  color: inherit;
 }
-.jobBullets li::before {
+/* barrinha à esquerda: acende na frente ativa */
+.stackCat::before {
   content: "";
   position: absolute;
-  left: 2px;
-  top: 0.55em;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--grad-accent);
-  opacity: 0.85;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 2px;
+  background: rgba(241, 245, 240, 0.1);
+  transition: background var(--dur) var(--ease);
 }
-
-/* ---------- formação ---------- */
-.eduGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-3);
+.stackCatOn::before {
+  background: var(--accent);
 }
-.edu {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-5);
+.stackNum {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted-2);
+  transition: color var(--dur) var(--ease);
 }
-.eduTitle {
+.stackName {
+  font-size: 15px;
   font-weight: 700;
+  color: var(--muted-2);
+  transition: color var(--dur) var(--ease);
 }
-.eduOrg {
-  color: var(--muted);
-  font-size: var(--fs-sm);
-  margin-top: 4px;
+.stackCatOn .stackNum {
+  color: var(--accent);
 }
-.eduMeta {
-  color: var(--muted);
-  font-size: var(--fs-sm);
-  margin-top: 10px;
-}
-.eduNote {
-  color: var(--good);
-  font-weight: 600;
-}
-
-/* ---------- stack ---------- */
-.stackGroups {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--space-3);
-}
-.stackCard {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-md);
-  padding: var(--space-5);
-}
-.groupName {
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  margin-bottom: 14px;
-}
-/* itens de tecnologia: logo cinza + nome, em grade alinhada */
-.techGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
-  gap: 8px;
-}
-.tech {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: var(--fs-sm);
-  color: var(--text-dim);
-  padding: 8px 11px;
-  border-radius: 10px;
-  background: rgba(241, 245, 240, 0.03);
-  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-.tech:hover {
-  background: rgba(241, 245, 240, 0.07);
+.stackCatOn .stackName,
+.stackCat:hover .stackName {
   color: var(--text);
 }
-.tech svg {
-  color: var(--muted);
-  opacity: 0.8;
-  flex: none;
+.stackPanel {
+  position: relative;
+  min-height: 300px;
+  animation: wallIn 0.45s var(--ease);
+}
+/* numeral fantasma da frente ativa (o mesmo da home) */
+.ghostNum {
+  position: absolute;
+  top: -36px;
+  right: 0;
+  font-size: clamp(120px, 14vw, 200px);
+  font-weight: 800;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(60, 233, 127, 0.14);
+  pointer-events: none;
+}
+.stackDesc {
+  position: relative;
+  color: var(--text-dim);
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 46ch;
+  margin-bottom: 32px;
+}
+.wall {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  align-items: baseline;
+}
+@keyframes wallIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.word {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--text);
+  transition: color var(--dur) var(--ease);
+}
+.word:hover {
+  color: var(--accent-2);
+}
+.wordHot {
+  font-weight: 800;
+  color: var(--accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .stackPanel {
+    animation: none;
+  }
 }
 
-@media (max-width: 640px) {
+/* ---------- responsivo ---------- */
+@media (max-width: 900px) {
+  /* celular (6b): retrato sangrando no topo, esmaecendo no fundo; por cima
+     do esmaecido "Sobre", nome em 2 linhas ("Lauxen" vazado), cargo e fatos */
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .heroText {
+    display: contents;
+  }
+  .portrait {
+    --portrait-w: 440px;
+    position: relative;
+    order: 0;
+    width: auto;
+    max-width: none;
+    height: 430px;
+    /* sobe até passar por baixo do header (o topo da foto fica atrás da
+       barra): assim nome, cargo e fatos cabem na primeira tela do celular */
+    margin: calc(-56px - var(--nav-h) - 16px) calc(-1 * clamp(20px, 4vw, 40px)) -54px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: clip;
+    /* sem fundo próprio: a máscara do retrato já dissolve as bordas na página */
+  }
+  /* o rosto na foto fica um pouco à direita do centro: compensa */
+  .portrait > * {
+    translate: -18px 0;
+  }
+  .eyebrow {
+    order: 1;
+    position: relative;
+    font-size: 13px;
+  }
+  .name {
+    order: 2;
+    position: relative;
+    writing-mode: horizontal-tb;
+    rotate: none;
+    white-space: normal;
+    max-height: none;
+    align-self: auto;
+    font-size: 52px;
+    line-height: 0.95;
+  }
+  .nameOutline {
+    display: block;
+    -webkit-text-stroke-width: 2.4px;
+  }
+  .role {
+    order: 3;
+    position: relative;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
   .facts {
-    width: 100%;
+    order: 4;
+    position: relative;
+    gap: 16px 20px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(241, 245, 240, 0.12);
   }
-  .fact {
-    flex: 1 1 140px;
+  .factValue {
+    font-size: 16px;
   }
-  .timeline {
-    padding-left: 26px;
+  .factLabel {
+    font-size: 12px;
   }
-  .timelineLine {
-    left: 5px;
+  .intro {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
-  .job::before {
-    left: -24px;
+  /* no celular o card vem depois do texto */
+  .intro > a {
+    order: 1;
+  }
+  .job {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 16px 20px;
+  }
+  .jobYear {
+    font-size: 28px;
+    padding-top: 2px;
+  }
+  .jobSummary {
+    grid-column: 2;
+  }
+  .stack {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .stackCats {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px 16px;
+  }
+  .stackCat {
+    padding: 8px 0 8px 14px;
+  }
+  .ghostNum {
+    top: -20px;
+  }
+  .word {
+    font-size: calc(var(--fs, 32px) * 0.8) !important;
   }
 }

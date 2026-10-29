@@ -26,6 +26,8 @@ export const skills: Skill[] = [
   { name: "Ionic", level: 76, category: "Front-end" },
   { name: "Quasar", level: 74, category: "Front-end" },
   { name: "PWA", level: 82, category: "Front-end" },
+  { name: "Swift", level: 72, category: "Front-end" },
+  { name: "SwiftUI", level: 74, category: "Front-end" },
   // Back-end & infra
   { name: "Node.js", level: 88, category: "Back-end & infra" },
   { name: "Express", level: 86, category: "Back-end & infra" },
@@ -61,6 +63,11 @@ export interface ExperienceItem {
   locationEn?: string;
   bullets: string[];
   bulletsEn: string[];
+  /** Ano de entrada (numeral vazado da tabela do Sobre). */
+  year: string;
+  /** Resumo de uma frase (tabela do Sobre); os bullets ficam pro currículo. */
+  summary: string;
+  summaryEn: string;
 }
 
 export const experience: ExperienceItem[] = [
@@ -68,8 +75,13 @@ export const experience: ExperienceItem[] = [
     role: "Desenvolvedor Fullstack",
     roleEn: "Fullstack Developer",
     company: "DKW System",
+    year: "2025",
     period: "jun/2025 — atual",
     periodEn: "Jun 2025 — present",
+    summary:
+      "CRM e mensageria whitelabel de grande porte (6 repositórios). Liderei sozinho a migração React 16→18, Node 16→22, MUI v4→v5 e Vite, e construo agentes de IA com function calling.",
+    summaryEn:
+      "Large-scale whitelabel CRM and messaging (6 repositories). Single-handedly led the React 16→18, Node 16→22, MUI v4→v5 and Vite migration, and I build AI agents with function calling.",
     location: "Novo Hamburgo, RS, Brasil · híbrido",
     locationEn: "Novo Hamburgo, RS, Brazil · hybrid",
     bullets: [
@@ -89,8 +101,13 @@ export const experience: ExperienceItem[] = [
     role: "Desenvolvedor de Software",
     roleEn: "Software Developer",
     company: "CWI Software",
+    year: "2024",
     period: "2024 — 2025",
     periodEn: "2024 — 2025",
+    summary:
+      "Selecionado para o programa Crescer; projetos práticos em React e Java ao lado de engenheiros sênior.",
+    summaryEn:
+      "Selected for the Crescer program; hands-on React and Java projects alongside senior engineers.",
     bullets: [
       "Selecionado para o programa de desenvolvimento de software da CWI (Crescer); entreguei projetos práticos em React e Java ao lado de engenheiros sênior.",
     ],
@@ -102,8 +119,11 @@ export const experience: ExperienceItem[] = [
     role: "Desenvolvedor Frontend",
     roleEn: "Frontend Developer",
     company: "B3Dev",
+    year: "2022",
     period: "set/2022 — nov/2023",
     periodEn: "Sep 2022 — Nov 2023",
+    summary: "Aplicações web e mobile para diversos clientes com Vue.js, Ionic, Quasar e MongoDB.",
+    summaryEn: "Web and mobile apps for various clients with Vue.js, Ionic, Quasar and MongoDB.",
     location: "Porto Alegre, RS, Brasil",
     locationEn: "Porto Alegre, RS, Brazil",
     bullets: [
