@@ -105,7 +105,10 @@
   /* ---- Layout ---- */
   --maxw: 1440px;
   --maxw-prose: 720px;
-  --nav-h: 64px;
+  /* área do notch no iPhone (viewport-fit=cover); 0 no resto. --nav-h já a
+     inclui, então tudo que desconta o header também desconta o notch */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --nav-h: calc(64px + var(--safe-top));
   --blur: 16px;
 
   /* ---- Motion ---- */

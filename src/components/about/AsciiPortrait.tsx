@@ -170,11 +170,18 @@ export function AsciiPortrait({
       }
     };
 
+    // 30 fps bastam pro flow/ripple; a 60 fps eram ~8 mil fillText por quadro
+    let last = 0;
     const loop = (now: number) => {
       if (stop) return;
+      if (now - last < 33) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      last = now;
       if (visible && !document.hidden) {
         // o ripple decai em ~0,5 s depois que o mouse sai
-        if (!mouse && mouseFade > 0) mouseFade = Math.max(0, mouseFade - 0.04);
+        if (!mouse && mouseFade > 0) mouseFade = Math.max(0, mouseFade - 0.08);
         draw(now);
       }
       raf = requestAnimationFrame(loop);

@@ -7,13 +7,14 @@ export const messages: Record<string, Entry> = {
   // ---- nav ----
   "nav.home": { pt: "Início", en: "Home" },
   "nav.projects": { pt: "Projetos", en: "Projects" },
-  "nav.library": { pt: "Biblioteca", en: "Library" },
+  "nav.library": { pt: "Acervo", en: "Toolbox" },
   "nav.about": { pt: "Sobre", en: "About" },
   "nav.contact": { pt: "Fale comigo", en: "Get in touch" },
   "loc.country": { pt: "Brasil", en: "Brazil" },
-  "meta.home": { pt: "Gabriel Lauxen · Portfólio & Biblioteca", en: "Gabriel Lauxen · Portfolio & Library" },
+  "meta.home": { pt: "Gabriel Lauxen · Portfólio", en: "Gabriel Lauxen · Portfolio" },
   "meta.about": { pt: "Sobre · Gabriel Lauxen", en: "About · Gabriel Lauxen" },
-  "meta.library": { pt: "Biblioteca · Gabriel Lauxen", en: "Library · Gabriel Lauxen" },
+  "meta.library": { pt: "Lab · Gabriel Lauxen", en: "Lab · Gabriel Lauxen" },
+  "meta.acervo": { pt: "Acervo · Gabriel Lauxen", en: "Toolbox · Gabriel Lauxen" },
   "meta.articles": { pt: "Artigos · Gabriel Lauxen", en: "Writing · Gabriel Lauxen" },
 
   // ---- home / hero (design 2a) ----
@@ -30,12 +31,12 @@ export const messages: Record<string, Entry> = {
     pt: "Desenvolvedor fullstack com {years} anos de experiência — Node, React e TypeScript do modelo de dados à interface, com foco em agentes de IA, RAG e LLMs em produção.",
     en: "Fullstack developer with {years} years of experience — Node, React and TypeScript from data model to interface, focused on AI agents, RAG and LLMs in production.",
   },
-  "home.ctaLibrary": { pt: "Explorar biblioteca", en: "Explore the library" },
+  "home.ctaLibrary": { pt: "Ver meu acervo", en: "See my toolbox" },
   "home.ctaProjects": { pt: "Ver projetos", en: "View projects" },
   "home.stat1v": { pt: "{years} anos", en: "{years} years" },
   "home.stat1l": { pt: "de experiência", en: "of experience" },
-  "home.stat2v": { pt: "90+ componentes", en: "90+ components" },
-  "home.stat2l": { pt: "na biblioteca própria", en: "in my own library" },
+  "home.stat2v": { pt: "80+ efeitos", en: "80+ effects" },
+  "home.stat2l": { pt: "reunidos no meu lab", en: "gathered in my lab" },
   "home.stat3v": { pt: "Design + código", en: "Design + code" },
   "home.stat3l": { pt: "do conceito ao deploy", en: "concept to deploy" },
   "home.skillsTitle": { pt: "O que eu domino", en: "What I master" },
@@ -161,7 +162,7 @@ export const messages: Record<string, Entry> = {
   "home.worksTitle": { pt: "Projetos em destaque", en: "Featured projects" },
   "proj.visit": { pt: "Ver projeto", en: "View project" },
   "proj.code": { pt: "Código no GitHub", en: "Source on GitHub" },
-  "proj.open": { pt: "Abrir a biblioteca", en: "Open the library" },
+  "proj.open": { pt: "Abrir o acervo", en: "Open the toolbox" },
   "proj.private": { pt: "Em uso privado", en: "Private, in use" },
   "home.ctaTitle": { pt: "Vamos trabalhar juntos?", en: "Let's work together?" },
   "home.ctaSub": {
@@ -216,6 +217,21 @@ export const messages: Record<string, Entry> = {
   "articles.min": { pt: "min de leitura", en: "min read" },
   "articles.readMore": { pt: "Ler artigo", en: "Read" },
   "articles.back": { pt: "← voltar ao sobre", en: "← back to about" },
+
+  // ---- acervo ----
+  "acervo.title": { pt: "Acervo", en: "Toolbox" },
+  "acervo.lead": {
+    pt: "Minha toolbox pessoal: as bibliotecas e os sites que eu uso como referência no dia a dia, e o lab onde testo e construo meus próprios efeitos.",
+    en: "My personal toolbox: the libraries and sites I use as reference day to day, and the lab where I test and build my own effects.",
+  },
+  "acervo.refsTitle": { pt: "Referências", en: "References" },
+  "acervo.previewOf": { pt: "Prévia do site {name}", en: "Preview of {name}" },
+  "acervo.labTitle": { pt: "Lab", en: "Lab" },
+  "acervo.labText": {
+    pt: "{n} efeitos — feitos por mim ou adaptados dessas referências — com parâmetros ao vivo e código pra copiar.",
+    en: "{n} effects — built by me or adapted from these references — with live parameters and copyable code.",
+  },
+  "acervo.labCta": { pt: "Abrir o lab", en: "Open the lab" },
 
   // ---- biblioteca ----
   "lib.search": { pt: "Buscar...", en: "Search..." },

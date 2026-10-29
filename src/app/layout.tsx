@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Manrope, JetBrains_Mono } from "next/font/google";
 import "@/styles/tokens.css";
 import "./globals.css";
@@ -23,6 +23,15 @@ const jbMono = JetBrains_Mono({
   variable: "--font-jbmono",
   display: "swap",
 });
+
+// viewport-fit=cover: no iPhone a página desenha atrás do notch e da barra do
+// Safari (o fundo animado do hero preenche essas áreas em vez da cor chapada);
+// o header desce pela altura do notch via --safe-top (tokens.css).
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: `${profile.name} · Portfólio & Biblioteca`,

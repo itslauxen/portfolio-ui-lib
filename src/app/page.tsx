@@ -232,7 +232,7 @@ export default function HomePage() {
               <Link href="/#projects" className={s.btnSolid} onClick={scrollToProjects}>
                 {t("home.ctaProjects")}
               </Link>
-              <Link href="/biblioteca" className={s.btnOutline}>
+              <Link href="/acervo" className={s.btnOutline}>
                 {t("home.ctaLibrary")}
               </Link>
             </div>

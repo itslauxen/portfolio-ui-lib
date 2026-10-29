@@ -180,19 +180,21 @@
   right: 0;
   /* desce um pouco além do hero (extensão curta: mais longa deixava um
      blob claro do shader reaparecer como "segundo degradê") */
-  height: calc(100svh + 160px);
+  /* lvh (não svh): no Safari do iPhone o fundo desce até atrás da barra de
+     endereço flutuante; no desktop lvh = svh, nada muda */
+  height: calc(100lvh + 160px);
   z-index: 0;
   -webkit-mask-image: linear-gradient(
     to bottom,
     black 0,
-    black calc(100svh - 30px),
-    transparent calc(100svh + 140px)
+    black calc(100lvh - 30px),
+    transparent calc(100lvh + 140px)
   );
   mask-image: linear-gradient(
     to bottom,
     black 0,
-    black calc(100svh - 30px),
-    transparent calc(100svh + 140px)
+    black calc(100lvh - 30px),
+    transparent calc(100lvh + 140px)
   );
 }
 /* Dither mesclado por cima do Grainient: screen faz o preto sumir e só as
@@ -234,9 +236,30 @@
     transparent 78%
   );
 }
+/* celular: o chip sangra pela direita, atrás do texto, bem apagado (o fundo
+   do hero fica exatamente como no desktop — sem degradê por cima) */
 @media (max-width: 960px) {
+  .heroTop {
+    position: static; /* o chip passa a se posicionar pelo .heroContent */
+  }
   .heroAsset {
-    display: none;
+    z-index: 0;
+    top: 64px;
+    right: -150px;
+    width: 420px;
+    translate: none;
+  }
+  /* a opacidade vai no conteúdo: a entrada (motion) grava opacity: 1 inline
+     no .heroAsset e anularia o valor do CSS */
+  .heroAsset > *,
+  .heroAsset::before {
+    opacity: 0.45;
+  }
+  .heroTitle,
+  .heroRow,
+  .heroStats {
+    position: relative;
+    z-index: 2;
   }
 }
 /* Um degrau menor que o fs-3xl: com os botões empilhados embaixo, o hero
@@ -791,5 +814,34 @@
     right: 0;
     width: 70vw;
     height: 60vh;
+  }
+}
+
+/* hero no celular (7b) — no FIM do arquivo de propósito: as regras base do
+   hero vêm depois do primeiro bloco mobile e ganhavam dele. Título grande
+   ancorado embaixo, colado no texto e nos números (que ficam menores). */
+@media (max-width: 960px) {
+  .heroTitle {
+    font-size: clamp(2.25rem, 10.8vw, 2.625rem);
+    line-height: 1;
+  }
+  .heroLead {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  /* bloco todo ancorado no pé da tela: sem folga embaixo dos números */
+  .heroContent {
+    padding-bottom: 24px;
+  }
+  .heroStats {
+    margin: 28px 0 0;
+    padding-top: 0;
+    gap: 14px 26px;
+  }
+  .heroStatValue {
+    font-size: 19px;
+  }
+  .heroStatLabel {
+    font-size: 12.5px;
   }
 }

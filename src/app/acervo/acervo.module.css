@@ -1,0 +1,206 @@
+/* Acervo: cabeçalho, grade de referências (preview + nome + nota) e o lab. */
+.page {
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(-1 * var(--nav-h));
+  padding: calc(var(--nav-h) + 72px) 0 112px;
+  overflow: clip;
+}
+.glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 600px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(800px 420px at 16% -8%, rgba(60, 233, 127, 0.14), transparent 62%);
+}
+.head,
+.section {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.title {
+  font-size: clamp(3rem, 7vw, 5.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+.lead {
+  margin-top: 24px;
+  max-width: 58ch;
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.section {
+  margin-top: 80px;
+}
+.sectionTitle {
+  font-size: 32px;
+  margin-bottom: 28px;
+}
+
+/* ---- grade de referências ---- */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+.grid > li {
+  min-width: 0;
+}
+/* número ímpar de referências: a última ocupa a linha toda, deitada */
+@media (min-width: 861px) {
+  .grid > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  .grid > li:last-child:nth-child(odd) .card {
+    flex-direction: row;
+  }
+  .grid > li:last-child:nth-child(odd) .shot {
+    width: calc(50% - 14px);
+    flex: none;
+  }
+  .grid > li:last-child:nth-child(odd) .body {
+    justify-content: center;
+    padding: 32px 36px;
+  }
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  background: var(--bg-2);
+  overflow: clip;
+  transition: transform 0.35s var(--ease), background 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+.card:hover {
+  transform: translateY(-4px);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 1px var(--accent-line), 0 30px 60px -34px var(--accent-glow);
+}
+.shot {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: clip;
+  background: var(--bg-card);
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+.card:hover .shot img {
+  transform: scale(1.03);
+}
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px 24px;
+  flex: 1;
+}
+.nameRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.host {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease);
+}
+.card:hover .host {
+  color: var(--accent);
+}
+.note {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  flex: 1;
+}
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.tag {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(78, 240, 140, 0.12);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* ---- lab ---- */
+.lab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  padding: 40px 44px;
+  border-radius: var(--radius-xl);
+  background: var(--bg-2);
+}
+.lab .sectionTitle {
+  margin-bottom: 12px;
+}
+.labText {
+  max-width: 62ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+.labCta {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 16px;
+  font-weight: 800;
+  transition: filter var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.labCta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .lab {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .card:hover .shot img {
+    transform: none;
+  }
+}

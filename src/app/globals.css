@@ -40,12 +40,16 @@ body {
      onde o overflow virava zoom-out da página no celular */
   overflow-x: hidden;
   overflow-x: clip;
+  /* âncora da aurora e do grão (absolute, não fixed — ver abaixo) */
+  position: relative;
 }
 
-/* Aurora difusa fixa por trás do conteúdo. */
+/* Aurora difusa por trás do conteúdo. absolute (não fixed): no Safari do
+   iOS 26 uma camada fixed encostada nas bordas faz a barra de endereço e a
+   faixa do notch virarem cor chapada em vez de mostrar a página por trás. */
 body::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: -2;
   pointer-events: none;
@@ -55,7 +59,7 @@ body::before {
 /* Grain sutil por cima da aurora: tira a cara "flat" dos gradientes. */
 body::after {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;

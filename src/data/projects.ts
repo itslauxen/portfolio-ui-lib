@@ -4,68 +4,6 @@ import type { Project } from "@/lib/types";
 // Dica: coloque as telas em /public/projects/<id>/ e referencie em `media`.
 export const projects: Project[] = [
   {
-    id: "nova-notes",
-    title: "Nova Notes",
-    description:
-      "Segundo cérebro com notas, metas e hábitos: editor de blocos estilo Notion (TipTap), chat com IA (Claude) que lê e cria notas via tools, controle por voz, push próprio e sincronização em tempo real no Supabase.",
-    descriptionEn:
-      "A second brain for notes, goals and habits: Notion-style block editor (TipTap), an AI chat (Claude) that reads and creates notes through tools, voice control, self-built web push and real-time sync on Supabase.",
-    tags: ["React", "Vite", "Supabase", "Claude", "TipTap"],
-    year: "2025",
-    url: "https://novanotes.lauxen.dev/",
-    repo: "https://github.com/itslauxen/nova-notes",
-    featured: true,
-    cover: "/projects/nova-notes.webp",
-    media: [
-      {
-        label: { pt: "Web", en: "Web" },
-        layout: "gallery",
-        shots: [
-          {
-            kind: "video",
-            src: "/projects/nova/demo.mp4",
-            poster: "/projects/nova/demo-poster.webp",
-            label: { pt: "Demo", en: "Demo" },
-            alt: { pt: "Demonstração do Nova Notes em uso", en: "Nova Notes demo in use" },
-          },
-          {
-            kind: "desktop",
-            src: "/projects/nova/home.webp",
-            label: { pt: "Início", en: "Home" },
-            alt: {
-              pt: "Início com o núcleo de partículas e os três botões orbitando",
-              en: "Home with the particle core and the three orbiting buttons",
-            },
-          },
-          {
-            kind: "desktop",
-            src: "/projects/nova/chat.webp",
-            label: { pt: "Chat com IA", en: "AI chat" },
-            alt: { pt: "Chat com IA respondendo a partir das notas", en: "AI chat answering from the notes" },
-          },
-          {
-            kind: "desktop",
-            src: "/projects/nova/note.webp",
-            label: { pt: "Editor", en: "Editor" },
-            alt: { pt: "Nota com checklist, tabela e toggle", en: "Note with checklist, table and toggle" },
-          },
-          {
-            kind: "desktop",
-            src: "/projects/nova/goals.webp",
-            label: { pt: "Metas", en: "Goals" },
-            alt: { pt: "Metas com barra de progresso", en: "Goals with progress" },
-          },
-          {
-            kind: "desktop",
-            src: "/projects/nova/habits.webp",
-            label: { pt: "Hábitos", en: "Habits" },
-            alt: { pt: "Grade mensal de hábitos", en: "Monthly habit grid" },
-          },
-        ],
-      },
-    ],
-  },
-  {
     id: "gym-app",
     title: "Gym App",
     description:
@@ -78,48 +16,6 @@ export const projects: Project[] = [
     featured: true,
     cover: "/projects/gym-app.webp",
     media: [
-      {
-        label: { pt: "Web (PWA)", en: "Web (PWA)" },
-        layout: "phones",
-        shots: [
-          {
-            kind: "phone",
-            src: "/projects/gym/web-hoje.webp",
-            label: { pt: "Hoje", en: "Today" },
-            alt: { pt: "Hoje: o treino do dia e a semana", en: "Today: the workout for the day and the week" },
-          },
-          {
-            kind: "phone",
-            src: "/projects/gym/web-treino.webp",
-            label: { pt: "Treino", en: "Workout" },
-            alt: { pt: "Treino em andamento com o timer de descanso", en: "Workout in progress with the rest timer" },
-          },
-          {
-            kind: "phone",
-            src: "/projects/gym/web-cargas.webp",
-            label: { pt: "Cargas", en: "Weights" },
-            alt: { pt: "Gráfico de carga de um exercício", en: "Weight chart for one exercise" },
-          },
-          {
-            kind: "phone",
-            src: "/projects/gym/web-chat.webp",
-            label: { pt: "Assistente IA", en: "AI assistant" },
-            alt: { pt: "Assistente de plano com IA", en: "AI plan assistant" },
-          },
-          {
-            kind: "phone",
-            src: "/projects/gym/web-plano.webp",
-            label: { pt: "Plano", en: "Plan" },
-            alt: { pt: "Editor do plano", en: "Plan editor" },
-          },
-          {
-            kind: "phone",
-            src: "/projects/gym/web-evolucao.webp",
-            label: { pt: "Evolução", en: "Progress" },
-            alt: { pt: "Frequência e semanas na meta", en: "Frequency and weeks on target" },
-          },
-        ],
-      },
       {
         label: { pt: "iOS nativo (SwiftUI)", en: "Native iOS (SwiftUI)" },
         layout: "phones",
@@ -159,6 +55,48 @@ export const projects: Project[] = [
             src: "/projects/gym/ios-plano.webp",
             label: { pt: "Plano", en: "Plan" },
             alt: { pt: "Plano no app nativo", en: "Plan in the native app" },
+          },
+        ],
+      },
+      {
+        label: { pt: "Web (PWA)", en: "Web (PWA)" },
+        layout: "phones",
+        shots: [
+          {
+            kind: "phone",
+            src: "/projects/gym/web-hoje.webp",
+            label: { pt: "Hoje", en: "Today" },
+            alt: { pt: "Hoje: o treino do dia e a semana", en: "Today: the workout for the day and the week" },
+          },
+          {
+            kind: "phone",
+            src: "/projects/gym/web-treino.webp",
+            label: { pt: "Treino", en: "Workout" },
+            alt: { pt: "Treino em andamento com o timer de descanso", en: "Workout in progress with the rest timer" },
+          },
+          {
+            kind: "phone",
+            src: "/projects/gym/web-cargas.webp",
+            label: { pt: "Cargas", en: "Weights" },
+            alt: { pt: "Gráfico de carga de um exercício", en: "Weight chart for one exercise" },
+          },
+          {
+            kind: "phone",
+            src: "/projects/gym/web-chat.webp",
+            label: { pt: "Assistente IA", en: "AI assistant" },
+            alt: { pt: "Assistente de plano com IA", en: "AI plan assistant" },
+          },
+          {
+            kind: "phone",
+            src: "/projects/gym/web-plano.webp",
+            label: { pt: "Plano", en: "Plan" },
+            alt: { pt: "Editor do plano", en: "Plan editor" },
+          },
+          {
+            kind: "phone",
+            src: "/projects/gym/web-evolucao.webp",
+            label: { pt: "Evolução", en: "Progress" },
+            alt: { pt: "Frequência e semanas na meta", en: "Frequency and weeks on target" },
           },
         ],
       },
@@ -223,15 +161,77 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: "lib-componentes",
-    title: "Lib de componentes",
+    id: "nova-notes",
+    title: "Nova Notes",
     description:
-      "Biblioteca de backgrounds, componentes e animações parametrizados (Canvas 2D, WebGL, three.js e shaders) com editor de parâmetros ao vivo e código copiável. Integrada neste site em /biblioteca — os efeitos abaixo estão rodando de verdade.",
+      "Segundo cérebro com notas, metas e hábitos: editor de blocos estilo Notion (TipTap), chat com IA (Claude) que lê e cria notas via tools, controle por voz, push próprio e sincronização em tempo real no Supabase.",
     descriptionEn:
-      "Library of parametrized backgrounds, components and animations (Canvas 2D, WebGL, three.js and shaders) with a live parameter editor and copyable code. Built into this site at /biblioteca — the effects below are running for real.",
-    tags: ["Canvas", "WebGL", "Shaders", "Ferramenta"],
+      "A second brain for notes, goals and habits: Notion-style block editor (TipTap), an AI chat (Claude) that reads and creates notes through tools, voice control, self-built web push and real-time sync on Supabase.",
+    tags: ["React", "Vite", "Supabase", "Claude", "TipTap"],
     year: "2025",
-    url: "/biblioteca",
+    url: "https://novanotes.lauxen.dev/",
+    repo: "https://github.com/itslauxen/nova-notes",
+    featured: true,
+    cover: "/projects/nova-notes.webp",
+    media: [
+      {
+        label: { pt: "Web", en: "Web" },
+        layout: "gallery",
+        shots: [
+          {
+            kind: "video",
+            src: "/projects/nova/demo.mp4",
+            poster: "/projects/nova/demo-poster.webp",
+            label: { pt: "Demo", en: "Demo" },
+            alt: { pt: "Demonstração do Nova Notes em uso", en: "Nova Notes demo in use" },
+          },
+          {
+            kind: "desktop",
+            src: "/projects/nova/home.webp",
+            label: { pt: "Início", en: "Home" },
+            alt: {
+              pt: "Início com o núcleo de partículas e os três botões orbitando",
+              en: "Home with the particle core and the three orbiting buttons",
+            },
+          },
+          {
+            kind: "desktop",
+            src: "/projects/nova/chat.webp",
+            label: { pt: "Chat com IA", en: "AI chat" },
+            alt: { pt: "Chat com IA respondendo a partir das notas", en: "AI chat answering from the notes" },
+          },
+          {
+            kind: "desktop",
+            src: "/projects/nova/note.webp",
+            label: { pt: "Editor", en: "Editor" },
+            alt: { pt: "Nota com checklist, tabela e toggle", en: "Note with checklist, table and toggle" },
+          },
+          {
+            kind: "desktop",
+            src: "/projects/nova/goals.webp",
+            label: { pt: "Metas", en: "Goals" },
+            alt: { pt: "Metas com barra de progresso", en: "Goals with progress" },
+          },
+          {
+            kind: "desktop",
+            src: "/projects/nova/habits.webp",
+            label: { pt: "Hábitos", en: "Habits" },
+            alt: { pt: "Grade mensal de hábitos", en: "Monthly habit grid" },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "lib-componentes",
+    title: "Acervo & Lab",
+    description:
+      "Minha toolbox pessoal: bibliotecas e sites de referência (React Bits, Aceternity, Componentry…) e um lab com efeitos meus e adaptados — parâmetros ao vivo e código copiável. Os efeitos abaixo estão rodando de verdade.",
+    descriptionEn:
+      "My personal toolbox: libraries and reference sites (React Bits, Aceternity, Componentry…) and a lab with my own and adapted effects — live parameters and copyable code. The effects below are running for real.",
+    tags: ["Curadoria", "WebGL", "Shaders", "Toolbox"],
+    year: "2025",
+    url: "/acervo",
     featured: true,
     cover: "/projects/component-lib.webp", // foto da interface do estúdio
     media: [

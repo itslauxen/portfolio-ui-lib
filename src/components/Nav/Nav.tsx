@@ -13,7 +13,7 @@ const LINKS = [
   { href: "/", key: "nav.home" },
   { href: "/#projects", key: "nav.projects" },
   { href: "/sobre", key: "nav.about" },
-  { href: "/biblioteca", key: "nav.library" },
+  { href: "/acervo", key: "nav.library" },
 ];
 
 // Desfoque progressivo sob o header (design 2a): quatro camadas de
@@ -52,7 +52,11 @@ export function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : href.startsWith("/#") ? false : pathname.startsWith(href);
+    href === "/"
+      ? pathname === "/"
+      : href.startsWith("/#")
+        ? false
+        : pathname.startsWith(href) || (href === "/acervo" && pathname.startsWith("/biblioteca"));
   // O estúdio da biblioteca é layout de app (nada rola por baixo do header):
   // lá o desfoque fica confinado à barra, pra não cortar a sidebar.
   const isApp = pathname?.startsWith("/biblioteca") ?? false;
@@ -121,7 +125,12 @@ export function Nav() {
       </div>
 
       <div className={`wrap ${styles.inner}`}>
-        <Link href="/" className={styles.brand} aria-label={profile.name}>
+        {/* no Sobre o nome já é o título gigante da página: some da barra */}
+        <Link
+          href="/"
+          className={`${styles.brand} ${pathname?.startsWith("/sobre") ? styles.brandHidden : ""}`}
+          aria-label={profile.name}
+        >
           {profile.name}
         </Link>
 

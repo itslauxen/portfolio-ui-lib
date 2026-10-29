@@ -101,19 +101,24 @@ export function ServicesShowcase() {
             </button>
           ))}
         </div>
-        <div className={`${s.stage} ${s.stageMobile}`} aria-live="polite">
-          <div className={s.dots} aria-hidden="true" />
-          {demo}
-        </div>
-        <div className={s.bars} aria-hidden="true">
-          {SERVICES.map((sv, i) => (
-            <span key={sv.t} className={`${s.bar} ${i === active ? s.barOn : ""}`} />
-          ))}
-        </div>
-        <div className={s.curText}>
-          <span className={s.curLabel}>{cur.tags.join(" · ")}</span>
-          <h3 className={s.curTitle}>{t(cur.t)}</h3>
-          <p className={s.curDesc}>{t(cur.d)}</p>
+        {/* demo + texto no MESMO card: cabe numa tela de celular sem rolar */}
+        <div className={s.mCard}>
+          <div className={`${s.stage} ${s.stageMobile}`} aria-live="polite">
+            <div className={s.dots} aria-hidden="true" />
+            {demo}
+          </div>
+          <div className={s.curText}>
+            <div className={s.curRow}>
+              <span className={s.curLabel}>{cur.tags.join(" · ")}</span>
+              <span className={s.bars} aria-hidden="true">
+                {SERVICES.map((sv, i) => (
+                  <span key={sv.t} className={`${s.bar} ${i === active ? s.barOn : ""}`} />
+                ))}
+              </span>
+            </div>
+            <h3 className={s.curTitle}>{t(cur.t)}</h3>
+            <p className={s.curDesc}>{t(cur.d)}</p>
+          </div>
         </div>
       </div>
     );

@@ -14,6 +14,7 @@ export function RouteTitle() {
     let key = "meta.home";
     if (pathname.startsWith("/sobre")) key = "meta.about";
     else if (pathname.startsWith("/biblioteca")) key = "meta.library";
+    else if (pathname.startsWith("/acervo")) key = "meta.acervo";
     else if (pathname.startsWith("/artigos")) key = "meta.articles";
     document.title = t(key);
   }, [pathname, lang, t]);
