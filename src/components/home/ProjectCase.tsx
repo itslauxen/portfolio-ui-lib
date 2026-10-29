@@ -109,22 +109,29 @@ export function ProjectCase({ project }: { project: Project }) {
 
       {group &&
         (group.layout === "phones" ? (
-          // fileira de celulares: troca de grupo com um fade curto
-          <motion.ul
-            key={gi}
-            className={s.phones}
-            initial={reduced ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: EASE }}
-          >
-            {group.shots.map((shot) => (
-              <li key={shot.src} className={s.phone}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={shot.src} alt={L(shot.alt)} loading="lazy" className={s.phoneImg} />
-                <span className={s.phoneLabel}>{L(shot.label)}</span>
-              </li>
-            ))}
-          </motion.ul>
+          // fileiras de celulares: TODAS ficam montadas na mesma célula do grid
+          // (a mais alta define a altura) e só a ativa aparece — trocar de
+          // versão não recarrega as imagens nem faz o conteúdo pular
+          <div className={s.phoneStack}>
+            {groups.map((g, i) =>
+              g.layout === "phones" ? (
+                <ul
+                  key={L(g.label)}
+                  className={s.phones}
+                  data-active={i === gi || undefined}
+                  aria-hidden={i !== gi}
+                >
+                  {g.shots.map((shot) => (
+                    <li key={shot.src} className={s.phone}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={shot.src} alt={L(shot.alt)} loading="lazy" className={s.phoneImg} />
+                      <span className={s.phoneLabel}>{L(shot.label)}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null,
+            )}
+          </div>
         ) : (
           <div className={s.gallery}>
             <div className={s.stage}>
@@ -147,6 +154,8 @@ export function ProjectCase({ project }: { project: Project }) {
                   aria-selected={i === si}
                   className={`${s.tab} ${i === si ? s.tabOn : ""}`}
                   onClick={() => setSi(i)}
+                  // desktop: troca no hover do mouse; no toque continua o clique
+                  onPointerEnter={(e) => e.pointerType === "mouse" && setSi(i)}
                 >
                   {L(shot.label)}
                 </button>

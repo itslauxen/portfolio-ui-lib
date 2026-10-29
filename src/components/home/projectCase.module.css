@@ -133,6 +133,7 @@
 /* ---- seletor de versão (Web / iOS) ---- */
 .groupSwitch {
   display: inline-flex;
+  align-self: flex-start; /* a .case é flex-column: sem isso a pílula esticava */
   gap: 4px;
   margin-top: 32px;
   padding: 4px;
@@ -255,7 +256,7 @@
 @media (min-width: 1001px) {
   .gallery {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center; /* lista de telas centrada na altura da foto */
     gap: 32px;
   }
   .stage {
@@ -301,6 +302,22 @@
 }
 
 /* ---- fileira de celulares ---- */
+.phoneStack {
+  display: grid;
+}
+.phoneStack > .phones {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), visibility 0s 0.4s;
+}
+.phoneStack > .phones[data-active] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), visibility 0s 0s;
+}
 .phones {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));

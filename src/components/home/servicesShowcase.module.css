@@ -1,15 +1,40 @@
 /* "O que eu construo" — design 1b: lista de serviços à esquerda, palco com a
    micro-interface do serviço ativo à direita. Mono só dentro das
    interfaces simuladas (tool call, url, nomes de tabela). */
+/* título em cima da lista; o palco fica na linha da LISTA (alinhado com
+   ela, da mesma altura), não centrado no bloco todo */
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: 56px;
-  align-items: center;
+  grid-template-areas:
+    "title ."
+    "list stage";
+  column-gap: 56px;
+  row-gap: 24px;
+  align-items: stretch;
 }
 .title {
   font-size: clamp(1.9rem, 3vw, 2.25rem);
-  margin-bottom: 32px;
+}
+.titleCell {
+  grid-area: title;
+}
+.listStack {
+  grid-area: list;
+  display: grid;
+  align-self: center;
+}
+.listStack > .list {
+  grid-area: 1 / 1;
+}
+.listGhost {
+  visibility: hidden;
+  pointer-events: none;
+}
+.stageCell {
+  grid-area: stage;
+  aspect-ratio: auto !important;
+  min-height: 440px;
 }
 .list {
   display: flex;
@@ -75,7 +100,8 @@
   position: relative;
   aspect-ratio: 5 / 4;
   border-radius: var(--radius-lg);
-  background: var(--bg-2);
+  /* dois degraus acima do fundo da página: o painel se destaca da seção */
+  background: #1d241d;
   overflow: clip;
 }
 .dots {
@@ -443,7 +469,7 @@
 .stageMobile .chat,
 .stageMobile .browser,
 .stageMobile .run,
-.stageMobile .schemaM {
+.stageMobile .app {
   inset: 22px;
 }
 /* barrinhas de posição */
@@ -716,4 +742,120 @@
     grid-template-columns: 1fr;
     gap: 28px;
   }
+}
+
+/* ---- 4 · painel do app fullstack ---- */
+.app {
+  position: absolute;
+  inset: 36px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: var(--bg);
+  overflow: clip;
+}
+.appHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: var(--bg-2);
+}
+.appTitle {
+  font-weight: 800;
+  font-size: 15px;
+}
+.appSync {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(60, 233, 127, 0.12);
+  padding: 5px 10px;
+  border-radius: var(--radius-full);
+}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 16px 20px 6px;
+}
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(241, 245, 240, 0.04);
+}
+.kpiValue {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.kpiLabel {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.tickets {
+  list-style: none;
+  margin: 0;
+  padding: 8px 20px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.ticket {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 6px 0;
+}
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12.5px;
+  font-weight: 800;
+  background: rgba(241, 245, 240, 0.08);
+  color: var(--text-dim);
+}
+.ticketWho {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ticketName {
+  font-weight: 700;
+  font-size: 14px;
+}
+.ticketCh {
+  font-size: 12px;
+  color: var(--muted-2);
+}
+.status {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.st_done {
+  color: var(--accent);
+  background: rgba(60, 233, 127, 0.12);
+}
+.st_open {
+  color: var(--text-dim);
+  background: rgba(241, 245, 240, 0.08);
+}
+.st_bot {
+  color: var(--accent-ink);
+  background: var(--accent);
 }
