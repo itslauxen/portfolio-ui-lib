@@ -59,6 +59,22 @@ export const references: Reference[] = [
     noteEn: "Real website styles — colors, typography and spacing — as AI-ready DESIGN.md files.",
   },
   {
+    slug: "profitize",
+    name: "Profitize Build",
+    url: "https://profitize.com.br/build",
+    tags: ["Prompts", "Skills", "Landing pages"],
+    note: "Prompts, skills e design systems de landing pages para usar com Claude e Codex.",
+    noteEn: "Landing page prompts, skills and design systems to use with Claude and Codex.",
+  },
+  {
+    slug: "mellowui",
+    name: "Mellow UI",
+    url: "https://www.mellowui.com/",
+    tags: ["React", "Motion", "shadcn"],
+    note: "Componentes React com estética editorial e animações suaves em motion e canvas, copiados pelo CLI do shadcn.",
+    noteEn: "React components with an editorial look and smooth motion and canvas animations, copied through the shadcn CLI.",
+  },
+  {
     slug: "behold",
     name: "Behold",
     url: "https://behold.so/",
