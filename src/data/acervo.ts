@@ -75,6 +75,14 @@ export const references: Reference[] = [
     noteEn: "React components with an editorial look and smooth motion and canvas animations, copied through the shadcn CLI.",
   },
   {
+    slug: "reactdrops",
+    name: "ReactDrops",
+    url: "https://reactdrops.dev/",
+    tags: ["React", "Efeitos", "Prompts"],
+    note: "Componentes e efeitos React com preview ao vivo, controles para personalizar e um prompt pronto para integrar com IA.",
+    noteEn: "React components and effects with live previews, controls to customize them and a ready prompt to integrate with AI.",
+  },
+  {
     slug: "behold",
     name: "Behold",
     url: "https://behold.so/",
