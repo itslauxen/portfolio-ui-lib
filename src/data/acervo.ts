@@ -83,6 +83,22 @@ export const references: Reference[] = [
     noteEn: "React components and effects with live previews, controls to customize them and a ready prompt to integrate with AI.",
   },
   {
+    slug: "thinkingorbs",
+    name: "Thinking Orbs",
+    url: "https://libraries.dev/orbs",
+    tags: ["React", "Loaders", "IA"],
+    note: "Orbes animados para o estado de pensando em interfaces de IA, com nove estados, em React, React Native e SwiftUI.",
+    noteEn: "Animated orbs for the thinking state in AI interfaces, with nine states, for React, React Native and SwiftUI.",
+  },
+  {
+    slug: "hairline",
+    name: "Hairline",
+    url: "https://hairline.lucasmarkes.com/figures",
+    tags: ["Figuras", "Linhas", "npm"],
+    note: "Galeria de 33 figuras em traço fino, agrupadas pelo que desenham, com o código para copiar. Vem num pacote npm, MIT.",
+    noteEn: "A gallery of 33 hairline figures grouped by what they draw, with code to copy. Ships as an MIT npm package.",
+  },
+  {
     slug: "behold",
     name: "Behold",
     url: "https://behold.so/",
