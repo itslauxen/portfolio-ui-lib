@@ -14,6 +14,9 @@ const manrope = Manrope({
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-manrope",
   display: "swap",
+  // explícito (é o padrão): mudar as opções invalida o CSS da fonte que a Vercel guardou em cache.
+  // Um build reaproveitou um CSS antigo, com outra classe, e o site saiu sem a Manrope.
+  preload: true,
 });
 
 // Mono apenas para blocos de código da biblioteca.
@@ -22,6 +25,7 @@ const jbMono = JetBrains_Mono({
   weight: ["400", "500", "600"],
   variable: "--font-jbmono",
   display: "swap",
+  preload: true,
 });
 
 // viewport-fit=cover: no iPhone a página desenha atrás do notch e da barra do
