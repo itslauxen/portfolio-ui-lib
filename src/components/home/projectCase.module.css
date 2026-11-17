@@ -4,12 +4,17 @@
    recebe o que sobra depois do cabeçalho (--media-h) e a largura segue a
    proporção 16:9. */
 .case {
-  --media-h: calc(100svh - var(--nav-h) - 300px);
-  min-height: calc(100svh - var(--nav-h));
+  --media-h: calc(100svh - var(--nav-h) - 340px);
+  position: relative;
+  min-height: calc(100svh - var(--nav-h) - 16px);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-block: 28px;
+  /* um mundo por projeto: cada vitrine é um painel com o fundo e a cor do produto */
+  padding: 44px clamp(20px, 3.4vw, 56px) 36px;
+  border-radius: 32px;
+  background: var(--case-bg, var(--bg-2));
+  overflow: clip;
 }
 
 /* ---- cabeçalho ---- */
@@ -74,7 +79,7 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);
-  background: rgba(78, 240, 140, 0.12);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   padding: 6px 13px;
   border-radius: var(--radius-full);
 }
@@ -338,7 +343,7 @@
   max-width: 100%;
   height: auto;
   /* fileira limitada pela altura da janela, como a galeria */
-  max-height: calc(var(--media-h) - 40px);
+  max-height: calc(var(--media-h) - 90px);
   margin-inline: auto;
   border-radius: 22px;
   background: var(--bg-card);
@@ -348,6 +353,16 @@
   font-weight: 700;
   color: var(--text-dim);
   text-align: center;
+}
+.phoneLabelOn {
+  color: var(--accent);
+}
+/* com a demo, a fileira tem sete "celulares" */
+@media (min-width: 1101px) {
+  .phones[data-demo] {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 16px;
+  }
 }
 
 /* ---- responsivo ---- */
@@ -384,4 +399,24 @@
     flex: 0 0 min(58%, 260px);
     scroll-snap-align: start;
   }
+}
+
+/* Dentro da pilha em tela cheia (ProjectStack): a vitrine ocupa a janela inteira, de borda a borda,
+   começando atrás da barra de navegação. */
+:global([data-pinned]) .case {
+  --media-h: calc(100svh - var(--nav-h) - 350px);
+  height: 100svh;
+  min-height: 0;
+  padding: calc(var(--nav-h) + 16px) clamp(28px, 4.4vw, 72px) 28px;
+  /* cantos de cima arredondados: cada mundo chega como uma folha subindo, em vez de uma faixa reta */
+  border-radius: 36px 36px 0 0;
+}
+
+/* versão com margem (projetos alternados): o painel ocupa o que sobra abaixo do menu, com todos os
+   cantos arredondados */
+:global([data-pinned]) :global([data-inset]) .case {
+  --media-h: calc(100svh - var(--nav-h) - 390px);
+  height: 100%;
+  padding: 40px clamp(24px, 3.6vw, 60px) 28px;
+  border-radius: 32px;
 }

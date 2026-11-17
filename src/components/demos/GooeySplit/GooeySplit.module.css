@@ -1,0 +1,64 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+  width: var(--s);
+  height: var(--s);
+}
+.defs {
+  position: absolute;
+}
+.spin {
+  position: absolute;
+  inset: 0;
+}
+.spinOn {
+  animation: gira calc(var(--t) * 4) linear infinite;
+}
+.blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--s) * 0.34);
+  height: calc(var(--s) * 0.34);
+  margin: calc(var(--s) * -0.17) 0 0 calc(var(--s) * -0.17);
+  border-radius: 50%;
+  background: var(--c);
+  animation: var(--t) cubic-bezier(0.6, 0, 0.4, 1) infinite alternate;
+}
+.a {
+  animation-name: vaiA;
+}
+.b {
+  animation-name: vaiB;
+}
+@keyframes vaiA {
+  0%,
+  12% {
+    transform: translateX(0) scale(1.12);
+  }
+  100% {
+    transform: translateX(calc(var(--s) * -0.27)) scale(0.86);
+  }
+}
+@keyframes vaiB {
+  0%,
+  12% {
+    transform: translateX(0) scale(1.12);
+  }
+  100% {
+    transform: translateX(calc(var(--s) * 0.27)) scale(0.86);
+  }
+}
+@keyframes gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinOn {
+    animation: none;
+  }
+  .blob {
+    animation-duration: calc(var(--t) * 3);
+  }
+}

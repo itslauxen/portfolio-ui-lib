@@ -1,12 +1,11 @@
 /* Mesma geometria do estúdio (studio.module.css) para a troca ser 1:1. */
 .wrap {
   display: grid;
-  grid-template-columns: 288px minmax(0, 1fr);
-  gap: var(--space-5);
+  grid-template-columns: 272px minmax(0, 1fr);
+  gap: 16px;
   width: 100%;
-  max-width: var(--maxw);
   margin: 0 auto;
-  padding: var(--space-4) clamp(20px, 4vw, 40px);
+  padding: 8px clamp(12px, 1.4vw, 20px) 12px;
   height: calc(100vh - var(--nav-h));
   height: calc(100dvh - var(--nav-h));
   overflow: hidden;
@@ -15,19 +14,24 @@
 .side {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
   min-height: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  padding: var(--space-3);
+  padding: 6px 0 0;
   overflow: hidden;
 }
 
 .main {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  align-content: start;
+  gap: 12px;
   min-width: 0;
   overflow: hidden;
 }
@@ -35,7 +39,7 @@
 /* Osso base com shimmer. */
 .bone {
   display: block;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   background: linear-gradient(100deg, var(--surface) 40%, var(--surface-2) 50%, var(--surface) 60%);
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
@@ -49,24 +53,41 @@
   }
 }
 
-.search {
-  height: 38px;
-  border-radius: var(--radius-full);
+/* o cartão "vendo…" e a fileira de abas */
+.box {
+  height: 30px;
+  border-radius: 9px;
   flex: none;
 }
+.search {
+  height: 29px;
+  border-radius: 9px;
+  flex: none;
+}
+.gap {
+  height: 16px;
+  flex: none;
+}
+/* itens da lista: linhas finas, de larguras diferentes */
 .item {
-  height: 46px;
+  height: 14px;
+  margin: 6px 10px;
+  border-radius: 5px;
   flex: none;
 }
 .stage {
-  height: clamp(340px, 56vh, 640px);
-  border-radius: var(--radius-lg);
+  height: clamp(340px, 64vh, 820px);
+  border-radius: 14px;
   flex: none;
 }
 .panel {
   flex: 1;
   min-height: 120px;
-  border-radius: var(--radius-lg);
+  border-radius: 14px;
+}
+.card {
+  aspect-ratio: 16 / 12;
+  border-radius: 14px;
 }
 
 @media (max-width: 900px) {

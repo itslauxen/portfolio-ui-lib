@@ -1,0 +1,54 @@
+.wrap {
+  display: inline-block;
+  /* folga para o desfoque do filtro não ser cortado */
+  padding: var(--s);
+}
+.defs {
+  position: absolute;
+}
+.row {
+  position: relative;
+  display: flex;
+  gap: calc(var(--s) * 0.9);
+}
+.dot,
+.runner {
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: var(--c);
+}
+.dot {
+  animation: respira var(--t) ease-in-out infinite;
+}
+.runner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: corre var(--t) cubic-bezier(0.65, 0, 0.35, 1) infinite alternate;
+}
+@keyframes corre {
+  from {
+    left: calc(var(--s) * -0.9);
+    transform: scale(1.15);
+  }
+  to {
+    left: calc(100% - var(--s) * 0.1);
+    transform: scale(1.15);
+  }
+}
+@keyframes respira {
+  0%,
+  100% {
+    transform: scale(0.82);
+  }
+  50% {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .runner,
+  .dot {
+    animation-duration: calc(var(--t) * 3);
+  }
+}

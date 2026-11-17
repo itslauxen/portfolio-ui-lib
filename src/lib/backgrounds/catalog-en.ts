@@ -13,6 +13,8 @@ export const CAT_EN: Record<string, string> = {
   Retrô: "Retro",
   Shader: "Shader",
   Cards: "Cards",
+  Figuras: "Figures",
+  Loaders: "Loaders",
   "3D": "3D",
   Galeria: "Gallery",
   Navegação: "Navigation",
@@ -273,6 +275,22 @@ export const CATALOG_EN: Record<string, { name: string; desc: string }> = {
   dotfield: {
     name: "Dot Field",
     desc: "A 2D canvas dot grid that bulges or repels around the cursor, with an optional ambient wave.",
+  },
+  avatarstack: {
+    name: "Avatar Stack",
+    desc: "Overlapping avatars with a +N that opens into a scrollable strip (arrows, drag, wheel). Click selects; on collapse, hidden selected ones move to the front.",
+  },
+  hairlinecore: {
+    name: "Hairline Core",
+    desc: "A Hairline-style line figure: a core floating in a cage of three rings that turn on their own, with an eye that follows the cursor.",
+  },
+  gooeydots: { name: "Gooey Dots", desc: "A drop runs from side to side and merges with the dots it passes, like liquid." },
+  gooeyorbit: { name: "Gooey Orbit", desc: "Drops orbit a core at different speeds and merge with it as they cross." },
+  gooeysplit: { name: "Gooey Split", desc: "A drop stretches, splits in two and merges back, slowly turning." },
+  arcspinner: { name: "Arc Spinner", desc: "A round-capped stroke that spins while it stretches and shrinks, over a faint track." },
+  barsloader: {
+    name: "Bars",
+    desc: "Bars that stretch and shrink in sequence, like an equalizer. CSS only.",
   },
   magicbento: {
     name: "Magic Bento",

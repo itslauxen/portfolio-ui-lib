@@ -16,6 +16,38 @@
   pointer-events: none;
   background: radial-gradient(800px 420px at 16% -8%, rgba(60, 233, 127, 0.14), transparent 62%);
 }
+/* fundo da página, na linguagem da home: manchas verdes suaves que alternam de lado ao longo da
+   rolagem e uma malha pontilhada que só aparece dentro delas. Só CSS, sem custo de animação. */
+.page::before,
+.page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.page::before {
+  background:
+    radial-gradient(34% 300px at 88% 220px, rgba(60, 233, 127, 0.16), transparent 72%),
+    radial-gradient(30% 360px at 6% 1050px, rgba(60, 233, 127, 0.12), transparent 72%),
+    radial-gradient(32% 380px at 94% 1900px, rgba(60, 233, 127, 0.12), transparent 72%),
+    radial-gradient(30% 360px at 8% calc(100% - 420px), rgba(60, 233, 127, 0.13), transparent 72%);
+  filter: blur(30px);
+}
+.page::after {
+  background-image: radial-gradient(circle, rgba(60, 233, 127, 0.17) 1px, transparent 1px);
+  background-size: 10px 10px;
+  -webkit-mask-image:
+    radial-gradient(34% 340px at 88% 220px, #000, transparent),
+    radial-gradient(30% 400px at 6% 1050px, #000, transparent),
+    radial-gradient(32% 420px at 94% 1900px, #000, transparent),
+    radial-gradient(30% 400px at 8% calc(100% - 420px), #000, transparent);
+  mask-image:
+    radial-gradient(34% 340px at 88% 220px, #000, transparent),
+    radial-gradient(30% 400px at 6% 1050px, #000, transparent),
+    radial-gradient(32% 420px at 94% 1900px, #000, transparent),
+    radial-gradient(30% 400px at 8% calc(100% - 420px), #000, transparent);
+}
 .head,
 .section {
   max-width: 1200px;
@@ -36,38 +68,142 @@
 .section {
   margin-top: 80px;
 }
-.sectionTitle {
-  font-size: 32px;
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
   margin-bottom: 28px;
 }
+.sectionTitle {
+  font-size: 32px;
+}
+.count {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--muted-2);
+  font-variant-numeric: tabular-nums;
+}
 
-/* ---- grade de referências ---- */
+/* ---- lab: um efeito do lab rodando ao vivo, com o texto por cima ---- */
+.lab {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: 420px;
+  margin-top: 56px;
+  border-radius: var(--radius-xl);
+  background: var(--bg-2);
+  overflow: clip;
+}
+.labLive {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+/* escurece o lado do texto e a base, para o efeito aparecer à direita sem brigar com a leitura */
+.lab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(16, 19, 17, 0.94) 0%, rgba(16, 19, 17, 0.78) 38%, rgba(16, 19, 17, 0) 72%),
+    linear-gradient(0deg, rgba(16, 19, 17, 0.55) 0%, rgba(16, 19, 17, 0) 45%);
+}
+.labBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  max-width: 560px;
+  padding: 48px;
+  /* o efeito segue o mouse no painel todo; só os links e o botão recebem o clique */
+  pointer-events: none;
+}
+.labBody a {
+  pointer-events: auto;
+}
+.labTitle {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+.labText {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+.labCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  padding: 14px 26px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 16px;
+  font-weight: 800;
+  transition: filter var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.labCta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.labPicks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.labPicks a {
+  font-weight: 700;
+  color: var(--text);
+  transition: color var(--dur) var(--ease);
+}
+.labPicks a:hover {
+  color: var(--accent);
+}
+
+/* ---- grade de referências: três colunas, prévia em cima ---- */
 .grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 24px;
 }
 .grid > li {
   min-width: 0;
+  grid-column: span 2;
 }
-/* número ímpar de referências: a última ocupa a linha toda, deitada */
-@media (min-width: 861px) {
-  .grid > li:last-child:nth-child(odd) {
+@media (min-width: 1041px) {
+  /* sobra de uma: a última ocupa a linha toda, deitada; sobra de duas: dividem a linha ao meio */
+  .grid > li:last-child:nth-child(3n + 1) {
     grid-column: 1 / -1;
   }
-  .grid > li:last-child:nth-child(odd) .card {
+  .grid > li:last-child:nth-child(3n + 1) .card {
     flex-direction: row;
   }
-  .grid > li:last-child:nth-child(odd) .shot {
-    width: calc(50% - 14px);
+  .grid > li:last-child:nth-child(3n + 1) .shot {
+    width: calc(50% - 12px);
     flex: none;
   }
-  .grid > li:last-child:nth-child(odd) .body {
+  .grid > li:last-child:nth-child(3n + 1) .body {
     justify-content: center;
     padding: 32px 36px;
+  }
+  .grid > li:last-child:nth-child(3n + 1) .note {
+    flex: none;
+  }
+  .grid > li:nth-last-child(2):nth-child(3n + 1),
+  .grid > li:last-child:nth-child(3n + 2) {
+    grid-column: span 3;
   }
 }
 .card {
@@ -77,13 +213,11 @@
   border-radius: var(--radius-lg);
   background: var(--bg-2);
   overflow: clip;
-  transition: transform 0.35s var(--ease), background 0.35s var(--ease),
-    box-shadow 0.35s var(--ease);
+  transition: transform 0.35s var(--ease), background 0.35s var(--ease);
 }
 .card:hover {
   transform: translateY(-4px);
   background: var(--bg-card);
-  box-shadow: 0 0 0 1px var(--accent-line), 0 30px 60px -34px var(--accent-glow);
 }
 .shot {
   display: block;
@@ -100,27 +234,30 @@
   transition: transform 0.6s var(--ease-out-expo);
 }
 .card:hover .shot img {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 .body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 22px 24px 24px;
+  gap: 8px;
+  padding: 20px 22px 22px;
   flex: 1;
 }
 .nameRow {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 16px;
+  gap: 14px;
 }
 .name {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 800;
   letter-spacing: -0.01em;
 }
 .host {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 13.5px;
   font-weight: 600;
   color: var(--muted);
@@ -132,70 +269,37 @@
 }
 .note {
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text-dim);
   flex: 1;
 }
 .tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-.tag {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--accent);
-  background: rgba(78, 240, 140, 0.12);
-  padding: 5px 12px;
-  border-radius: var(--radius-full);
+  margin-top: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--muted-2);
 }
 
-/* ---- lab ---- */
-.lab {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 32px;
-  padding: 40px 44px;
-  border-radius: var(--radius-xl);
-  background: var(--bg-2);
+@media (max-width: 1040px) {
+  .grid > li {
+    grid-column: span 3;
+  }
+  .grid > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 }
-.lab .sectionTitle {
-  margin-bottom: 12px;
-}
-.labText {
-  max-width: 62ch;
-  font-size: 17px;
-  line-height: 1.65;
-  color: var(--text-dim);
-}
-.labCta {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 26px;
-  border-radius: var(--radius-full);
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: 16px;
-  font-weight: 800;
-  transition: filter var(--dur) var(--ease), transform var(--dur-fast) var(--ease);
-}
-.labCta:hover {
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-}
-
-@media (max-width: 860px) {
-  .grid {
-    grid-template-columns: 1fr;
+@media (max-width: 700px) {
+  .grid > li {
+    grid-column: 1 / -1;
   }
   .lab {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 28px 24px;
+    min-height: 0;
+  }
+  .lab::before {
+    background: linear-gradient(0deg, rgba(16, 19, 17, 0.95) 0%, rgba(16, 19, 17, 0.8) 60%, rgba(16, 19, 17, 0.35) 100%);
+  }
+  .labBody {
+    padding: 140px 24px 28px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

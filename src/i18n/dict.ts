@@ -228,10 +228,11 @@ export const messages: Record<string, Entry> = {
   "acervo.previewOf": { pt: "Prévia do site {name}", en: "Preview of {name}" },
   "acervo.labTitle": { pt: "Lab", en: "Lab" },
   "acervo.labText": {
-    pt: "{n} efeitos — feitos por mim ou adaptados dessas referências — com parâmetros ao vivo e código pra copiar.",
-    en: "{n} effects — built by me or adapted from these references — with live parameters and copyable code.",
+    pt: "{n} efeitos, feitos por mim ou adaptados dessas referências, com parâmetros ao vivo e código pra copiar.",
+    en: "{n} effects, built by me or adapted from these references, with live parameters and copyable code.",
   },
   "acervo.labCta": { pt: "Abrir o lab", en: "Open the lab" },
+  "acervo.labPicks": { pt: "Comece por", en: "Start with" },
 
   // ---- biblioteca ----
   "lib.search": { pt: "Buscar...", en: "Search..." },
@@ -244,6 +245,10 @@ export const messages: Record<string, Entry> = {
   "lib.randomize": { pt: "Aleatorizar", en: "Randomize" },
   "lib.searchBg": { pt: "Buscar fundo...", en: "Search a background..." },
   "lib.items": { pt: "itens", en: "items" },
+  "lib.filterType": { pt: "Filtrar por tipo", en: "Filter by type" },
+  "lib.filterAll": { pt: "Todos", en: "All" },
+  "lib.viewingAll": { pt: "Vendo todos os componentes", en: "Viewing all components" },
+  "lib.filterN": { pt: "Filtrar {n} componentes...", en: "Filter {n} components..." },
   "lib.paramsCount": { pt: "parâmetros", en: "parameters" },
   "lib.params": { pt: "Parâmetros", en: "Parameters" },
   "lib.export": { pt: "Exportar", en: "Export" },
@@ -263,6 +268,7 @@ export const messages: Record<string, Entry> = {
   "lib.secComponentes": { pt: "Componentes", en: "Components" },
   "lib.secAnimacoes": { pt: "Animações", en: "Animations" },
   "lib.secTexto": { pt: "Animações de texto", en: "Text animations" },
+  "lib.secLoaders": { pt: "Loaders", en: "Loaders" },
 
   // ---- modal de contato ----
   "contact.title": { pt: "Como você prefere falar?", en: "How do you prefer to talk?" },

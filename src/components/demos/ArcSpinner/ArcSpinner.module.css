@@ -1,0 +1,47 @@
+.svg {
+  display: inline-block;
+  animation: gira var(--t) linear infinite;
+}
+.track,
+.arc {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: var(--w);
+}
+.track {
+  opacity: 0.16;
+}
+.arc {
+  stroke-linecap: round;
+  transform-origin: 50% 50%;
+  animation: estica calc(var(--t) * 1.5) ease-in-out infinite;
+}
+@keyframes gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* o traço cresce de 8% para 70% da volta e encolhe de novo, "andando" pelo trilho */
+@keyframes estica {
+  0% {
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 70 30;
+    stroke-dashoffset: -18;
+  }
+  100% {
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: -100;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svg {
+    animation-duration: calc(var(--t) * 4);
+  }
+  .arc {
+    animation: none;
+    stroke-dasharray: 30 70;
+  }
+}

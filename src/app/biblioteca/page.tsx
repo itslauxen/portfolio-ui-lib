@@ -1,9 +1,7 @@
-import { redirect } from "next/navigation";
-import { BACKGROUND_CATALOG, getEffectMeta } from "@/lib/backgrounds";
+import { BackgroundStudio } from "@/components/backgrounds/BackgroundStudio";
 
-// /biblioteca abre direto no estúdio, no item padrão.
-const DEFAULT_ID = getEffectMeta("gradientblinds") ? "gradientblinds" : BACKGROUND_CATALOG[0].id;
-
+// /biblioteca é a grade do lab: a lista lateral e uma foto de cada item. Clicar num item abre o
+// estúdio (/biblioteca/[id]) com os parâmetros e o código.
 export default function BibliotecaIndexPage() {
-  redirect(`/biblioteca/${DEFAULT_ID}`);
+  return <BackgroundStudio />;
 }

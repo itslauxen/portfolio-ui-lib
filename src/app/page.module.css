@@ -197,6 +197,18 @@
     transparent calc(100lvh + 140px)
   );
 }
+/* O Grainient do hero roda com metade da largura e da altura e é ampliado 2×: em tela retina eram
+   ~4× mais pixels por quadro para um degradê que é todo suave. O grão fica um pouco mais graúdo. */
+.heroBgLow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 50%;
+  transform: scale(2);
+  transform-origin: 0 0;
+}
+
 /* Dither mesclado por cima do Grainient: screen faz o preto sumir e só as
    ondas pixeladas verdes somarem, como uma textura retrô discreta. */
 .heroBgBlend {
@@ -351,6 +363,29 @@
   font-weight: 600;
 }
 
+/* desktop: título em escala de cartaz, atravessando a página, com o chip enorme e cortado na borda */
+@media (min-width: 961px) {
+  .heroTop {
+    isolation: isolate;
+  }
+  .heroTitle {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(3rem, 6.3vw, 6.3rem);
+    line-height: 0.96;
+    letter-spacing: -0.05em;
+  }
+  .heroAsset {
+    z-index: 0;
+    right: clamp(-240px, -12vw, -100px);
+    width: clamp(460px, 44vw, 760px);
+    translate: 0 calc(-50% + 56px);
+  }
+  .heroRow {
+    margin-top: 32px;
+  }
+}
+
 /* ---------- seções ---------- */
 .sectionTitle {
   font-size: clamp(1.9rem, 3vw, 2.25rem);
@@ -363,28 +398,20 @@
   z-index: 2;
   margin-block: clamp(28px, 5vh, 56px);
   margin-inline: clamp(12px, 2.2vw, 32px);
-  background: var(--bg-2);
-  border-radius: 32px;
-  overflow: clip;
   /* fórmula do painel: viewport − header − margens (cabe inteiro na tela
      junto com a barra, sem sobra da próxima seção) */
   min-height: calc(100svh - var(--nav-h) - 2 * clamp(28px, 5vh, 56px));
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-block: 40px 44px;
+  padding-block: 24px 0;
   /* âncora /#projects: para o scroll com o painel centrado — barra + margem
      em cima, margem embaixo, sem cortar o topo nem vazar a próxima seção */
   scroll-margin-top: calc(var(--nav-h) + clamp(28px, 5vh, 56px));
 }
 /* Lista de vitrines: separadas por um degrau de tom (fundo alternado). */
 .projectList {
-  margin-top: 8px;
-}
-.projectList > div:nth-child(even) > article {
-  background: var(--bg);
-  border-radius: var(--radius-lg);
-  padding-inline: clamp(20px, 3vw, 40px);
+  margin-top: 36px;
 }
 
 /* O QUE EU DOMINO: painel interativo (design 1c) — categorias à esquerda,
@@ -414,6 +441,9 @@
     radial-gradient(26% 28% at 30% 66%, rgba(60, 233, 127, 0.1), transparent 75%);
   filter: blur(26px);
   pointer-events: none;
+  /* nasce do nada: sem isto o brilho era cortado em linha reta no topo da seção */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 40px, #000 300px);
+  mask-image: linear-gradient(to bottom, transparent 40px, #000 300px);
 }
 .skills::after {
   content: "";
@@ -421,14 +451,14 @@
   inset: 0;
   background-image: radial-gradient(circle, rgba(60, 233, 127, 0.08) 1px, transparent 1px);
   background-size: 10px 10px;
-  -webkit-mask-image: radial-gradient(60% 50% at 80% 20%, #000, transparent);
-  mask-image: radial-gradient(60% 50% at 80% 20%, #000, transparent);
+  /* a mancha da malha fica abaixo da borda de cima da seção, para não aparecer uma linha ali */
+  -webkit-mask-image: radial-gradient(60% 38% at 80% 42%, #000, transparent);
+  mask-image: radial-gradient(60% 38% at 80% 42%, #000, transparent);
   pointer-events: none;
 }
 /* carrossel: um slide por frente (título + descrição + muro), sem lista */
 .skillsPanel {
   position: relative;
-  margin-top: 40px;
 }
 .catTitle {
   position: relative;
@@ -545,6 +575,105 @@
   initial-value: 0deg;
 }
 
+/* lista das frentes (só no desktop; no celular ficam as barrinhas e o título de cada slide) */
+.catNav {
+  display: none;
+}
+/* desktop: seção mais alta, em duas colunas. À esquerda as quatro frentes em tipo grande (a ativa
+   em branco com a barra verde); à direita a descrição e o muro de tecnologias, maiores. */
+@media (min-width: 961px) {
+  .skills {
+    padding-block: calc(var(--space-8) + 24px);
+  }
+  .skillsPanel {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 2fr);
+    column-gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+    margin-top: 0;
+    min-height: 340px;
+  }
+  .catNav {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .catBtn {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0 14px 22px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: clamp(24px, 2.3vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-align: left;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: color var(--dur) var(--ease);
+  }
+  .catBtn::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(241, 245, 240, 0.1);
+    transition: background var(--dur) var(--ease);
+  }
+  .catBtn:hover {
+    color: var(--text-dim);
+  }
+  .catBtn[aria-selected="true"] {
+    color: var(--text);
+  }
+  .catBtn[aria-selected="true"]::before {
+    background: var(--accent);
+  }
+  .catNum {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--muted-2);
+  }
+  .catBtn[aria-selected="true"] .catNum {
+    color: var(--accent);
+  }
+  /* a lista já diz qual é a frente: o título do slide e as barrinhas saem */
+  .catTitle,
+  .dots {
+    display: none;
+  }
+  .slideStack {
+    padding-top: 12px;
+  }
+  .wallDesc {
+    margin-bottom: 44px;
+    font-size: 22px;
+    line-height: 1.55;
+    max-width: 34ch;
+    color: var(--text);
+  }
+  .techWall {
+    gap: 14px 30px;
+  }
+  .techWord {
+    font-size: calc(var(--ws, 40px) * 1.3);
+  }
+  .ghostNum {
+    top: -110px;
+  }
+}
+
 /* O QUE EU CONSTRUO: lista + micro-interface (ServicesShowcase) */
 .services {
   padding-block: var(--space-8) 0;
@@ -560,14 +689,41 @@
   margin-top: 48px;
 }
 /* trilho vertical passando pelo centro das bolinhas (o Motion anima o scaleY) */
-.trackLine {
+/* trilho de fundo: um fio apagado de ponta a ponta, que some nas extremidades */
+.stepTrack::before {
+  content: "";
   position: absolute;
   top: 10px;
   bottom: 10px;
+  left: 6.5px;
+  width: 1px;
+  background: rgba(60, 233, 127, 0.2);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 90px, #000 calc(100% - 90px), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 90px, #000 calc(100% - 90px), transparent);
+}
+/* a parte já percorrida: nasce transparente, ganha o verde e termina numa ponta de luz que desce
+   com a rolagem (altura = --p, vinda do Motion) */
+.trackLine {
+  --pad: 20px;
+  position: absolute;
+  top: 10px;
   left: 6px;
   width: 2px;
-  background: var(--accent);
-  transform-origin: top center;
+  height: calc((100% - var(--pad)) * var(--p, 1));
+  border-radius: 2px;
+  background: linear-gradient(to bottom, rgba(60, 233, 127, 0) 0, rgba(60, 233, 127, 0.55) 110px, var(--accent) 100%);
+}
+.trackLine::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  translate: -50% 0;
+  background: #d6ffe6;
+  box-shadow: 0 0 10px 3px rgba(60, 233, 127, 0.85), 0 0 28px 8px rgba(60, 233, 127, 0.35);
 }
 .stepRow {
   display: grid;
@@ -634,6 +790,137 @@
   color: var(--text-dim);
   font-size: 16px;
   line-height: 1.6;
+}
+
+/* a figura do Hairline de cada etapa: nas cores do site, sobre o fundo da página */
+.stepFig {
+  display: none;
+  --hairline-plate: #101311;
+  --hairline-hi: #3ce97f;
+  --hairline-edge: #c9d2c9;
+  --hairline-mid: #5f6c62;
+  --hairline-lo: #2b342d;
+}
+/* desktop: linha do tempo no centro, etapas em lados alternados, bem separadas, e do lado oposto de
+   cada uma a figura dela. Numeral, nome e texto maiores. */
+@media (min-width: 961px) {
+  /* fundo da seção, na linguagem do "O que eu domino": manchas verdes suaves atrás de cada figura
+     (alternando de lado, como as etapas) e uma malha pontilhada que só aparece nessas manchas */
+  .process {
+    position: relative;
+    isolation: isolate;
+  }
+  .process::before,
+  .process::after {
+    content: "";
+    position: absolute;
+    inset: 40px calc(-1 * clamp(20px, 4vw, 40px)) 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .process::before {
+    background:
+      radial-gradient(30% 16% at 76% 16%, rgba(60, 233, 127, 0.15), transparent 72%),
+      radial-gradient(30% 16% at 24% 39%, rgba(60, 233, 127, 0.13), transparent 72%),
+      radial-gradient(30% 16% at 76% 62%, rgba(60, 233, 127, 0.13), transparent 72%),
+      radial-gradient(30% 16% at 24% 86%, rgba(60, 233, 127, 0.15), transparent 72%);
+    filter: blur(24px);
+  }
+  .process::after {
+    background-image: radial-gradient(circle, rgba(60, 233, 127, 0.16) 1px, transparent 1px);
+    background-size: 10px 10px;
+    -webkit-mask-image:
+      radial-gradient(34% 18% at 76% 16%, #000, transparent),
+      radial-gradient(34% 18% at 24% 39%, #000, transparent),
+      radial-gradient(34% 18% at 76% 62%, #000, transparent),
+      radial-gradient(34% 18% at 24% 86%, #000, transparent);
+    mask-image:
+      radial-gradient(34% 18% at 76% 16%, #000, transparent),
+      radial-gradient(34% 18% at 24% 39%, #000, transparent),
+      radial-gradient(34% 18% at 76% 62%, #000, transparent),
+      radial-gradient(34% 18% at 24% 86%, #000, transparent);
+  }
+  /* as figuras ficam sobre as manchas: a "chapa" delas passa a ser transparente o bastante para o
+     fundo aparecer, sem deixar de esconder o que está atrás de cada peça */
+  .stepFig {
+    --hairline-plate: #121a15;
+  }
+  .stepTrack {
+    margin-top: 56px;
+  }
+  .stepTrack::before {
+    left: calc(50% - 0.5px);
+    top: 0;
+    bottom: 0;
+  }
+  .trackLine {
+    --pad: 0px;
+    left: calc(50% - 1px);
+    top: 0;
+  }
+  /* cada ponto ganha um anel: a linha passa "por trás" dele em vez de atravessá-lo */
+  .stepDot {
+    box-shadow: 0 0 0 5px #121713, 0 0 0 6px rgba(60, 233, 127, 0.3);
+  }
+  .stepRow {
+    row-gap: 28px;
+  }
+  .step {
+    grid-template-columns: minmax(0, 1fr) 14px minmax(0, 1fr);
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: clamp(36px, 5vw, 80px);
+    min-height: 300px;
+  }
+  .stepDot {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    align-self: center;
+    margin-top: 0;
+  }
+  .stepFig {
+    display: block;
+    grid-row: 1 / -1;
+    align-self: center;
+    width: min(100%, 460px);
+  }
+  .stepBigNum {
+    grid-row: 2;
+    font-size: 84px;
+  }
+  .stepBody {
+    grid-row: 3;
+    padding-top: 14px;
+    max-width: 44ch;
+  }
+  /* etapa à esquerda (texto encostado na linha), figura à direita */
+  .step[data-side="left"] .stepBigNum,
+  .step[data-side="left"] .stepBody {
+    grid-column: 1;
+    justify-self: end;
+    text-align: right;
+  }
+  .step[data-side="left"] .stepFig {
+    grid-column: 3;
+    justify-self: start;
+  }
+  /* etapa à direita, figura à esquerda */
+  .step[data-side="right"] .stepBigNum,
+  .step[data-side="right"] .stepBody {
+    grid-column: 3;
+  }
+  .step[data-side="right"] .stepFig {
+    grid-column: 1;
+    justify-self: end;
+  }
+  .stepName {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+  }
+  .stepDesc {
+    margin-top: 12px;
+    font-size: 18px;
+    line-height: 1.65;
+  }
 }
 
 /* ARTIGO EM DESTAQUE (com respiro antes da banda verde): título numa

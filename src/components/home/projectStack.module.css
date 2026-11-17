@@ -1,0 +1,53 @@
+/* Pilha de projetos em tela cheia (ver ProjectStack.tsx). Sem `data-pinned` é uma lista comum. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.slot {
+  position: relative;
+}
+.stack[data-pinned] {
+  gap: 0;
+  /* de borda a borda: desfaz a margem lateral da seção */
+  margin-inline: calc(-1 * clamp(12px, 2.2vw, 32px));
+}
+.stack[data-pinned] .slot {
+  border-radius: 36px 36px 0 0;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  /* a folga embaixo é rolagem com o projeto parado: o seguinte só começa a subir depois dela */
+  margin-bottom: var(--folga, 0px);
+  overflow: clip;
+  transform-origin: 50% 40%;
+  will-change: transform;
+}
+/* o último não precisa de folga (não há próximo para segurar): com ela sobrava um vão vazio embaixo */
+.stack[data-pinned] .slot:last-child {
+  margin-bottom: 0;
+}
+/* o que chega sobe por cima do anterior com uma sombra na borda de cima */
+.stack[data-pinned] .slot + .slot {
+  box-shadow: 0 -34px 70px -10px rgba(0, 0, 0, 0.6);
+}
+.dim {
+  position: absolute;
+  inset: 0;
+  background: #060807;
+  pointer-events: none;
+}
+
+/* os projetos pares entram com margem: a tela toma a cor da página e o mundo do projeto fica como
+   um painel solto, abaixo do menu */
+.stack[data-pinned] .slot[data-inset] {
+  padding: calc(var(--nav-h) + 6px) clamp(16px, 2.6vw, 40px) 22px;
+  background: var(--bg);
+}
+
+/* o último projeto se desfaz no fundo da página em vez de terminar numa linha: a cor chapada atrás
+   do painel some nos últimos 200px, e o que vem depois (o fundo com granulado e os brilhos da seção
+   seguinte) aparece por baixo */
+.stack[data-pinned] .slot[data-inset]:last-child {
+  background: linear-gradient(to bottom, var(--bg) calc(100% - 200px), transparent);
+}

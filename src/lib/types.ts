@@ -72,7 +72,7 @@ export interface Localized {
 export interface ProjectShot {
   /** Como exibir: tela de desktop, tela de celular, painel (recorte com
    *  transparência), vídeo em loop ou um efeito AO VIVO da biblioteca. */
-  kind: "desktop" | "phone" | "panel" | "video" | "live";
+  kind: "desktop" | "phone" | "panel" | "video" | "live" | "demo";
   /** Caminho em /public (imagem ou vídeo). Não usado em `live`. */
   src?: string;
   /** Quadro de capa do vídeo. */

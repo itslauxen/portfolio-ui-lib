@@ -6,9 +6,21 @@ import { motion, useReducedMotion } from "motion/react";
 import { BackgroundSurface } from "@/components/backgrounds/BackgroundSurface";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { Localized, Project, ProjectShot } from "@/lib/types";
+import { GymDemo, NotchStage, NotesDemo } from "./CaseDemos";
 import s from "./projectCase.module.css";
 
 const EASE = [0.22, 0.61, 0.36, 1] as const;
+
+// Um mundo por projeto: o painel de cada vitrine tem o fundo e a cor de destaque do próprio produto
+// (o --accent local tinge tags, botões e abas sem mexer em mais nada).
+const WORLDS: Record<string, { bg: string; accent: string; ink: string }> = {
+  "gym-app": { bg: "linear-gradient(165deg, #0a1330 0%, #10225c 55%, #0a1330 100%)", accent: "#86b6ff", ink: "#08122e" },
+  mynotch: { bg: "linear-gradient(165deg, #1b1c1d 0%, #2a2c2e 55%, #17181a 100%)", accent: "#f1f5f0", ink: "#17181a" },
+  "nova-notes": { bg: "linear-gradient(165deg, #0d0a16 0%, #21123c 55%, #0d0a16 100%)", accent: "#b98bff", ink: "#150a26" },
+  "lib-componentes": { bg: "linear-gradient(165deg, #0f1512 0%, #12331f 55%, #0f1512 100%)", accent: "#3ce97f", ink: "#0e1a12" },
+};
+// a demo que dá para usar, como uma tela a mais da galeria
+const DEMO_SHOT: ProjectShot = { kind: "demo", label: { pt: "Experimente", en: "Try it" }, alt: { pt: "", en: "" } };
 
 // Vitrine de um projeto na home: cabeçalho (título, descrição, tags, links)
 // e as telas reais — grupos por versão (Web / iOS…) com uma galeria de uma
@@ -20,9 +32,29 @@ export function ProjectCase({ project }: { project: Project }) {
   const groups = project.media ?? [];
   const [gi, setGi] = useState(0);
   const [si, setSi] = useState(0);
-  const group = groups[Math.min(gi, groups.length - 1)];
+  const rawGroup = groups[Math.min(gi, groups.length - 1)];
+  // Nova Notes: a demo de escrever entra como segunda tela, logo depois do vídeo
+  // myNotch: no lugar do vídeo fica o próprio notch funcionando; a lista ao lado são as abas dele
+  const isNotch = project.id === "mynotch";
+  const [notchOpen, setNotchOpen] = useState(false);
+  const group = rawGroup && project.id === "nova-notes" && rawGroup.layout === "gallery"
+    ? { ...rawGroup, shots: [rawGroup.shots[0], DEMO_SHOT, ...rawGroup.shots.slice(1)] }
+    : rawGroup && isNotch
+      ? { ...rawGroup, shots: rawGroup.shots.filter((x) => x.kind === "panel") }
+      : rawGroup;
+  const world = WORLDS[project.id];
   const desc = lang === "en" && project.descriptionEn ? project.descriptionEn : project.description;
   const external = (url: string) => /^https?:\/\//.test(url);
+
+  const entra = (k: number) =>
+    reduced
+      ? {}
+      : {
+          initial: { opacity: 0, y: 46 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: true, margin: "0px 0px -12% 0px" },
+          transition: { duration: 0.7, ease: EASE, delay: k * 0.07 },
+        };
 
   const pickGroup = (i: number) => {
     setGi(i);
@@ -47,7 +79,8 @@ export function ProjectCase({ project }: { project: Project }) {
   }, []);
 
   return (
-    <article ref={rootRef} className={s.case} id={`project-${project.id}`} data-case="">
+    <article ref={rootRef} className={s.case} id={`project-${project.id}`} data-case=""
+      style={world ? ({ "--case-bg": world.bg, "--accent": world.accent, "--accent-ink": world.ink } as React.CSSProperties) : undefined}>
       <header className={s.head}>
         <div className={s.headText}>
           <h3 className={s.title}>
@@ -118,15 +151,24 @@ export function ProjectCase({ project }: { project: Project }) {
                 <ul
                   key={L(g.label)}
                   className={s.phones}
+                  data-demo={project.id === "gym-app" || undefined}
                   data-active={i === gi || undefined}
                   aria-hidden={i !== gi}
                 >
-                  {g.shots.map((shot) => (
-                    <li key={shot.src} className={s.phone}>
+                  {/* Gym App: o primeiro "celular" é de verdade, dá para concluir uma série */}
+                  {project.id === "gym-app" && (
+                    <motion.li className={s.phone} {...entra(0)}>
+                      <GymDemo L={L} />
+                      <span className={`${s.phoneLabel} ${s.phoneLabelOn}`}>{L(DEMO_SHOT.label)}</span>
+                    </motion.li>
+                  )}
+                  {/* as telas entram uma depois da outra quando a vitrine chega na tela */}
+                  {g.shots.map((shot, k) => (
+                    <motion.li key={shot.src} className={s.phone} {...entra(k + 1)}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={shot.src} alt={L(shot.alt)} loading="lazy" className={s.phoneImg} />
                       <span className={s.phoneLabel}>{L(shot.label)}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
               ) : null,
@@ -135,17 +177,24 @@ export function ProjectCase({ project }: { project: Project }) {
         ) : (
           <div className={s.gallery}>
             <div className={s.stage}>
-              <motion.div
-                key={`${gi}-${si}`}
-                className={s.stageInner}
-                initial={reduced ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, ease: EASE }}
-              >
-                <Shot shot={group.shots[Math.min(si, group.shots.length - 1)]} alt={L} active={near} />
-              </motion.div>
+              {isNotch ? (
+                <div className={s.stageInner}>
+                  <NotchStage L={L} tab={si} onTab={setSi} open={notchOpen} onOpen={setNotchOpen} />
+                </div>
+              ) : (
+                <motion.div
+                  key={`${gi}-${si}`}
+                  className={s.stageInner}
+                  initial={reduced ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4, ease: EASE }}
+                >
+                  <Shot shot={group.shots[Math.min(si, group.shots.length - 1)]} alt={L} active={near} en={lang === "en"} />
+                </motion.div>
+              )}
             </div>
-            <div className={s.tabs} role="tablist" aria-label={L(group.label)}>
+            <div className={s.tabs} role="tablist" aria-label={L(group.label)}
+              onPointerLeave={(e) => isNotch && e.pointerType === "mouse" && setNotchOpen(false)}>
               {group.shots.map((shot, i) => (
                 <button
                   key={L(shot.label)}
@@ -153,9 +202,9 @@ export function ProjectCase({ project }: { project: Project }) {
                   role="tab"
                   aria-selected={i === si}
                   className={`${s.tab} ${i === si ? s.tabOn : ""}`}
-                  onClick={() => setSi(i)}
+                  onClick={() => { setSi(i); if (isNotch) setNotchOpen(true); }}
                   // desktop: troca no hover do mouse; no toque continua o clique
-                  onPointerEnter={(e) => e.pointerType === "mouse" && setSi(i)}
+                  onPointerEnter={(e) => { if (e.pointerType !== "mouse") return; setSi(i); if (isNotch) setNotchOpen(true); }}
                 >
                   {L(shot.label)}
                 </button>
@@ -171,13 +220,17 @@ function Shot({
   shot,
   alt,
   active,
+  en,
 }: {
   shot: ProjectShot;
   alt: (o: Localized) => string;
   /** false = vitrine fora da tela: vídeo pausado, shader desmontado */
   active: boolean;
+  en: boolean;
 }) {
   switch (shot.kind) {
+    case "demo":
+      return <NotesDemo L={alt} en={en} />;
     case "video":
       return <LoopVideo shot={shot} label={alt(shot.alt)} active={active} />;
     case "live":

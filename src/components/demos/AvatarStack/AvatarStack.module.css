@@ -1,0 +1,215 @@
+/* Pilha de avatares (ver AvatarStack.tsx).
+   --s diâmetro do avatar · --c destaque · --bg fundo onde a pilha está · --o sobreposição */
+.root {
+  --t: 280ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  font-family: inherit;
+}
+.window {
+  position: relative;
+  display: flex;
+}
+/* a faixa: fechada mostra só os primeiros; aberta cresce e passa a rolar. É a LARGURA dela que anima,
+   então os vizinhos (o "+N", os botões, o que vier depois da pilha) deslizam junto, sozinhos */
+.strip {
+  /* folga em cima e embaixo para o contorno do selecionado e a subida do hover não serem cortados */
+  padding: 5px 0;
+  overflow: hidden;
+  transition: width var(--t);
+  scrollbar-width: none;
+  user-select: none;
+}
+.strip::-webkit-scrollbar {
+  display: none;
+}
+.root[data-open] .strip {
+  overflow-x: auto;
+  cursor: grab;
+}
+.root[data-open] .strip[data-drag] {
+  cursor: grabbing;
+}
+.row {
+  display: flex;
+  width: max-content;
+}
+.avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  /* content-box: o contorno fica por fora e o avatar visível tem sempre --s */
+  box-sizing: content-box;
+  width: var(--s);
+  height: var(--s);
+  margin: 0 0 0 calc(var(--o) * -1);
+  padding: 0;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: hsl(var(--h) 46% 34%);
+  color: #fff;
+  font: inherit;
+  font-size: calc(var(--s) * 0.36);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.16s ease, border-color 0.16s ease, opacity 0.2s ease;
+}
+/* fechada: os que ficam além do limite somem (senão um canto do próximo aparecia atrás do "+N") */
+.avatar[data-out] {
+  opacity: 0;
+  pointer-events: none;
+}
+.avatar:first-child {
+  margin-left: 0;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.avatar:hover {
+  transform: translateY(-2px);
+}
+.avatar[aria-pressed="true"] {
+  border-color: var(--c);
+}
+.avatar:focus-visible,
+.more:focus-visible,
+.arrow:focus-visible {
+  outline: 2px solid var(--c);
+  outline-offset: 2px;
+}
+
+/* "+N": encosta na pilha como mais um avatar; ao abrir encolhe até sumir, dando lugar aos botões */
+.more {
+  position: relative;
+  flex: none;
+  box-sizing: content-box;
+  width: var(--s);
+  height: var(--s);
+  margin-left: calc(var(--o) * -1);
+  padding: 0;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--c) 22%, var(--bg));
+  color: var(--c);
+  font: inherit;
+  font-size: calc(var(--s) * 0.36);
+  font-weight: 700;
+  cursor: pointer;
+  transition: width var(--t), margin var(--t), border-width var(--t), opacity 0.18s ease, transform var(--t), background 0.16s ease;
+}
+.more:hover {
+  background: color-mix(in srgb, var(--c) 32%, var(--bg));
+}
+/* ponto: há selecionados escondidos atrás do "+N" */
+.more[data-dot]::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 0 2px var(--bg);
+}
+.root[data-open] .more {
+  width: 0;
+  margin-left: 0;
+  border-width: 0;
+  opacity: 0;
+  transform: scale(0.5);
+  pointer-events: none;
+}
+
+/* setas e recolher: botões redondos só de ícone */
+.arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: color-mix(in srgb, currentColor 62%, transparent);
+  cursor: pointer;
+  transition: width var(--t), margin var(--t), opacity 0.18s ease, transform var(--t), background 0.16s ease, color 0.16s ease;
+}
+.arrow:hover {
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  color: inherit;
+}
+.arrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* a da esquerda flutua sobre o começo da faixa, sem fundo, igual à da direita: os avatares somem por
+   completo antes de chegar nela (a máscara da faixa reserva esse trecho). Não ocupa lugar, então o
+   primeiro avatar fica no mesmo ponto com a pilha aberta ou fechada */
+.left {
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  z-index: 100;
+  translate: 0 -50%;
+  opacity: 0;
+  pointer-events: none;
+}
+.left[data-show] {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* a da direita e o recolher nascem com largura zero e crescem junto com a faixa */
+.right,
+.close {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+}
+.root[data-open] .right,
+.root[data-open] .close {
+  width: 30px;
+  transform: none;
+}
+.root[data-open] .close,
+.root[data-open] .right[data-show] {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* limpar seleção, à esquerda: o lugar dele fica sempre reservado e ele só aparece e some (sem mudar
+   de largura), para a pilha não andar quando a seleção passa de zero para um */
+.clear {
+  width: 30px;
+  margin-right: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.6);
+}
+.clear[data-show] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip,
+  .more,
+  .arrow,
+  .avatar {
+    transition: none;
+  }
+}

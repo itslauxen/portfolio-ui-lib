@@ -8,10 +8,11 @@ import { BackgroundSurface } from "@/components/backgrounds/BackgroundSurface";
 import { ContactModal } from "@/components/ContactModal/ContactModal";
 import LogoLoop from "@/components/demos/LogoLoop/LogoLoop";
 import { HeroChip } from "@/components/home/HeroChip";
-import { ProjectCase } from "@/components/home/ProjectCase";
-import { ServicesShowcase } from "@/components/home/ServicesShowcase";
+import { LiveWords } from "@/components/home/LiveWords";
+import { ProjectStack } from "@/components/home/ProjectStack";
 import { Reveal } from "@/components/ui/Reveal";
 import { TechIcon } from "@/components/ui/TechIcon";
+import { Exploded, Format, Loupe, Slow } from "@lucasmarkes/hairline/react";
 import { useI18n } from "@/i18n/I18nProvider";
 import { experienceLabel } from "@/lib/experience";
 import { profile, skills } from "@/data/profile";
@@ -19,6 +20,10 @@ import { projects } from "@/data/projects";
 import s from "./page.module.css";
 
 const EASE = [0.22, 0.61, 0.36, 1] as const;
+
+// A palavra de destaque do título é um efeito do lab rodando dentro das letras (Onda de Plasma).
+// Cores claras: a letra precisa continuar legível.
+const TITLE_FX = { id: "plasmawave", params: { color1: "#eafff3", color2: "#3ce97f" } };
 
 // Fundo do hero: Grainient da própria biblioteca (/biblioteca/grainient),
 // tematizado na paleta verde-noite do site. Mude aqui pra reestilizar.
@@ -60,11 +65,13 @@ const SKILL_EN: Record<string, string> = {
 const WALL_SIZES = [48, 36, 40, 36, 48, 36, 40, 36] as const;
 
 // Passos do processo ("Como eu trabalho") — sequência real, números fazem sentido.
+// Cada etapa tem, do lado oposto, uma figura do Hairline que conversa com ela: a lupa da descoberta,
+// a janela em camadas do protótipo, o formatador da construção e a esteira da entrega.
 const STEPS = [
-  { t: "home.step1t", d: "home.step1d" },
-  { t: "home.step2t", d: "home.step2d" },
-  { t: "home.step3t", d: "home.step3d" },
-  { t: "home.step4t", d: "home.step4d" },
+  { t: "home.step1t", d: "home.step1d", Fig: Loupe },
+  { t: "home.step2t", d: "home.step2d", Fig: Exploded },
+  { t: "home.step3t", d: "home.step3d", Fig: Format },
+  { t: "home.step4t", d: "home.step4d", Fig: Slow },
 ] as const;
 
 // Marquee de stack: logos monocromáticas cinza.
@@ -154,10 +161,8 @@ export default function HomePage() {
   });
   // Mecânica estilo Stitch: o painel SOBE (y) enquanto aparece, com molas
   // por cima dos valores crus pra ter inércia em vez do 1:1 travado.
-  const rawY = useTransform(scrollYProgress, [0, 1], [110, 0]);
   const rawOpacity = useTransform(scrollYProgress, [0, 0.45], [0, 1]);
   const spring = { stiffness: 90, damping: 24, mass: 0.6 };
-  const panelY = useSpring(rawY, spring);
   const panelOpacity = useSpring(rawOpacity, spring);
 
   // "Como eu trabalho": o trilho vertical se desenha conforme a lista
@@ -165,7 +170,8 @@ export default function HomePage() {
   const processRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: processProgress } = useScroll({
     target: processRef,
-    offset: ["start 0.85", "end 0.6"],
+    // a ponta de luz acompanha o meio da tela (antes ficava entre 60% e 85% da altura, lá embaixo)
+    offset: ["start 0.5", "end 0.5"],
   });
   const trackScale = useSpring(processProgress, { stiffness: 120, damping: 28, mass: 0.5 });
 
@@ -194,7 +200,10 @@ export default function HomePage() {
           pra o vidro do painel ter o que desfocar (uma instância só). */}
       <div className={s.stage}>
       <div className={s.heroBg} aria-hidden="true">
-        <BackgroundSurface effectId="grainient" interactive={false} params={HERO_GRAINIENT} />
+        {/* meia resolução (ver .heroBgLow): é um degradê suave em tela cheia, não precisa de 2× */}
+        <div className={s.heroBgLow}>
+          <BackgroundSurface effectId="grainient" interactive={false} params={HERO_GRAINIENT} />
+        </div>
         <div className={s.heroBgBlend}>
           <BackgroundSurface effectId="dither" interactive={false} params={HERO_DITHER} />
         </div>
@@ -219,7 +228,7 @@ export default function HomePage() {
               {t("home.titleLine1")}
               <br />
               {t("home.t2pre")}
-              <span className={s.hl}>{t("home.t2hl")}</span>
+              <LiveWords text={t("home.t2hl")} effectId={TITLE_FX.id} params={TITLE_FX.params} />
               {t("home.t2post")}
             </motion.h1>
             <motion.div className={s.heroAsset} {...rise(0.3)}>
@@ -253,21 +262,18 @@ export default function HomePage() {
         ref={projectsRef}
         className={s.projects}
         id="projects"
-        style={reduced ? undefined : { opacity: panelOpacity, y: panelY }}
+        // só a opacidade: sem o deslocamento, o título fica onde as trilhas do chip chegam
+        style={reduced ? undefined : { opacity: panelOpacity }}
       >
         <div className="wrap">
           <Reveal>
             <h2 className={s.sectionTitle}>{t("home.worksTitle")}</h2>
           </Reveal>
-          {/* uma vitrine grande por projeto: telas reais (web, celular,
-              app nativo, efeitos ao vivo) em vez de cards pequenos */}
-          <div className={s.projectList}>
-            {featured.map((p) => (
-              <Reveal key={p.id}>
-                <ProjectCase project={p} />
-              </Reveal>
-            ))}
-          </div>
+        </div>
+        {/* uma vitrine grande por projeto, cada uma no seu próprio painel e na cor do produto:
+            telas reais (web, celular, app nativo, efeitos ao vivo) em vez de cards pequenos */}
+        <div className={s.projectList}>
+          <ProjectStack items={featured} />
         </div>
       </motion.section>
       </div>
@@ -293,24 +299,33 @@ export default function HomePage() {
         />
       </section>
 
-      {/* O QUE EU CONSTRUO (design 1b): lista + micro-interface do serviço ativo */}
-      <section className="wrap">
-        <div className={s.services}>
-          <Reveal>
-            <ServicesShowcase />
-          </Reveal>
-        </div>
-      </section>
-
       {/* O QUE EU DOMINO: painel 3a — numeral fantasma, descrição por
           frente, barrinha nos botões e auto-rotação até o primeiro clique */}
       <section className="wrap">
         <div className={s.skills}>
-          <Reveal>
-            <h2 className={s.sectionTitle}>{t("home.skillsTitle")}</h2>
-          </Reveal>
+          <h2 className="sr-only">{t("home.skillsTitle")}</h2>
           <Reveal delay={0.08}>
             <div className={s.skillsPanel}>
+              {/* desktop: as frentes numa coluna à esquerda, cada uma um botão grande; a escolhida
+                  mostra à direita a descrição e o muro de tecnologias */}
+              <div className={s.catNav} role="tablist" aria-label={t("home.skillsTitle")}>
+                {SKILL_CARDS.map((c, i) => (
+                  <button
+                    key={c.cat}
+                    type="button"
+                    role="tab"
+                    aria-selected={i === activeSkill}
+                    className={s.catBtn}
+                    onClick={() => {
+                      setActiveSkill(i);
+                      setSkillAuto(false);
+                    }}
+                  >
+                    <span className={s.catNum}>{String(i + 1).padStart(2, "0")}</span>
+                    {t(c.key)}
+                  </button>
+                ))}
+              </div>
               {/* pilha de slides no MESMO grid cell: o container fica com a
                   altura do slide mais alto — trocar de página não empurra o
                   resto. Arrastável no eixo X (swipe) via Motion. */}
@@ -407,12 +422,13 @@ export default function HomePage() {
             <motion.span
               className={s.trackLine}
               aria-hidden="true"
-              style={reduced ? undefined : { scaleY: trackScale }}
+              // --p (0 a 1): quanto da trilha já foi percorrido; o CSS transforma em altura
+              style={{ "--p": reduced ? 1 : trackScale } as unknown as React.CSSProperties}
             />
             <div className={s.stepRow}>
               {STEPS.map((st, i) => (
                 <Reveal key={st.t} delay={i * 0.08}>
-                  <div className={s.step}>
+                  <div className={s.step} data-side={i % 2 ? "right" : "left"}>
                     <span
                       className={`${s.stepDot} ${[s.dotA, s.dotB, s.dotC, s.dotD][i]}`}
                       aria-hidden="true"
@@ -421,6 +437,9 @@ export default function HomePage() {
                     <div className={s.stepBody}>
                       <div className={s.stepName}>{t(st.t)}</div>
                       <p className={s.stepDesc}>{t(st.d)}</p>
+                    </div>
+                    <div className={s.stepFig}>
+                      <st.Fig theme="dark" play aria-hidden="true" />
                     </div>
                   </div>
                 </Reveal>

@@ -5,11 +5,11 @@
 .studio {
   display: grid;
   grid-template-columns: 288px minmax(0, 1fr);
-  gap: var(--space-5);
+  /* margens e cantos enxutos, sem largura máxima: o palco do efeito fica com o máximo de tela */
+  gap: 12px;
   width: 100%;
-  max-width: var(--maxw);
   margin: 0 auto;
-  padding: var(--space-4) clamp(20px, 4vw, 40px);
+  padding: 8px clamp(12px, 1.4vw, 20px) 12px;
   height: calc(100vh - var(--nav-h));
   height: calc(100dvh - var(--nav-h));
   animation: studioIn 0.5s var(--ease) both;
@@ -30,7 +30,7 @@
   gap: var(--space-3);
   min-height: 0;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 14px;
   background: var(--surface);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -44,6 +44,34 @@
 }
 .sideHead :global(label) {
   width: 100%;
+}
+/* chips de filtro por tipo, embaixo da busca */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.chip {
+  padding: 3px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(241, 245, 240, 0.06);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.chip:hover {
+  background: rgba(241, 245, 240, 0.11);
+  color: var(--text);
+}
+/* o escolhido: um tom do verde no fundo e o texto em verde, sem preencher */
+.chip[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 .count {
   font-size: var(--fs-xs);
@@ -70,9 +98,6 @@
 }
 /* Rótulo de seção: barrinha em gradiente + texto normal. */
 .groupLabel {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -80,7 +105,6 @@
   font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--muted);
-  background: linear-gradient(to bottom, var(--bg) 72%, transparent);
 }
 .groupLabel::before {
   content: "";
@@ -96,8 +120,8 @@
   gap: 10px;
   width: 100%;
   text-align: left;
-  padding: 8px 10px;
-  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  border-radius: 7px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-dim);
@@ -151,7 +175,7 @@
 .main {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 12px;
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
@@ -162,8 +186,8 @@
 .stage {
   position: relative;
   flex: none;
-  height: clamp(340px, 56vh, 640px);
-  border-radius: var(--radius-lg);
+  height: clamp(340px, 64vh, 820px);
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--border-strong);
   background: var(--bg);
@@ -219,9 +243,9 @@
 
 .panel {
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 14px;
   background: var(--surface);
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  padding: 12px 14px 14px;
 }
 .panelHead {
   display: flex;
@@ -229,7 +253,7 @@
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: var(--space-4);
+  margin-bottom: 10px;
 }
 .panelTitle {
   font-size: var(--fs-sm);
@@ -284,4 +308,536 @@
     min-height: 0;
     padding-right: 0;
   }
+}
+
+/* Controles compactos, na linha de um editor (Claude, VS Code): baixos, cantos de 6–7px, texto de
+   12–13px, sem pílulas nem elevação no hover. Vale só dentro do estúdio; os botões do resto do site
+   não mudam. */
+.sidebar {
+  padding: 10px;
+  gap: 8px;
+}
+.sideHead {
+  gap: 7px;
+}
+.sideHead label {
+  padding: 5px 9px;
+  border-radius: 7px;
+  gap: 7px;
+}
+.sideHead label:focus-within {
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.sideHead input {
+  width: 100%;
+  max-width: none;
+  font-size: 13px;
+}
+.count {
+  font-size: 12px;
+}
+.item .itemName {
+  font-size: 13px;
+}
+.item .itemCat {
+  font-size: 11.5px;
+}
+.stageActions button {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+}
+.stageActions button svg {
+  width: 14px;
+  height: 14px;
+}
+.panelActions {
+  gap: 6px;
+}
+.panelActions button {
+  padding: 5px 11px;
+  border-radius: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  gap: 6px;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.panelActions button svg {
+  width: 13px;
+  height: 13px;
+}
+.stageActions button:hover,
+.panelActions button:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* prévia flutuante: o efeito do item sob o mouse, num cartão ao lado da lista */
+.peek {
+  position: fixed;
+  z-index: 60;
+  width: 384px;
+  height: 240px;
+  border-radius: 12px;
+  /* preto puro: efeitos transparentes (Onda de Plasma, raios) precisam do fundo escuro para aparecer */
+  background: #000;
+  overflow: hidden;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(241, 245, 240, 0.1), 0 24px 60px -16px rgba(0, 0, 0, 0.75);
+  animation: peekIn 0.16s var(--ease) both;
+}
+@keyframes peekIn {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+}
+.peekStage,
+.peekHalf {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.peekStage {
+  width: 100%;
+  height: 100%;
+}
+.peekHalf {
+  width: 200%;
+  height: 200%;
+  transform: scale(0.5);
+  transform-origin: 0 0;
+}
+.peekStage > *,
+.peekHalf > * {
+  width: 100% !important;
+  height: 100% !important;
+}
+.peekName {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+@media (max-width: 900px) {
+  .peek {
+    display: none;
+  }
+}
+
+/* Lista lateral sem moldura: sai o cartão (borda, fundo, desfoque) e a lista fica solta na página,
+   como a árvore de arquivos de um editor. Cada item é uma linha só (nome, e o tipo apagado à direita);
+   o escolhido tem só um fundo leve e uma barra verde à esquerda. */
+.studio {
+  grid-template-columns: 248px minmax(0, 1fr);
+  gap: 18px;
+}
+.sidebar {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding: 4px 0 0;
+  gap: 10px;
+}
+.sideHead label {
+  border: 0;
+  background: rgba(241, 245, 240, 0.06);
+}
+.list {
+  margin: 0 -6px 0 0;
+  padding: 0 6px 16px 0;
+  gap: 14px;
+  /* some no fim, em vez de cortar na borda */
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(241, 245, 240, 0.14) transparent;
+}
+.group {
+  gap: 1px;
+}
+.groupLabel {
+  padding: 6px 10px 5px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--muted-2);
+}
+.groupLabel::before {
+  display: none;
+}
+.item {
+  position: relative;
+  gap: 8px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted);
+}
+.item:hover {
+  background: rgba(241, 245, 240, 0.05);
+  color: var(--text);
+}
+.itemActive,
+.itemActive:hover {
+  background: rgba(241, 245, 240, 0.08);
+  color: var(--text);
+}
+.itemActive::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 7px;
+  bottom: 7px;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+.itemText {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+}
+.item .itemName {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+}
+.itemActive .itemName {
+  font-weight: 700;
+}
+/* o tipo só aparece no item sob o mouse ou escolhido, para a lista ficar limpa */
+.item .itemCat {
+  flex: none;
+  font-size: 11px;
+  color: var(--muted-2);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.item:hover .itemCat,
+.itemActive .itemCat {
+  opacity: 1;
+}
+/* "GPU" vira um ponto verde discreto */
+.gpu {
+  width: 5px;
+  height: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.55;
+  font-size: 0;
+}
+@media (max-width: 900px) {
+  .studio {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Lista lateral no jeito do React Bits: um cartão com o que está na tela, as abas de ícone
+   para filtrar, a busca e a lista rolando por baixo de um degradê ---- */
+.studio {
+  grid-template-columns: 272px minmax(0, 1fr);
+  gap: 16px;
+}
+.sidebar {
+  position: relative;
+  padding: 14px 12px 0;
+  gap: 0;
+  border-radius: 20px;
+  background: rgba(241, 245, 240, 0.025);
+  box-shadow: inset 0 0 0 1px rgba(241, 245, 240, 0.07);
+  overflow: hidden;
+}
+.sideHead {
+  position: relative;
+  z-index: 2;
+  gap: 8px;
+}
+/* a lista some atrás da busca num degradê, em vez de bater nela */
+.sideHead::after {
+  content: "";
+  position: absolute;
+  left: -12px;
+  right: -12px;
+  top: 100%;
+  height: 34px;
+  background: linear-gradient(to bottom, #141815 0%, rgba(20, 24, 21, 0.85) 35%, rgba(20, 24, 21, 0));
+  pointer-events: none;
+}
+.viewing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(241, 245, 240, 0.06);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.viewing:hover,
+.viewing[aria-current="page"] {
+  background: rgba(241, 245, 240, 0.09);
+  color: var(--text);
+}
+.viewing svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(241, 245, 240, 0.09);
+}
+.tabIcon {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.tabIcon:hover {
+  color: var(--text);
+}
+.tabIcon[aria-pressed="true"] {
+  background: rgba(241, 245, 240, 0.1);
+  color: var(--text);
+}
+.sideHead .search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 11px;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(241, 245, 240, 0.09);
+  color: var(--muted);
+}
+.sideHead .search:focus-within {
+  box-shadow: inset 0 0 0 1px var(--accent-line);
+}
+.sideHead .search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.list {
+  margin: 0 -8px 0 0;
+  padding: 22px 8px 20px 0;
+}
+
+/* ---- a grade de fotos (tela "todos os componentes") ---- */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(241, 245, 240, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.card:hover {
+  background: rgba(241, 245, 240, 0.08);
+  transform: translateY(-2px);
+}
+.shot {
+  display: block;
+  aspect-ratio: 16 / 10;
+  background: #000;
+  overflow: hidden;
+}
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease-out-expo);
+}
+.card:hover .shot img {
+  transform: scale(1.04);
+}
+.cardMeta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px 10px;
+}
+.cardName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.cardCat {
+  flex: none;
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (max-width: 900px) {
+  .studio {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card:hover,
+  .card:hover .shot img {
+    transform: none;
+  }
+}
+
+/* Sem o cartão em volta da lista lateral: fica só o conteúdo, solto na página. A lista some atrás da
+   busca (e no fim) por máscara, sem pintar cor nenhuma por cima, então nada é cortado. */
+.sidebar {
+  padding: 6px 0 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  overflow: visible;
+}
+.sideHead::after {
+  display: none;
+}
+.list {
+  padding-top: 26px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 30px, #000 calc(100% - 36px), transparent);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 30px, #000 calc(100% - 36px), transparent);
+}
+
+/* topo da lista mais fino: menos altura e menos padding nos três blocos */
+.sideHead {
+  gap: 6px;
+}
+.viewing {
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  font-size: 13px;
+}
+.viewing svg {
+  width: 14px;
+  height: 14px;
+}
+.tabs {
+  gap: 1px;
+  padding: 2px;
+  border-radius: 9px;
+}
+.tabIcon {
+  position: relative;
+  height: 26px;
+  border-radius: 7px;
+}
+.tabIcon svg {
+  width: 16px;
+  height: 16px;
+}
+/* o fundo do ativo passou para o .tabOn, que desliza entre as abas */
+.tabIcon[aria-pressed="true"] {
+  background: transparent;
+}
+.tabOn {
+  position: absolute;
+  inset: 0;
+  border-radius: 7px;
+  background: rgba(241, 245, 240, 0.1);
+}
+.tabGlyph {
+  position: relative;
+  display: grid;
+}
+.sideHead .search {
+  gap: 7px;
+  padding: 5px 9px;
+  border-radius: 9px;
+}
+.sideHead .search svg {
+  width: 13px;
+  height: 13px;
+}
+.sideHead .search input {
+  font-size: 12.5px;
+}
+
+/* o efeito rodando por cima da foto do cartão, enquanto o mouse está nele */
+.shot {
+  position: relative;
+}
+.live,
+.liveHalf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  background: #000;
+  pointer-events: none;
+  animation: liveIn 0.25s var(--ease) 0.12s both;
+}
+@keyframes liveIn {
+  from {
+    opacity: 0;
+  }
+}
+.live {
+  width: 100%;
+  height: 100%;
+}
+/* componentes: desenhados numa área ~3,5× maior e reduzidos, perto do enquadramento das fotos
+   (tiradas numa janela de 960px), para a troca da foto pelo efeito não dar um salto de tamanho */
+.liveHalf {
+  width: 350%;
+  height: 350%;
+  transform: scale(0.2857);
+  transform-origin: 0 0;
+}
+.live > *,
+.liveHalf > * {
+  width: 100% !important;
+  height: 100% !important;
 }

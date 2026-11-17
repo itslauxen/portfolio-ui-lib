@@ -1,0 +1,85 @@
+"use client";
+
+// Spinner de arco: um traço de ponta redonda que gira enquanto estica e encolhe, sobre um trilho
+// apagado. SVG com animação só em CSS.
+import type { CSSProperties } from "react";
+import styles from "./ArcSpinner.module.css";
+
+interface ArcSpinnerProps {
+  /** Lado do spinner, em px. */
+  size?: number;
+  /** Espessura do traço, em px. */
+  stroke?: number;
+  color?: string;
+  /** Duração de uma volta, em segundos. */
+  speed?: number;
+  /** Mostrar o trilho apagado por baixo. */
+  track?: boolean;
+  label?: string;
+  className?: string;
+}
+
+const ArcSpinner = ({ size = 64, stroke = 5, color = "#3ce97f", speed = 1.1, track = true, label = "Carregando", className = "" }: ArcSpinnerProps) => {
+  const r = 50 - (stroke / size) * 50;
+  return (
+    <svg className={`${styles.svg} ${className}`} role="status" aria-label={label} width={size} height={size} viewBox="0 0 100 100"
+      style={{ "--c": color, "--t": `${speed}s`, "--w": (stroke / size) * 100 } as CSSProperties}>
+      {track && <circle className={styles.track} cx="50" cy="50" r={r} />}
+      <circle className={styles.arc} cx="50" cy="50" r={r} pathLength={100} />
+    </svg>
+  );
+};
+
+export default ArcSpinner;
+
+
+/* ============================================================
+   ArcSpinner.module.css
+   ============================================================ */
+.svg {
+  display: inline-block;
+  animation: gira var(--t) linear infinite;
+}
+.track,
+.arc {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: var(--w);
+}
+.track {
+  opacity: 0.16;
+}
+.arc {
+  stroke-linecap: round;
+  transform-origin: 50% 50%;
+  animation: estica calc(var(--t) * 1.5) ease-in-out infinite;
+}
+@keyframes gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* o traço cresce de 8% para 70% da volta e encolhe de novo, "andando" pelo trilho */
+@keyframes estica {
+  0% {
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 70 30;
+    stroke-dashoffset: -18;
+  }
+  100% {
+    stroke-dasharray: 8 92;
+    stroke-dashoffset: -100;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .svg {
+    animation-duration: calc(var(--t) * 4);
+  }
+  .arc {
+    animation: none;
+    stroke-dasharray: 30 70;
+  }
+}

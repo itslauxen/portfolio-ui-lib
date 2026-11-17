@@ -1,0 +1,28 @@
+.bars {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--s) / 8);
+  height: var(--s);
+}
+.bars > span {
+  width: calc(var(--s) / 7);
+  height: 100%;
+  border-radius: 999px;
+  background: var(--c);
+  animation: estica var(--t) ease-in-out infinite;
+}
+@keyframes estica {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bars > span {
+    animation-duration: calc(var(--t) * 2.5);
+  }
+}

@@ -67,6 +67,58 @@ export const DEMO_EFFECTS: DemoEffect[] = [
     }),
   },
 
+  // ---- HairlineCore (núcleo em linha, estilo Hairline) -----------------------
+  {
+    id: "hairlinecore",
+    name: "Núcleo Hairline",
+    cat: "Figuras",
+    desc: "Figura em linha no estilo Hairline: um núcleo flutuando numa gaiola de três anéis que giram sozinhos, com um olho que acompanha o cursor.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "componentes",
+    component: "HairlineCore",
+    params: [
+      { key: "energy", label: "Energia dos anéis", type: "range", min: 0, max: 1, step: 0.01, default: 0.2 },
+      { key: "size", label: "Tamanho", type: "range", min: 160, max: 640, step: 10, default: 420 },
+      { key: "color", label: "Cor do destaque", type: "color", default: "#3ce97f" },
+    ],
+    propsFrom: (v) => ({
+      energy: n(v.energy, 0.2),
+      size: n(v.size, 420),
+      color: s(v.color, "#3ce97f"),
+    }),
+  },
+
+  // ---- AvatarStack (pilha de avatares que abre numa faixa) -------------------
+  {
+    id: "avatarstack",
+    name: "Pilha de Avatares",
+    cat: "Navegação",
+    desc: "Avatares sobrepostos com um +N que abre numa faixa rolável (setas, arrasto, rodinha). Clique seleciona; ao recolher, os selecionados escondidos vêm para a frente.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "componentes",
+    component: "AvatarStack",
+    params: [
+      { key: "color", label: "Cor do destaque", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho do avatar", type: "range", min: 24, max: 64, step: 1, default: 40 },
+      { key: "max", label: "Visíveis (fechada)", type: "range", min: 2, max: 8, step: 1, default: 5 },
+      { key: "visible", label: "Visíveis (aberta)", type: "range", min: 4, max: 12, step: 1, default: 8 },
+      { key: "surface", label: "Cor do contorno (fundo)", type: "color", default: "#101311" },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 40),
+      max: n(v.max, 5),
+      visible: n(v.visible, 8),
+      surface: s(v.surface, "#101311"),
+      // o palco centraliza a demo: reserva a largura aberta para o botão não sair de baixo do mouse
+      reserve: true,
+    }),
+  },
+
   // ---- FluidGlass (lente de vidro 3D) ---------------------------------------
   {
     id: "fluidglass",
@@ -1199,6 +1251,137 @@ export const DEMO_EFFECTS: DemoEffect[] = [
       direction: s(v.direction, "left") as "left" | "right",
       yoyo: b(v.yoyo, false),
       pauseOnHover: b(v.pauseOnHover, false),
+    }),
+  },
+
+  // ==========================================================================
+  // Seção: Loaders
+  // ==========================================================================
+
+  // ---- BarsLoader (barras de equalizador) -----------------------------------
+  {
+    id: "barsloader",
+    name: "Barras",
+    cat: "Loaders",
+    desc: "Barras que esticam e encolhem em sequência, como um equalizador. Só CSS.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "BarsLoader",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho", type: "range", min: 16, max: 160, step: 2, default: 72 },
+      { key: "bars", label: "Qtd. de barras", type: "range", min: 3, max: 12, step: 1, default: 5 },
+      { key: "speed", label: "Duração do ciclo (s)", type: "range", min: 0.4, max: 3, step: 0.05, default: 1.2 },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 72),
+      bars: n(v.bars, 5),
+      speed: n(v.speed, 1.2),
+    }),
+  },
+
+  // ---- GooeyDots ----
+  {
+    id: "gooeydots",
+    name: "Pontos Gooey",
+    cat: "Loaders",
+    desc: "Uma gota corre de um lado ao outro e se funde com os pontos por onde passa, como líquido.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeyDots",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho do ponto", type: "range", min: 8, max: 60, step: 1, default: 26 },
+      { key: "dots", label: "Qtd. de pontos", type: "range", min: 2, max: 7, step: 1, default: 4 },
+      { key: "speed", label: "Duração da ida (s)", type: "range", min: 0.5, max: 4, step: 0.05, default: 1.4 },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 26),
+      dots: n(v.dots, 4),
+      speed: n(v.speed, 1.4),
+    }),
+  },
+
+  // ---- GooeyOrbit ----
+  {
+    id: "gooeyorbit",
+    name: "Órbita Gooey",
+    cat: "Loaders",
+    desc: "Gotas orbitam um núcleo em velocidades diferentes e se fundem com ele quando se cruzam.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeyOrbit",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho", type: "range", min: 32, max: 240, step: 2, default: 120 },
+      { key: "drops", label: "Qtd. de gotas", type: "range", min: 1, max: 6, step: 1, default: 3 },
+      { key: "speed", label: "Duração da volta (s)", type: "range", min: 0.5, max: 5, step: 0.05, default: 1.6 },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 120),
+      drops: n(v.drops, 3),
+      speed: n(v.speed, 1.6),
+    }),
+  },
+
+  // ---- GooeySplit ----
+  {
+    id: "gooeysplit",
+    name: "Divisão Gooey",
+    cat: "Loaders",
+    desc: "Uma gota se estica, parte em duas e volta a se fundir, girando devagar.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeySplit",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho", type: "range", min: 32, max: 240, step: 2, default: 120 },
+      { key: "speed", label: "Duração do ciclo (s)", type: "range", min: 0.5, max: 4, step: 0.05, default: 1.5 },
+      { key: "rotate", label: "Girar", type: "bool", default: true },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 120),
+      speed: n(v.speed, 1.5),
+      rotate: b(v.rotate, true),
+    }),
+  },
+
+  // ---- ArcSpinner ----
+  {
+    id: "arcspinner",
+    name: "Spinner de Arco",
+    cat: "Loaders",
+    desc: "Um traço de ponta redonda que gira enquanto estica e encolhe, sobre um trilho apagado.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "ArcSpinner",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho", type: "range", min: 16, max: 200, step: 2, default: 88 },
+      { key: "stroke", label: "Espessura", type: "range", min: 1, max: 20, step: 0.5, default: 7 },
+      { key: "speed", label: "Duração da volta (s)", type: "range", min: 0.4, max: 3, step: 0.05, default: 1.1 },
+      { key: "track", label: "Trilho", type: "bool", default: true },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 88),
+      stroke: n(v.stroke, 7),
+      speed: n(v.speed, 1.1),
+      track: b(v.track, true),
     }),
   },
 ];

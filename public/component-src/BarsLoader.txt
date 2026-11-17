@@ -1,0 +1,67 @@
+"use client";
+
+// Loader de barras: barras que esticam e encolhem em sequência, como um equalizador.
+// Adaptado do "Bars" do aicssanimations.com. Só CSS: nenhuma animação em JavaScript.
+import type { CSSProperties } from "react";
+import styles from "./BarsLoader.module.css";
+
+interface BarsLoaderProps {
+  /** Altura do loader, em px. */
+  size?: number;
+  /** Quantidade de barras. */
+  bars?: number;
+  color?: string;
+  /** Duração de um ciclo, em segundos. */
+  speed?: number;
+  /** Texto para leitores de tela. */
+  label?: string;
+  className?: string;
+}
+
+const BarsLoader = ({ size = 56, bars = 5, color = "#3ce97f", speed = 1.2, label = "Carregando", className = "" }: BarsLoaderProps) => (
+  <span
+    className={`${styles.bars} ${className}`}
+    role="status"
+    aria-label={label}
+    style={{ "--s": `${size}px`, "--c": color, "--t": `${speed}s` } as CSSProperties}
+  >
+    {Array.from({ length: bars }, (_, i) => (
+      <span key={i} style={{ animationDelay: `${-speed + (i * speed) / 12}s` }} />
+    ))}
+  </span>
+);
+
+export default BarsLoader;
+
+
+/* ============================================================
+   BarsLoader.module.css
+   ============================================================ */
+.bars {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--s) / 8);
+  height: var(--s);
+}
+.bars > span {
+  width: calc(var(--s) / 7);
+  height: 100%;
+  border-radius: 999px;
+  background: var(--c);
+  animation: estica var(--t) ease-in-out infinite;
+}
+@keyframes estica {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bars > span {
+    animation-duration: calc(var(--t) * 2.5);
+  }
+}

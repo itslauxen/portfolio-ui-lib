@@ -1,0 +1,35 @@
+/* Palavra do título feita de um efeito do lab (ver LiveWords.tsx). */
+.word {
+  position: relative;
+  color: var(--accent);
+}
+/* com a camada viva por cima, o texto de verdade fica só para leitores de tela e seleção */
+.word[data-live] {
+  color: transparent;
+}
+.layer {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  /* base verde: o efeito soma luz por cima (screen), então a letra nunca fica mais escura que isto */
+  background: #27c56c;
+  pointer-events: none;
+}
+.fx {
+  position: absolute;
+  inset: -20% -4%;
+  mix-blend-mode: screen;
+}
+/* meia resolução: o efeito é desenhado numa área com metade da largura e da altura e ampliado 2×.
+   Dentro das letras a diferença não se vê, e são 4× menos pixels por quadro. */
+.fx > * {
+  position: absolute !important;
+  inset: 0 auto auto 0 !important;
+  width: 50% !important;
+  height: 50% !important;
+  transform: scale(2);
+  transform-origin: 0 0;
+}
+.defs {
+  position: absolute;
+}

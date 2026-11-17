@@ -45,18 +45,17 @@ export function BackgroundControls({ eff, values, onChange, layout = "list" }: P
         }
         if (p.type === "color") {
           return (
-            <div key={p.key} className={`${styles.ctrl} ${styles.ctrlRow}`}>
+            // o cartão inteiro é o rótulo do campo: clicar em qualquer ponto dele abre o seletor de cor
+            <label key={p.key} className={`${styles.ctrl} ${styles.ctrlColor}`}>
+              <input
+                type="color"
+                className={styles.color}
+                value={String(values[p.key])}
+                onChange={(e) => onChange(p.key, e.target.value)}
+              />
               <span className={styles.labText}>{p.label}</span>
-              <div className={styles.swatch}>
-                <input
-                  type="color"
-                  className={styles.color}
-                  value={String(values[p.key])}
-                  onChange={(e) => onChange(p.key, e.target.value)}
-                />
-                <span className={styles.hex}>{String(values[p.key])}</span>
-              </div>
-            </div>
+              <span className={styles.hex}>{String(values[p.key])}</span>
+            </label>
           );
         }
         if (p.type === "select") {

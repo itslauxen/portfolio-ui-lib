@@ -28,6 +28,19 @@
   transition: transform 0.35s var(--ease);
 }
 
+/* sombra e brilho da placa como um degradê pintado atrás dela (antes eram dois drop-shadow na
+   própria placa, refeitos a cada quadro por causa dos pulsos que se movem por cima) */
+.tilt::before {
+  content: "";
+  position: absolute;
+  inset: 4% -8% -16% -8%;
+  background:
+    radial-gradient(closest-side, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3) 62%, transparent),
+    radial-gradient(closest-side, rgba(78, 240, 140, 0.16), transparent 82%);
+  transform: translateY(26px) translateZ(-2px);
+  pointer-events: none;
+}
+
 .layer {
   position: absolute;
   inset: 0;
@@ -49,7 +62,6 @@
   fill: rgba(11, 16, 12, 0.9);
   stroke: rgba(78, 240, 140, 0.32);
   stroke-width: 1.2;
-  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 26px rgba(78, 240, 140, 0.14));
 }
 .hole {
   fill: rgba(16, 19, 17, 0.9);
@@ -65,11 +77,12 @@
 
 /* Pulso: traço curto num ciclo de dash maior que qualquer trilha. */
 .pulse {
-  stroke: var(--accent);
-  stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 14 420;
-  filter: drop-shadow(0 0 5px rgba(78, 240, 140, 0.8));
+  /* sem drop-shadow: eram 19 filtros recalculados a cada quadro (os pulsos se movem), e com o chip
+     grande isso derrubava o hero para ~45 quadros por segundo. O brilho vem do traço mais claro e largo. */
+  stroke: #9dffc6;
+  stroke-width: 2.4;
   animation-name: run;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
@@ -84,24 +97,22 @@
   fill: rgba(78, 240, 140, 0.45);
 }
 
-/* Lente de derretimento: desfoca o que está sob o círculo do cursor. */
+/* Lente de derretimento: desfoca o que está sob o círculo do cursor.
+   A lente É o círculo (300px, preso ao cursor), não uma camada do tamanho do chip com máscara: com a
+   camada inteira o navegador redesfocava a área toda do chip a cada quadro do shader de fundo, e o
+   hero caía de 60 para ~42 quadros por segundo. Visualmente é o mesmo círculo de antes. */
 .meltLens {
   position: absolute;
-  inset: 0;
+  left: var(--mx, -30%);
+  top: var(--my, -30%);
+  width: 300px;
+  height: 300px;
+  translate: -50% -50%;
+  border-radius: 50%;
   -webkit-backdrop-filter: blur(9px) saturate(1.15);
   backdrop-filter: blur(9px) saturate(1.15);
-  -webkit-mask-image: radial-gradient(
-    circle 150px at var(--mx, -30%) var(--my, -30%),
-    black 0%,
-    black 30%,
-    transparent 70%
-  );
-  mask-image: radial-gradient(
-    circle 150px at var(--mx, -30%) var(--my, -30%),
-    black 0%,
-    black 30%,
-    transparent 70%
-  );
+  -webkit-mask-image: radial-gradient(circle closest-side, black 0%, black 30%, transparent 70%);
+  mask-image: radial-gradient(circle closest-side, black 0%, black 30%, transparent 70%);
   pointer-events: none;
 }
 

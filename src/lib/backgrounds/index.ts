@@ -15,6 +15,8 @@ export type { DemoEffect } from "./demo-catalog";
 
 // Fundos ocultados do catálogo (removidos a pedido, sem apagar o código-fonte).
 const HIDDEN_IDS = new Set([
+  "conic", // Gradiente Cônico
+  "kaleido", // Caleidoscópio
   "bubbles",
   "snow", // Neve
   "cubecore", // Cubo Neon (Core)
@@ -63,6 +65,7 @@ export const LIB_SECTIONS: { key: LibSection; label: string }[] = [
   { key: "componentes", label: "Componentes" },
   { key: "animacoes", label: "Animações" },
   { key: "texto", label: "Animações de texto" },
+  { key: "loaders", label: "Loaders" },
 ];
 
 /** Seção de um item (ausente = backgrounds). */
@@ -79,6 +82,7 @@ export const BACKGROUND_CATALOG: BackgroundEffect[] = [
   ...DEMO_EFFECTS.filter((e) => e.section === "componentes"),
   ...DEMO_EFFECTS.filter((e) => e.section === "animacoes"),
   ...DEMO_EFFECTS.filter((e) => e.section === "texto"),
+  ...DEMO_EFFECTS.filter((e) => e.section === "loaders"),
 ];
 
 interface EngineEffect {
@@ -105,7 +109,9 @@ export function previewParamsOf(eff: Pick<BackgroundEffect, "params">): BgValues
   const o = defaultsOf(eff);
   for (const p of eff.params) {
     const d = p.default as number;
-    if (p.key === "count") o[p.key] = Math.max(30, Math.round(d * 0.4));
+    // contagens grandes são reduzidas (até um piso de 30), mas nunca passam do padrão: com poucas
+    // unidades (ex.: 6 manchas no Mesh Gradient) o piso de 30 estourava o efeito e a prévia ficava preta
+    if (p.key === "count") o[p.key] = Math.min(d, Math.max(30, Math.round(d * 0.4)));
     else if (p.key === "cols" || p.key === "rows") o[p.key] = Math.max(3, Math.round(d * 0.6));
     else if (p.key === "rings" && d > 20) o[p.key] = Math.round(d * 0.6);
   }

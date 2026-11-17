@@ -27,7 +27,7 @@ export interface BgParam {
 export type BackgroundKind = "canvas" | "react" | "component";
 
 /** Seção da biblioteca a que o item pertence (ausente = "backgrounds"). */
-export type LibSection = "backgrounds" | "componentes" | "animacoes" | "texto";
+export type LibSection = "backgrounds" | "componentes" | "animacoes" | "texto" | "loaders";
 
 /** Metadado de um item da biblioteca (sem a função, essa vive no engine/registry). */
 export interface BackgroundEffect {
