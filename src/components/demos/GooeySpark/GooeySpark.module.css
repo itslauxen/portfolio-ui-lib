@@ -1,0 +1,61 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+  width: var(--s);
+  height: var(--s);
+}
+.defs {
+  position: absolute;
+}
+.turn {
+  position: absolute;
+  inset: 0;
+}
+.spin {
+  animation: gira calc(var(--t) * 6) linear infinite;
+}
+.core {
+  position: absolute;
+  inset: 42%;
+  border-radius: 50%;
+  background: var(--c);
+}
+.arm {
+  position: absolute;
+  inset: 0;
+}
+/* o raio nasce no centro e cresce para cima; a espessura afina com mais raios */
+.ray {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: calc(var(--s) * min(0.085, 0.62 / var(--n)));
+  height: calc(var(--s) * 0.47 * var(--k, 1));
+  margin-left: calc(var(--s) * min(0.085, 0.62 / var(--n)) / -2);
+  border-radius: 999px;
+  background: var(--c);
+  transform-origin: 50% 100%;
+  animation: pulsa var(--t) ease-in-out infinite;
+}
+@keyframes pulsa {
+  0%,
+  100% {
+    transform: scaleY(0.58);
+  }
+  45% {
+    transform: scaleY(1);
+  }
+}
+@keyframes gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+  .ray {
+    animation-duration: calc(var(--t) * 3);
+  }
+}

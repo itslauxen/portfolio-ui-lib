@@ -1384,6 +1384,141 @@ export const DEMO_EFFECTS: DemoEffect[] = [
       track: b(v.track, true),
     }),
   },
+
+  // ---- GooeySpark ----
+  {
+    id: "gooeyspark",
+    name: "Faísca",
+    cat: "Loaders",
+    desc: "Raios que esticam e encolhem em onda em volta de um núcleo, fundidos numa peça só: parece girar e respirar, como um indicador de pensando.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeySpark",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho", type: "range", min: 32, max: 260, step: 2, default: 140 },
+      { key: "rays", label: "Qtd. de raios", type: "range", min: 5, max: 14, step: 1, default: 8 },
+      { key: "speed", label: "Duração da onda (s)", type: "range", min: 0.6, max: 5, step: 0.05, default: 1.8 },
+      { key: "spin", label: "Girar", type: "bool", default: true },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 140),
+      rays: n(v.rays, 8),
+      speed: n(v.speed, 1.8),
+      spin: b(v.spin, true),
+    }),
+  },
+
+  // ---- GooeyCarousel ----
+  {
+    id: "gooeycarousel",
+    name: "Carrossel Gooey",
+    cat: "Loaders",
+    desc: "Pontos que parecem girar uns em volta dos outros: vão e voltam de lado crescendo na frente e encolhendo atrás, e se fundem ao se cruzar.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeyCarousel",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho do ponto", type: "range", min: 8, max: 60, step: 1, default: 30 },
+      { key: "dots", label: "Qtd. de pontos", type: "range", min: 2, max: 6, step: 1, default: 3 },
+      { key: "radius", label: "Raio da órbita", type: "range", min: 0.6, max: 3, step: 0.05, default: 1.5 },
+      { key: "speed", label: "Duração da volta (s)", type: "range", min: 0.6, max: 5, step: 0.05, default: 1.6 },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 30),
+      dots: n(v.dots, 3),
+      radius: n(v.radius, 1.5),
+      speed: n(v.speed, 1.6),
+    }),
+  },
+
+  // ---- GooeyCross ----
+  {
+    id: "gooeycross",
+    name: "Cruz Gooey",
+    cat: "Loaders",
+    desc: "O vai e vem do Carrossel Gooey em linhas que se cruzam: os pontos crescem na frente, encolhem atrás e se fundem ao passar pelo centro.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeyCross",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho do ponto", type: "range", min: 8, max: 50, step: 1, default: 26 },
+      { key: "lines", label: "Qtd. de linhas", type: "range", min: 2, max: 5, step: 1, default: 2 },
+      { key: "radius", label: "Comprimento da linha", type: "range", min: 1, max: 3.5, step: 0.05, default: 2 },
+      { key: "speed", label: "Duração da volta (s)", type: "range", min: 0.6, max: 5, step: 0.05, default: 1.8 },
+      { key: "spin", label: "Girar", type: "bool", default: false },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 26),
+      lines: n(v.lines, 2),
+      radius: n(v.radius, 2),
+      speed: n(v.speed, 1.8),
+      spin: b(v.spin, false),
+    }),
+  },
+
+  // ---- GooeyCube ----
+  {
+    id: "gooeycube",
+    name: "Cubo Gooey",
+    cat: "Loaders",
+    desc: "Oito pontos nos vértices de um cubo girando em 3D: os da frente crescem, os de trás encolhem, e eles se fundem quando se cruzam.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeyCube",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho do ponto", type: "range", min: 6, max: 40, step: 1, default: 22 },
+      { key: "edge", label: "Aresta do cubo", type: "range", min: 1.5, max: 5, step: 0.1, default: 3 },
+      { key: "tilt", label: "Inclinação", type: "range", min: 0, max: 60, step: 1, default: 28 },
+      { key: "speed", label: "Duração da volta (s)", type: "range", min: 1, max: 12, step: 0.1, default: 4 },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 22),
+      edge: n(v.edge, 3),
+      tilt: n(v.tilt, 28),
+      speed: n(v.speed, 4),
+    }),
+  },
+
+  // ---- GooeyMorph ----
+  {
+    id: "gooeymorph",
+    name: "Metamorfose Gooey",
+    cat: "Loaders",
+    desc: "Quatro gotas passeiam em laços diferentes e se fundem numa massa só, que não para de mudar de forma.",
+    heavy: false,
+    gl: false,
+    kind: "component",
+    section: "loaders",
+    component: "GooeyMorph",
+    params: [
+      { key: "color", label: "Cor", type: "color", default: "#3ce97f" },
+      { key: "size", label: "Tamanho", type: "range", min: 32, max: 260, step: 2, default: 140 },
+      { key: "spread", label: "Afastamento", type: "range", min: 0.2, max: 1.4, step: 0.02, default: 0.9 },
+      { key: "speed", label: "Duração do ciclo (s)", type: "range", min: 0.8, max: 6, step: 0.05, default: 2.4 },
+    ],
+    propsFrom: (v) => ({
+      color: s(v.color, "#3ce97f"),
+      size: n(v.size, 140),
+      spread: n(v.spread, 0.9),
+      speed: n(v.speed, 2.4),
+    }),
+  },
 ];
 
 export function isDemoEffect(id: string): boolean {

@@ -1,0 +1,39 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+  /* largura da órbita + o ponto no tamanho máximo; folga para o desfoque do filtro */
+  width: calc(var(--r) * 2 + var(--s) * 2.2);
+  height: calc(var(--s) * 2.6);
+}
+.defs {
+  position: absolute;
+}
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%;
+  background: var(--c);
+  animation: volta var(--t) linear infinite;
+}
+/* uma volta vista de lado: x segue o seno, o tamanho segue o cosseno (perto = grande, longe = pequeno).
+   Oito passos com easing linear dão uma curva suave o bastante sem JavaScript. */
+@keyframes volta {
+  0% { transform: translateX(calc(var(--r) * -1)) scale(1); }
+  12.5% { transform: translateX(calc(var(--r) * -0.707)) scale(1.28); }
+  25% { transform: translateX(0) scale(1.4); }
+  37.5% { transform: translateX(calc(var(--r) * 0.707)) scale(1.28); }
+  50% { transform: translateX(var(--r)) scale(1); }
+  62.5% { transform: translateX(calc(var(--r) * 0.707)) scale(0.72); }
+  75% { transform: translateX(0) scale(0.6); }
+  87.5% { transform: translateX(calc(var(--r) * -0.707)) scale(0.72); }
+  100% { transform: translateX(calc(var(--r) * -1)) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation-duration: calc(var(--t) * 4);
+  }
+}

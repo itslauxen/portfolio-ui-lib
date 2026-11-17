@@ -1,0 +1,62 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+  width: var(--s);
+  height: var(--s);
+}
+.defs {
+  position: absolute;
+}
+.blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--s) * 0.36);
+  height: calc(var(--s) * 0.36);
+  margin: calc(var(--s) * -0.18) 0 0 calc(var(--s) * -0.18);
+  border-radius: 50%;
+  background: var(--c);
+  animation: ease-in-out infinite;
+}
+/* cada gota faz um laço diferente, em durações que não coincidem: a forma nunca se repete igual */
+.a {
+  animation-name: lacoA;
+  animation-duration: var(--t);
+}
+.b {
+  animation-name: lacoB;
+  animation-duration: calc(var(--t) * 1.37);
+}
+.c {
+  animation-name: lacoC;
+  animation-duration: calc(var(--t) * 1.71);
+}
+.d {
+  animation-name: lacoD;
+  animation-duration: calc(var(--t) * 2.13);
+}
+@keyframes lacoA {
+  0%, 100% { transform: translate(calc(var(--d) * -1), calc(var(--d) * -0.6)) scale(1); }
+  33% { transform: translate(var(--d), calc(var(--d) * -1)) scale(0.82); }
+  66% { transform: translate(calc(var(--d) * 0.3), var(--d)) scale(1.08); }
+}
+@keyframes lacoB {
+  0%, 100% { transform: translate(var(--d), calc(var(--d) * 0.5)) scale(0.9); }
+  40% { transform: translate(calc(var(--d) * -1), var(--d)) scale(1.1); }
+  75% { transform: translate(calc(var(--d) * -0.4), calc(var(--d) * -1)) scale(0.8); }
+}
+@keyframes lacoC {
+  0%, 100% { transform: translate(calc(var(--d) * -0.7), var(--d)) scale(0.86); }
+  30% { transform: translate(calc(var(--d) * 0.9), calc(var(--d) * 0.7)) scale(1); }
+  60% { transform: translate(var(--d), calc(var(--d) * -0.8)) scale(0.78); }
+  85% { transform: translate(calc(var(--d) * -1), calc(var(--d) * -0.3)) scale(1.06); }
+}
+@keyframes lacoD {
+  0%, 100% { transform: translate(0, calc(var(--d) * -1)) scale(0.74); }
+  50% { transform: translate(0, var(--d)) scale(1.02); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .blob {
+    animation-duration: calc(var(--t) * 4) !important;
+  }
+}

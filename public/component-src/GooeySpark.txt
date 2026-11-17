@@ -1,0 +1,113 @@
+"use client";
+
+// Loader "faísca": raios arredondados saem de um núcleo e esticam e encolhem em onda, um depois do
+// outro, o que dá a impressão de a forma inteira estar girando e respirando, como um indicador de
+// "pensando". Com o filtro gooey os raios se fundem ao núcleo numa peça só.
+import { useId, type CSSProperties } from "react";
+import styles from "./GooeySpark.module.css";
+
+interface GooeySparkProps {
+  /** Lado do loader, em px. */
+  size?: number;
+  /** Quantidade de raios. */
+  rays?: number;
+  color?: string;
+  /** Duração de uma volta da onda, em segundos. */
+  speed?: number;
+  /** Girar a faísca inteira devagar, além da onda. */
+  spin?: boolean;
+  label?: string;
+  className?: string;
+}
+
+const GooeySpark = ({ size = 96, rays = 8, color = "#3ce97f", speed = 1.8, spin = true, label = "Pensando", className = "" }: GooeySparkProps) => {
+  const id = `goo${useId().replace(/[^a-z0-9]/gi, "")}`;
+  return (
+    <span className={`${styles.wrap} ${className}`} role="status" aria-label={label}
+      style={{ "--s": `${size}px`, "--c": color, "--t": `${speed}s`, "--n": rays, filter: `url(#${id})` } as CSSProperties}>
+      <svg width="0" height="0" className={styles.defs} aria-hidden="true">
+        <filter id={id}>
+          <feGaussianBlur in="SourceGraphic" stdDeviation={size * 0.02} result="b" />
+          <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
+        </filter>
+      </svg>
+      <span className={`${styles.turn} ${spin ? styles.spin : ""}`}>
+        <span className={styles.core} />
+        {Array.from({ length: rays }, (_, i) => (
+          <span key={i} className={styles.arm} style={{ transform: `rotate(${(360 / rays) * i}deg)` }}>
+            {/* comprimentos de repouso alternados (longo, curto) para não parecer uma engrenagem */}
+            <span className={styles.ray} style={{ animationDelay: `${-speed + (speed / rays) * i}s`, "--k": i % 2 ? 0.78 : 1 } as CSSProperties} />
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+};
+
+export default GooeySpark;
+
+
+/* ============================================================
+   GooeySpark.module.css
+   ============================================================ */
+.wrap {
+  position: relative;
+  display: inline-block;
+  width: var(--s);
+  height: var(--s);
+}
+.defs {
+  position: absolute;
+}
+.turn {
+  position: absolute;
+  inset: 0;
+}
+.spin {
+  animation: gira calc(var(--t) * 6) linear infinite;
+}
+.core {
+  position: absolute;
+  inset: 42%;
+  border-radius: 50%;
+  background: var(--c);
+}
+.arm {
+  position: absolute;
+  inset: 0;
+}
+/* o raio nasce no centro e cresce para cima; a espessura afina com mais raios */
+.ray {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: calc(var(--s) * min(0.085, 0.62 / var(--n)));
+  height: calc(var(--s) * 0.47 * var(--k, 1));
+  margin-left: calc(var(--s) * min(0.085, 0.62 / var(--n)) / -2);
+  border-radius: 999px;
+  background: var(--c);
+  transform-origin: 50% 100%;
+  animation: pulsa var(--t) ease-in-out infinite;
+}
+@keyframes pulsa {
+  0%,
+  100% {
+    transform: scaleY(0.58);
+  }
+  45% {
+    transform: scaleY(1);
+  }
+}
+@keyframes gira {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+  .ray {
+    animation-duration: calc(var(--t) * 3);
+  }
+}

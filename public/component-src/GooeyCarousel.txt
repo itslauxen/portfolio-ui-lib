@@ -1,0 +1,86 @@
+"use client";
+
+// Loader "gooey" de carrossel: pontos que parecem girar uns em volta dos outros. Cada um vai e
+// volta de lado enquanto cresce (quando passa "pela frente") e encolhe (quando passa "por trás"),
+// e eles se fundem ao se cruzar. É só deslocamento + escala: a profundidade é ilusão.
+import { useId, type CSSProperties } from "react";
+import styles from "./GooeyCarousel.module.css";
+
+interface GooeyCarouselProps {
+  /** Diâmetro do ponto no tamanho médio, em px. */
+  size?: number;
+  /** Quantidade de pontos. */
+  dots?: number;
+  color?: string;
+  /** Duração de uma volta, em segundos. */
+  speed?: number;
+  /** Raio da órbita, em múltiplos do ponto. */
+  radius?: number;
+  label?: string;
+  className?: string;
+}
+
+const GooeyCarousel = ({ size = 22, dots = 3, color = "#3ce97f", speed = 1.6, radius = 1.5, label = "Carregando", className = "" }: GooeyCarouselProps) => {
+  const id = `goo${useId().replace(/[^a-z0-9]/gi, "")}`;
+  return (
+    <span className={`${styles.wrap} ${className}`} role="status" aria-label={label}
+      style={{ "--s": `${size}px`, "--c": color, "--t": `${speed}s`, "--r": `${size * radius}px`, filter: `url(#${id})` } as CSSProperties}>
+      <svg width="0" height="0" className={styles.defs} aria-hidden="true">
+        <filter id={id}>
+          <feGaussianBlur in="SourceGraphic" stdDeviation={size * 0.24} result="b" />
+          <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" />
+        </filter>
+      </svg>
+      {Array.from({ length: dots }, (_, i) => (
+        // cada ponto está numa fase diferente da mesma volta
+        <span key={i} className={styles.dot} style={{ animationDelay: `${(-speed * i) / dots}s` }} />
+      ))}
+    </span>
+  );
+};
+
+export default GooeyCarousel;
+
+
+/* ============================================================
+   GooeyCarousel.module.css
+   ============================================================ */
+.wrap {
+  position: relative;
+  display: inline-block;
+  /* largura da órbita + o ponto no tamanho máximo; folga para o desfoque do filtro */
+  width: calc(var(--r) * 2 + var(--s) * 2.2);
+  height: calc(var(--s) * 2.6);
+}
+.defs {
+  position: absolute;
+}
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%;
+  background: var(--c);
+  animation: volta var(--t) linear infinite;
+}
+/* uma volta vista de lado: x segue o seno, o tamanho segue o cosseno (perto = grande, longe = pequeno).
+   Oito passos com easing linear dão uma curva suave o bastante sem JavaScript. */
+@keyframes volta {
+  0% { transform: translateX(calc(var(--r) * -1)) scale(1); }
+  12.5% { transform: translateX(calc(var(--r) * -0.707)) scale(1.28); }
+  25% { transform: translateX(0) scale(1.4); }
+  37.5% { transform: translateX(calc(var(--r) * 0.707)) scale(1.28); }
+  50% { transform: translateX(var(--r)) scale(1); }
+  62.5% { transform: translateX(calc(var(--r) * 0.707)) scale(0.72); }
+  75% { transform: translateX(0) scale(0.6); }
+  87.5% { transform: translateX(calc(var(--r) * -0.707)) scale(0.72); }
+  100% { transform: translateX(calc(var(--r) * -1)) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation-duration: calc(var(--t) * 4);
+  }
+}

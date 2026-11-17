@@ -288,6 +288,11 @@ export const CATALOG_EN: Record<string, { name: string; desc: string }> = {
   gooeyorbit: { name: "Gooey Orbit", desc: "Drops orbit a core at different speeds and merge with it as they cross." },
   gooeysplit: { name: "Gooey Split", desc: "A drop stretches, splits in two and merges back, slowly turning." },
   arcspinner: { name: "Arc Spinner", desc: "A round-capped stroke that spins while it stretches and shrinks, over a faint track." },
+  gooeyspark: { name: "Spark", desc: "Rays that stretch and shrink in a wave around a core, merged into one piece: it seems to spin and breathe, like a thinking indicator." },
+  gooeycarousel: { name: "Gooey Carousel", desc: "Dots that seem to orbit each other: they slide sideways, growing in front and shrinking behind, and merge as they cross." },
+  gooeycross: { name: "Gooey Cross", desc: "The Gooey Carousel motion on crossing lines: dots grow in front, shrink behind and merge as they pass through the centre." },
+  gooeycube: { name: "Gooey Cube", desc: "Eight dots on the corners of a cube turning in 3D: the front ones grow, the back ones shrink, and they merge as they cross." },
+  gooeymorph: { name: "Gooey Morph", desc: "Four drops wander on different loops and merge into one mass that never stops changing shape." },
   barsloader: {
     name: "Bars",
     desc: "Bars that stretch and shrink in sequence, like an equalizer. CSS only.",
