@@ -21,9 +21,6 @@ import s from "./page.module.css";
 
 const EASE = [0.22, 0.61, 0.36, 1] as const;
 
-// A palavra de destaque do título é um efeito do lab rodando dentro das letras (Onda de Plasma).
-// Cores claras: a letra precisa continuar legível.
-const TITLE_FX = { id: "plasmawave", params: { color1: "#eafff3", color2: "#3ce97f" } };
 
 // Fundo do hero: Grainient da própria biblioteca (/biblioteca/grainient),
 // tematizado na paleta verde-noite do site. Mude aqui pra reestilizar.
@@ -228,7 +225,7 @@ export default function HomePage() {
               {t("home.titleLine1")}
               <br />
               {t("home.t2pre")}
-              <LiveWords text={t("home.t2hl")} effectId={TITLE_FX.id} params={TITLE_FX.params} />
+              <LiveWords text={t("home.t2hl")} />
               {t("home.t2post")}
             </motion.h1>
             <motion.div className={s.heroAsset} {...rise(0.3)}>

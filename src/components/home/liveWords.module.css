@@ -1,35 +1,44 @@
-/* Palavra do título feita de um efeito do lab (ver LiveWords.tsx). */
+/* Palavra de destaque do título (ver LiveWords.tsx). */
 .word {
-  position: relative;
+  /* sem suporte a background-clip: text, fica no verde liso */
   color: var(--accent);
 }
-/* com a camada viva por cima, o texto de verdade fica só para leitores de tela e seleção */
-.word[data-live] {
-  color: transparent;
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .word {
+    /* verde escuro → verde → menta → quase branco → menta → verde: a faixa clara é o brilho.
+       O fundo tem 3× a largura da palavra e desliza; como começa e termina na mesma cor, o laço não tem emenda. */
+    background-image: linear-gradient(
+      100deg,
+      #1fb866 0%,
+      #3ce97f 22%,
+      #9dffc6 40%,
+      #f1fff7 50%,
+      #9dffc6 60%,
+      #3ce97f 78%,
+      #1fb866 100%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* a descida do "g" e os acentos ficam dentro da área pintada */
+    padding-block: 0.12em;
+    margin-block: -0.12em;
+    animation: corre 5s linear infinite;
+  }
 }
-.layer {
-  position: absolute;
-  inset: 0;
-  isolation: isolate;
-  /* base verde: o efeito soma luz por cima (screen), então a letra nunca fica mais escura que isto */
-  background: #27c56c;
-  pointer-events: none;
+@keyframes corre {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
 }
-.fx {
-  position: absolute;
-  inset: -20% -4%;
-  mix-blend-mode: screen;
-}
-/* meia resolução: o efeito é desenhado numa área com metade da largura e da altura e ampliado 2×.
-   Dentro das letras a diferença não se vê, e são 4× menos pixels por quadro. */
-.fx > * {
-  position: absolute !important;
-  inset: 0 auto auto 0 !important;
-  width: 50% !important;
-  height: 50% !important;
-  transform: scale(2);
-  transform-origin: 0 0;
-}
-.defs {
-  position: absolute;
+@media (prefers-reduced-motion: reduce) {
+  .word {
+    animation: none;
+    background-position: 50% 0;
+  }
 }
