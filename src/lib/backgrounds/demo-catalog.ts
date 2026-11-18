@@ -79,11 +79,23 @@ export const DEMO_EFFECTS: DemoEffect[] = [
     section: "componentes",
     component: "HairlineCore",
     params: [
+      {
+        key: "spin",
+        label: "Rotação dos anéis",
+        type: "select",
+        default: "auto",
+        options: [
+          ["auto", "Automática"],
+          ["hover", "No hover do mouse"],
+          ["off", "Desligada"],
+        ],
+      },
       { key: "energy", label: "Energia dos anéis", type: "range", min: 0, max: 1, step: 0.01, default: 0.2 },
       { key: "size", label: "Tamanho", type: "range", min: 160, max: 640, step: 10, default: 420 },
       { key: "color", label: "Cor do destaque", type: "color", default: "#3ce97f" },
     ],
     propsFrom: (v) => ({
+      spin: s(v.spin, "auto") as "auto" | "hover" | "off",
       energy: n(v.energy, 0.2),
       size: n(v.size, 420),
       color: s(v.color, "#3ce97f"),

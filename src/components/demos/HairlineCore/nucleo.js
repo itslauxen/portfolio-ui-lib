@@ -24,7 +24,12 @@ const CHARGE0 = 0.42, SHELLS = [0.26, 0.5, 0.74];
 const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
-function mount({ stage, svg, read }, value) {
+/** The share of full charge at u reaches from the core (da figura original, que seguia o ponteiro). */
+const falloff = (u) =>
+  u <= 0 ? 1 : u <= 0.417 ? 1 - (u / 0.417) * 0.6875 : u <= 1 ? 0.3125 - ((u - 0.417) / 0.583) * 0.2185 : 0.094;
+
+// spin: "auto" (giram sozinhos, como no painel), "hover" (viram para o ponteiro, a figura original) ou "off"
+function mount({ stage, svg, read, spin = "auto" }, value) {
   const bag = disposer();
   const C = Cam(45, 0.5, 4.2);
   const box = [];
@@ -142,7 +147,7 @@ function mount({ stage, svg, read }, value) {
     olhoY += (alvoY - olhoY) * Math.min(1, dt * 4.5);
     olho.setAttribute("transform", `translate(${(olhoX + cx).toFixed(2)} ${(olhoY + cy).toFixed(2)}) scale(${PUPILA}) translate(${-cx} ${-cy})`);
     // o miolo fica sempre igual (um círculo só, o "olho"): a energia mexe só nos anéis
-    if (!quieto) rings.forEach((r, i) => {
+    if (!quieto && spin === "auto") rings.forEach((r, i) => {
       r.az.t += GIRO[i] * (1 + 7 * suave) * dt;
       r.tl.t = rad(r.tl0 + (9 + 22 * suave) * Math.sin(now / 3200 + i * 2.1));
     });
@@ -155,6 +160,32 @@ function mount({ stage, svg, read }, value) {
     return m;
   });
   bag.add(B.unregister);
+
+  // modo "hover" (comportamento original): o ponteiro é lido no plano do centro do núcleo; os anéis viram
+  // para ele e se fecham quando chega perto, e o miolo carrega. `value` é o alcance, em unidades do mundo.
+  if (spin === "hover") {
+    let over = null;
+    const reach = value;
+    const retarget = () => {
+      if (!over) {
+        charge.t = CHARGE0;
+        for (const r of rings) { r.az.t = r.az.t + wrap(rad(r.az0d) - r.az.t); r.tl.t = rad(r.tl0); }
+      } else {
+        const q = clamp(0.12 + 0.88 * falloff(Math.hypot(over[0], over[1]) / reach), 0, 1);
+        const phi = Math.atan2(over[1], over[0]);
+        charge.t = q;
+        for (const r of rings) {
+          r.az.t = r.az.t + wrap(phi + rad(r.off) * (1 - 0.35 * q) - r.az.t);
+          r.tl.t = rad(lerp(r.tl0, r.tp, clamp(q * 1.4, 0, 1)));
+        }
+      }
+      B.wake();
+    };
+    bag.add(HL.pointer(stage, {
+      move: (p) => { over = HL.unproj(C, p[0], p[1], ZC); retarget(); },
+      leave: () => { over = null; retarget(); },
+    }));
+  }
 
   bag.add(() => svg.replaceChildren());
 
