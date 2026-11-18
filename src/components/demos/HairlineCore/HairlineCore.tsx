@@ -10,6 +10,8 @@ import { nucleo } from "./nucleo.js";
 interface HairlineCoreProps {
   /** Rotação dos anéis: sozinhos ("auto"), virando para o mouse no hover ("hover", a figura original) ou parados ("off"). */
   spin?: "auto" | "hover" | "off";
+  /** O olho do núcleo segue o mouse. */
+  eye?: boolean;
   /** Energia dos anéis, de 0 (calmo) a 1 (agitado). */
   energy?: number;
   /** Largura da figura, em px. */
@@ -21,7 +23,7 @@ interface HairlineCoreProps {
   className?: string;
 }
 
-const HairlineCore = ({ spin = "auto", energy = 0.2, size = 360, color = "#3ce97f", plate = "#101311", className }: HairlineCoreProps) => {
+const HairlineCore = ({ spin = "auto", eye = true, energy = 0.2, size = 360, color = "#3ce97f", plate = "#101311", className }: HairlineCoreProps) => {
   const stage = useRef<HTMLDivElement>(null);
   const handle = useRef<{ set(v: number): void; destroy(): void } | null>(null);
   const energyRef = useRef(energy);
@@ -32,7 +34,7 @@ const HairlineCore = ({ spin = "auto", energy = 0.2, size = 360, color = "#3ce97
     if (!el) return;
     HL.inject(document);
     const svg = HL.mk("svg", { viewBox: "0 0 400 320", "aria-hidden": "true" }, el);
-    const h = nucleo.mount({ stage: el, svg, read: { textContent: "" }, spin }, nucleo.range[1]);
+    const h = nucleo.mount({ stage: el, svg, read: { textContent: "" }, spin, eye }, nucleo.range[1]);
     handle.current = h;
     h.set(energyRef.current);
     return () => {
@@ -40,7 +42,7 @@ const HairlineCore = ({ spin = "auto", energy = 0.2, size = 360, color = "#3ce97
       h.destroy();
       svg.remove();
     };
-  }, [spin]);
+  }, [spin, eye]);
 
   useEffect(() => {
     handle.current?.set(energy);

@@ -29,7 +29,8 @@ const falloff = (u) =>
   u <= 0 ? 1 : u <= 0.417 ? 1 - (u / 0.417) * 0.6875 : u <= 1 ? 0.3125 - ((u - 0.417) / 0.583) * 0.2185 : 0.094;
 
 // spin: "auto" (giram sozinhos, como no painel), "hover" (viram para o ponteiro, a figura original) ou "off"
-function mount({ stage, svg, read, spin = "auto" }, value) {
+// eye: o olho do miolo segue o mouse (true) ou fica parado no centro (false)
+function mount({ stage, svg, read, spin = "auto", eye = true }, value) {
   const bag = disposer();
   const C = Cam(45, 0.5, 4.2);
   const box = [];
@@ -138,9 +139,11 @@ function mount({ stage, svg, read, spin = "auto" }, value) {
     alvoY = d > 1 ? (dy / d) * PUXAO * forca : 0;
   };
   const aoSair = () => { alvoX = 0; alvoY = 0; };
-  addEventListener("pointermove", aoMover, { passive: true });
-  document.addEventListener("pointerleave", aoSair);
-  bag.add(() => { removeEventListener("pointermove", aoMover); document.removeEventListener("pointerleave", aoSair); });
+  if (eye) {
+    addEventListener("pointermove", aoMover, { passive: true });
+    document.addEventListener("pointerleave", aoSair);
+    bag.add(() => { removeEventListener("pointermove", aoMover); document.removeEventListener("pointerleave", aoSair); });
+  }
   const B = register(stage, (dt, now) => {
     suave += (energia - suave) * Math.min(1, dt * 9);   // segue o som sem tremer
     olhoX += (alvoX - olhoX) * Math.min(1, dt * 4.5);   // o olho chega devagar aonde o mouse puxa
